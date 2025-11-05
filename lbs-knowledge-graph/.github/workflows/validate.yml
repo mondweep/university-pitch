@@ -1,0 +1,98 @@
+name: Data Validation
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'data/**'
+      - 'src/validators/**'
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate schema definitions
+        run: |
+          python scripts/validate_schema.py \
+            --schema-dir ./src/schema \
+            --output ./validation-results/schema.json
+
+      - name: Validate data files
+        run: |
+          python scripts/validate_data.py \
+            --data-dir ./data \
+            --schema-dir ./src/schema \
+            --output ./validation-results/data.json
+
+      - name: Validate graph structure
+        run: |
+          python scripts/validate_graph.py \
+            --graph ./data/graph.json \
+            --output ./validation-results/graph.json
+
+      - name: Check for duplicate content
+        run: |
+          python scripts/check_duplicates.py \
+            --data-dir ./data/parsed \
+            --output ./validation-results/duplicates.json
+
+      - name: Validate URLs
+        run: |
+          python scripts/validate_urls.py \
+            --url-file ./data/urls.txt \
+            --timeout 10 \
+            --output ./validation-results/urls.json
+
+      - name: Generate validation report
+        run: |
+          python scripts/generate_validation_report.py \
+            --results-dir ./validation-results \
+            --output ./validation-report.html
+
+      - name: Upload validation results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: validation-results
+          path: |
+            validation-results/
+            validation-report.html
+
+      - name: Comment PR with validation results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('./validation-report.html', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Data Validation Results\n\n${report}`
+            });
+
+      - name: Fail if critical errors found
+        run: |
+          python scripts/check_validation_status.py \
+            --results-dir ./validation-results \
+            --fail-on-error true

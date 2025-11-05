@@ -1,0 +1,59 @@
+# LBS Knowledge Graph - Python Dependencies
+
+# Core Dependencies
+mgraph-db>=1.0.0              # Semantic knowledge graph database
+pydantic>=2.0.0               # Data validation
+python-dotenv>=1.0.0          # Environment variable management
+
+# Web Scraping & Parsing
+requests>=2.31.0              # HTTP client
+beautifulsoup4>=4.12.0        # HTML parsing
+lxml>=4.9.0                   # XML/HTML parser
+playwright>=1.40.0            # Headless browser for JS-heavy pages
+html5lib>=1.1                 # HTML5 parser
+
+# LLM Integration
+openai>=1.3.0                 # OpenAI GPT-4 API
+anthropic>=0.7.0              # Anthropic Claude API (alternative)
+
+# AWS Integration
+boto3>=1.28.0                 # AWS SDK
+botocore>=1.31.0              # AWS core
+
+# Data Processing
+pandas>=2.1.0                 # Data manipulation
+numpy>=1.24.0                 # Numerical computing
+
+# Utilities
+python-slugify>=8.0.0         # URL-friendly slugs
+colorama>=0.4.6               # Colored terminal output
+tqdm>=4.66.0                  # Progress bars
+click>=8.1.0                  # CLI framework
+
+# Testing
+pytest>=7.4.0                 # Testing framework
+pytest-cov>=4.1.0             # Code coverage
+pytest-mock>=3.12.0           # Mocking
+pytest-asyncio>=0.21.0        # Async testing
+faker>=20.0.0                 # Test data generation
+locust>=2.17.0                # Performance testing
+
+# Code Quality
+black>=23.11.0                # Code formatter
+flake8>=6.1.0                 # Linter
+isort>=5.12.0                 # Import sorter
+mypy>=1.7.0                   # Type checker
+pylint>=3.0.0                 # Code analyzer
+
+# Development
+ipython>=8.18.0               # Enhanced Python shell
+jupyter>=1.0.0                # Jupyter notebooks
+pre-commit>=3.5.0             # Git hooks
+
+# Logging & Monitoring
+structlog>=23.2.0             # Structured logging
+python-json-logger>=2.0.7     # JSON logging
+
+# Graph Exports
+networkx>=3.2.0               # Graph algorithms (optional)
+pygraphviz>=1.11              # Graphviz wrapper (optional)

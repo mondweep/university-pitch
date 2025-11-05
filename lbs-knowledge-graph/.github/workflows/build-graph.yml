@@ -1,0 +1,178 @@
+name: Build Knowledge Graph
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # Daily at 3 AM UTC (after crawler)
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: 'Force complete graph rebuild'
+        required: false
+        default: 'false'
+
+jobs:
+  build-graph:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install mgraph-db
+
+      - name: Download content from S3
+        run: |
+          # Download parsed content
+          aws s3 sync s3://${{ secrets.S3_BUCKET }}/parsed ./data/parsed
+
+          # Download existing graph (for incremental builds)
+          aws s3 cp s3://${{ secrets.S3_BUCKET }}/graph/latest.json \
+            ./data/graph-previous.json || echo "No previous graph found"
+
+      - name: Build graph with MGraph-DB
+        env:
+          FORCE_REBUILD: ${{ github.event.inputs.force_rebuild }}
+        run: |
+          python scripts/build_graph.py \
+            --input ./data/parsed \
+            --output ./data/graph \
+            --previous ./data/graph-previous.json \
+            --format json,graphml,cypher,mermaid
+
+      - name: Run LLM enrichment
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python scripts/enrich_graph.py \
+            --graph ./data/graph/graph.json \
+            --output ./data/graph/enriched.json \
+            --provider openai \
+            --model gpt-4
+
+      - name: Validate graph
+        run: |
+          python scripts/validate_graph.py \
+            --graph ./data/graph/enriched.json \
+            --strict
+
+      - name: Generate graph statistics
+        run: |
+          python scripts/graph_stats.py \
+            --graph ./data/graph/enriched.json \
+            --output ./data/graph/stats.json
+
+      - name: Upload to S3
+        run: |
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+          # Upload latest graph (all formats)
+          aws s3 cp ./data/graph/enriched.json \
+            s3://${{ secrets.S3_BUCKET }}/graph/latest.json
+
+          aws s3 cp ./data/graph/enriched.graphml \
+            s3://${{ secrets.S3_BUCKET }}/graph/latest.graphml
+
+          aws s3 cp ./data/graph/enriched.cypher \
+            s3://${{ secrets.S3_BUCKET }}/graph/latest.cypher
+
+          aws s3 cp ./data/graph/enriched.mmd \
+            s3://${{ secrets.S3_BUCKET }}/graph/latest.mmd
+
+          # Upload statistics
+          aws s3 cp ./data/graph/stats.json \
+            s3://${{ secrets.S3_BUCKET }}/graph/stats.json
+
+          # Versioned backup
+          aws s3 cp ./data/graph/enriched.json \
+            s3://${{ secrets.S3_BUCKET }}/graph/versions/${TIMESTAMP}.json
+
+          # Daily backup
+          aws s3 cp ./data/graph/enriched.json \
+            s3://${{ secrets.S3_BUCKET }}/graph/backups/daily/${TIMESTAMP}.json
+
+      - name: Warm up Lambda functions
+        run: |
+          # Force Lambda to reload graph from S3
+          aws lambda update-function-configuration \
+            --function-name lbs-kg-graph-query \
+            --environment Variables={GRAPH_VERSION=${TIMESTAMP}}
+
+          # Warm up by invoking
+          aws lambda invoke \
+            --function-name lbs-kg-graph-query \
+            --payload '{"queryStringParameters": {"type": "program"}}' \
+            warmup-response.json
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CF_DISTRIBUTION_ID }} \
+            --paths "/api/*" "/graph/*"
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: graph-build-${{ github.sha }}
+          path: |
+            data/graph/*.json
+            data/graph/*.graphml
+            data/graph/*.cypher
+            data/graph/*.mmd
+            data/graph/stats.json
+
+      - name: Create deployment summary
+        run: |
+          cat > deployment-summary.md << EOF
+          # Graph Build Summary
+
+          **Timestamp:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          **Commit:** ${{ github.sha }}
+          **Triggered by:** ${{ github.event_name }}
+
+          ## Statistics
+          $(cat ./data/graph/stats.json | python -m json.tool)
+
+          ## Files Generated
+          - graph/latest.json
+          - graph/latest.graphml
+          - graph/latest.cypher
+          - graph/latest.mmd
+          - graph/stats.json
+
+          ## Next Steps
+          - Lambda functions warmed up
+          - CloudFront cache invalidated
+          - Ready for queries
+          EOF
+
+          cat deployment-summary.md
+
+      - name: Notify success
+        if: success()
+        run: |
+          echo "✅ Graph build completed successfully"
+          echo "Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")"

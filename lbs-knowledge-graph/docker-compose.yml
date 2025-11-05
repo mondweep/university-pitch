@@ -1,0 +1,156 @@
+version: '3.8'
+
+services:
+  # Main application service
+  app:
+    build:
+      context: .
+      target: development
+    container_name: lbs-kg-app
+    volumes:
+      - .:/app
+      - pip-cache:/root/.cache/pip
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - LOG_LEVEL=DEBUG
+      - PYTHONPATH=/app
+    command: python -m src.api.server
+    networks:
+      - lbs-network
+    depends_on:
+      - redis
+      - opensearch
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: lbs-kg-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - lbs-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # OpenSearch for full-text search
+  opensearch:
+    image: opensearchproject/opensearch:2
+    container_name: lbs-kg-opensearch
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      - DISABLE_SECURITY_PLUGIN=true
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    networks:
+      - lbs-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # OpenSearch Dashboards
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2
+    container_name: lbs-kg-dashboards
+    ports:
+      - "5601:5601"
+    environment:
+      - OPENSEARCH_HOSTS=http://opensearch:9200
+      - DISABLE_SECURITY_DASHBOARDS_PLUGIN=true
+    networks:
+      - lbs-network
+    depends_on:
+      - opensearch
+
+  # Jupyter notebook for development/analysis
+  jupyter:
+    build:
+      context: .
+      target: development
+    container_name: lbs-kg-jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app
+      - jupyter-data:/root/.jupyter
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    command: jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+    networks:
+      - lbs-network
+
+  # Crawler service
+  crawler:
+    build:
+      context: .
+      target: development
+    container_name: lbs-kg-crawler
+    volumes:
+      - .:/app
+      - crawler-cache:/app/.cache
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+    command: python -m src.crawler.main
+    networks:
+      - lbs-network
+    depends_on:
+      - redis
+
+  # Graph builder service
+  graph-builder:
+    build:
+      context: .
+      target: development
+    container_name: lbs-kg-graph-builder
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+    command: python scripts/build_graph.py --watch
+    networks:
+      - lbs-network
+    depends_on:
+      - redis
+      - opensearch
+
+  # Test runner
+  test:
+    build:
+      context: .
+      target: development
+    container_name: lbs-kg-test
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+    command: pytest tests/ -v --cov=src
+    networks:
+      - lbs-network
+    profiles:
+      - testing
+
+networks:
+  lbs-network:
+    driver: bridge
+
+volumes:
+  pip-cache:
+  redis-data:
+  opensearch-data:
+  jupyter-data:
+  crawler-cache:

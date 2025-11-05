@@ -1,0 +1,139 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+junit.xml
+coverage.xml
+*.cover
+.hypothesis/
+.cache
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# pytype
+.pytype/
+
+# Logs
+logs/
+*.log
+
+# Data files (don't commit large datasets)
+data/raw/*.html
+data/parsed/*.json
+data/graph/*.json
+data/graph/*.graphml
+data/graph/*.cypher
+data/exports/
+data/backups/
+
+# But keep directory structure
+!data/raw/.gitkeep
+!data/parsed/.gitkeep
+!data/graph/.gitkeep
+!data/exports/.gitkeep
+!data/backups/.gitkeep
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production
+
+# AWS
+.aws/
+
+# Docker
+docker-compose.override.yml
+
+# Cache
+.cache/
+*.cache
+.swarm/
+
+# Validation
+validation-results/
+
+# Temporary
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Package manager
+package-lock.json
+yarn.lock
+
+# Compiled files
+*.pyc
+*.pyo
+
+# Distribution
+deployment*.zip
+
+# Local configuration
+config.local.yaml
+config.local.json

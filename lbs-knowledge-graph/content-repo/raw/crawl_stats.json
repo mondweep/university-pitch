@@ -1,0 +1,19 @@
+{
+  "pages_crawled": 10,
+  "pages_failed": 2,
+  "pages_queued": 186,
+  "duration_seconds": 34.947911739349365,
+  "pages_per_second": 0.28614012976176106,
+  "failed_urls": [
+    {
+      "url": "https://london.edu/admissions",
+      "error": "404 Client Error: Not Found for url: https://www.london.edu/admissions",
+      "timestamp": 1762353020.8676605
+    },
+    {
+      "url": "https://london.edu/student-life",
+      "error": "404 Client Error: Not Found for url: https://www.london.edu/student-life",
+      "timestamp": 1762353025.7855122
+    }
+  ]
+}

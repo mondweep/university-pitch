@@ -1,0 +1,752 @@
+[
+  {
+    "href": "#skipnav",
+    "text": "Skip to main content",
+    "type": "anchor"
+  },
+  {
+    "href": "/give-to-lbs",
+    "text": "Give to LBS",
+    "type": "internal"
+  },
+  {
+    "href": "/newsroom",
+    "text": "Newsroom",
+    "type": "internal"
+  },
+  {
+    "href": "/events",
+    "text": "Events",
+    "type": "internal"
+  },
+  {
+    "href": "/recruiters-and-organisations",
+    "text": "Recruiters and Organisations",
+    "type": "internal"
+  },
+  {
+    "href": "/jobs-at-lbs",
+    "text": "Jobs at LBS",
+    "type": "internal"
+  },
+  {
+    "href": "https://publishing.london.edu/",
+    "text": "LBS Publishing",
+    "type": "external"
+  },
+  {
+    "href": "/alumni/alumni-community/lbs-hub",
+    "text": "LBS Hub",
+    "type": "internal"
+  },
+  {
+    "href": "/portal",
+    "text": "Portal",
+    "type": "internal"
+  },
+  {
+    "href": "/create-a-profile",
+    "text": "Create a profile",
+    "type": "internal"
+  },
+  {
+    "href": "/.netlify/functions/login",
+    "text": "Login",
+    "type": "internal"
+  },
+  {
+    "href": "/about",
+    "text": "About",
+    "type": "internal"
+  },
+  {
+    "href": "/masters-degrees",
+    "text": "Masters Degrees",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education",
+    "text": "Executive Education",
+    "type": "internal"
+  },
+  {
+    "href": "/lbs-online",
+    "text": "LBS Online",
+    "type": "internal"
+  },
+  {
+    "href": "/phd",
+    "text": "PhD",
+    "type": "internal"
+  },
+  {
+    "href": "/faculty-and-research",
+    "text": "Faculty and Research",
+    "type": "internal"
+  },
+  {
+    "href": "/think",
+    "text": "Think",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni",
+    "text": "Alumni",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school",
+    "text": "London Business School",
+    "type": "internal"
+  },
+  {
+    "href": "/about/our-campuses",
+    "text": "Our campuses",
+    "type": "internal"
+  },
+  {
+    "href": "/about/diversity-inclusion-and-belonging",
+    "text": "Diversity, Inclusion and Belonging",
+    "type": "internal"
+  },
+  {
+    "href": "/about/sustainability-at-london-business-school",
+    "text": "Sustainability at London Business School",
+    "type": "internal"
+  },
+  {
+    "href": "/about/inclusion-and-diversity/wellbeing-services",
+    "text": "Student Wellbeing Services",
+    "type": "internal"
+  },
+  {
+    "href": "/about/contact",
+    "text": "Contact us",
+    "type": "internal"
+  },
+  {
+    "href": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+    "text": "Women at LBS",
+    "type": "internal"
+  },
+  {
+    "href": "/give-to-lbs",
+    "text": "Give to LBS",
+    "type": "internal"
+  },
+  {
+    "href": "#",
+    "text": "Graduate Masters",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "MBA",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "Masters in Finance",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "Executive MBA",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "Sloan",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "Before you arrive",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "Our Community",
+    "type": "anchor"
+  },
+  {
+    "href": "/recruiters-and-organisations",
+    "text": "Recruiters and Organisations",
+    "type": "internal"
+  },
+  {
+    "href": "#",
+    "text": "Career support",
+    "type": "anchor"
+  },
+  {
+    "href": "/masters-degrees/masters-in-analytics-and-management",
+    "text": "Masters in Analytics and Management",
+    "type": "internal"
+  },
+  {
+    "href": "/masters-degrees/executive-mba",
+    "text": "Executive MBA",
+    "type": "internal"
+  },
+  {
+    "href": "#",
+    "text": "Courses by topic",
+    "type": "anchor"
+  },
+  {
+    "href": "/lbs-online",
+    "text": "Online courses",
+    "type": "internal"
+  },
+  {
+    "href": "#",
+    "text": "In-person courses",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "Upcoming courses",
+    "type": "anchor"
+  },
+  {
+    "href": "/executive-education/our-work-with-organisations/customised-programmes",
+    "text": "Customised programmes",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+    "text": "Open programmes for organisations",
+    "type": "internal"
+  },
+  {
+    "href": "#",
+    "text": "Corporate partnerships",
+    "type": "anchor"
+  },
+  {
+    "href": "/executive-education/our-work-with-organisations/client-success-stories",
+    "text": "Client Success Stories",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/executive-education-alumni",
+    "text": "Executive Education alumni",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/womens-scholarships",
+    "text": "Womens scholarships",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/programme-search-results",
+    "text": "Course finder",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/certificates",
+    "text": "Certificates",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/programme-search-results",
+    "text": "Course search",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/programme-calendar",
+    "text": "Programme calendar",
+    "type": "internal"
+  },
+  {
+    "href": "#",
+    "text": "Courses by topic",
+    "type": "anchor"
+  },
+  {
+    "href": "/lbs-online/our-work-with-organisations",
+    "text": "B2B offerings",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+    "text": "Course search",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/programme-calendar",
+    "text": "Programme calendar",
+    "type": "internal"
+  },
+  {
+    "href": "/phd/profiles",
+    "text": "PhD Profiles",
+    "type": "internal"
+  },
+  {
+    "href": "/phd/transatlantic-doctoral-conference",
+    "text": "Transatlantic Doctoral Conference",
+    "type": "internal"
+  },
+  {
+    "href": "#",
+    "text": "Faculty",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "Subject Areas",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "Research Centres and Institutes",
+    "type": "anchor"
+  },
+  {
+    "href": "#",
+    "text": "Research",
+    "type": "anchor"
+  },
+  {
+    "href": "/faculty-and-research/research/research-highlights",
+    "text": "Research highlights",
+    "type": "internal"
+  },
+  {
+    "href": "/phd",
+    "text": "PhD",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Accounting",
+    "text": "Accounting",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Analytics%20and%20big%20data",
+    "text": "Analytics and big data",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Economics",
+    "text": "Economics",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Entrepreneurship",
+    "text": "Entrepreneurship",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Finance",
+    "text": "Finance",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Innovation",
+    "text": "Innovation",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Leadership",
+    "text": "Leadership",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Marketing",
+    "text": "Marketing",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Operations%20management",
+    "text": "Operations management",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=People%20management",
+    "text": "People management",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Personal%20development",
+    "text": "Personal development",
+    "type": "internal"
+  },
+  {
+    "href": "/think/articletopics?topics=Strategy",
+    "text": "Strategy",
+    "type": "internal"
+  },
+  {
+    "href": "/think/think-ahead",
+    "text": "Think Ahead events and podcast series",
+    "type": "internal"
+  },
+  {
+    "href": "/think",
+    "text": "Editor's Choice",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-community",
+    "text": "Connect with your community",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-community/lbs-hub",
+    "text": "LBS Hub",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-community/alumni-news",
+    "text": "AlumniNews",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-community/alumni-stories",
+    "text": "Alumni stories",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-community/alumni-council",
+    "text": "Alumni council",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/volunteer",
+    "text": "Volunteering",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/events",
+    "text": "Alumni events",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-career-centre",
+    "text": "Alumni Career Centre",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-career-centre/alumni-careers2",
+    "text": "Alumni Careers2",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-career-centre/career-opportunities",
+    "text": "Career Opportunities",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-career-centre/coaching",
+    "text": "Career Coaching",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-career-centre/resources-and-insights",
+    "text": "Career Development Resources",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-services-and-benefits",
+    "text": "Alumni services and benefits",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-services-and-benefits/forever-learning",
+    "text": "Forever Learning",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+    "text": "Alumni Discovery Circles",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/news-and-stories",
+    "text": "Alumni news and stories",
+    "type": "internal"
+  },
+  {
+    "href": "/give-to-lbs",
+    "text": "Give to LBS",
+    "type": "internal"
+  },
+  {
+    "href": "/give-to-lbs/why-give",
+    "text": "Why give",
+    "type": "internal"
+  },
+  {
+    "href": "/give-to-lbs/acknowledging-your-support",
+    "text": "Acknowledging your support",
+    "type": "internal"
+  },
+  {
+    "href": "/alumni/alumni-community/lbs-hub",
+    "text": "LBS Hub",
+    "type": "internal"
+  },
+  {
+    "href": "/give-to-lbs",
+    "text": "Give to LBS",
+    "type": "internal"
+  },
+  {
+    "href": "/masters-degrees/mba",
+    "text": "MBA",
+    "type": "internal"
+  },
+  {
+    "href": "/masters-degrees/executive-mba",
+    "text": "Executive MBA",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education",
+    "text": "Executive Education",
+    "type": "internal"
+  },
+  {
+    "href": "/newsroom",
+    "text": "Newsroom",
+    "type": "internal"
+  },
+  {
+    "href": "/masters-degrees",
+    "text": "Masters Degrees",
+    "type": "internal"
+  },
+  {
+    "href": "/phd",
+    "text": "PhD",
+    "type": "internal"
+  },
+  {
+    "href": "/faculty-and-research",
+    "text": "Faculty and Research",
+    "type": "internal"
+  },
+  {
+    "href": "/think",
+    "text": "Think",
+    "type": "internal"
+  },
+  {
+    "href": "/",
+    "text": "Home",
+    "type": "internal"
+  },
+  {
+    "href": "/about",
+    "text": "About us",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school",
+    "text": "London Business School",
+    "type": "internal"
+  },
+  {
+    "href": "#",
+    "text": "Save to my profile",
+    "type": "anchor"
+  },
+  {
+    "href": "/about",
+    "text": "Overview",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school",
+    "text": "London Business School",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/leadership",
+    "text": "Our leadership",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/programmes",
+    "text": "Programmes",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/our-local-impact",
+    "text": "Our local impact",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/rankings-and-accreditation",
+    "text": "Our rankings and accreditation",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/policies-and-legislation",
+    "text": "Policies and legislation",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/financial-statements",
+    "text": "Financial statements",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/learning-and-teaching-philosophy",
+    "text": "Learning and Teaching Philosophy",
+    "type": "internal"
+  },
+  {
+    "href": "/about/our-campuses",
+    "text": "Our campuses",
+    "type": "internal"
+  },
+  {
+    "href": "/about/our-campuses/london",
+    "text": "London",
+    "type": "internal"
+  },
+  {
+    "href": "/about/our-campuses/dubai",
+    "text": "Dubai",
+    "type": "internal"
+  },
+  {
+    "href": "/about/diversity-inclusion-and-belonging",
+    "text": "Diversity, inclusion and diversity",
+    "type": "internal"
+  },
+  {
+    "href": "/about/diversity-inclusion-and-belonging/black-at-lbs",
+    "text": "Black at LBS",
+    "type": "internal"
+  },
+  {
+    "href": "/campaigns/masters-degrees/laidlaw",
+    "text": "Laidlaw Women\u2019s Leadership Fund",
+    "type": "internal"
+  },
+  {
+    "href": "/about/diversity-inclusion-and-belonging/lgbtq",
+    "text": "LGBTQ+",
+    "type": "internal"
+  },
+  {
+    "href": "/about/diversity-inclusion-and-belonging/social-mobility-at-lbs",
+    "text": "Social Mobility at LBS",
+    "type": "internal"
+  },
+  {
+    "href": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+    "text": "Women at LBS",
+    "type": "internal"
+  },
+  {
+    "href": "/about/inclusion-and-diversity/wellbeing-services",
+    "text": "Wellbeing services",
+    "type": "internal"
+  },
+  {
+    "href": "/about/contact",
+    "text": "Contact us",
+    "type": "internal"
+  },
+  {
+    "href": "/about/contact/faqs",
+    "text": "Frequently asked questions",
+    "type": "internal"
+  },
+  {
+    "href": "/masters-degrees",
+    "text": "Explore our Masters programmes",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education",
+    "text": "Find out more",
+    "type": "internal"
+  },
+  {
+    "href": "/executive-education/our-work-with-organisations",
+    "text": "Find out more",
+    "type": "internal"
+  },
+  {
+    "href": "/lbs-online",
+    "text": "Find out more",
+    "type": "internal"
+  },
+  {
+    "href": "/phd",
+    "text": "Learn more",
+    "type": "internal"
+  },
+  {
+    "href": "/faculty-and-research/strategy-and-entrepreneurship/entrepreneurship-summer-school",
+    "text": "Read more",
+    "type": "internal"
+  },
+  {
+    "href": "/",
+    "text": "close",
+    "type": "internal"
+  },
+  {
+    "href": "/recruiters-and-organisations",
+    "text": "Organisations",
+    "type": "internal"
+  },
+  {
+    "href": "/recruiters-and-organisations/recruiters",
+    "text": "Recruiters",
+    "type": "internal"
+  },
+  {
+    "href": "/newsroom",
+    "text": "Newsroom",
+    "type": "internal"
+  },
+  {
+    "href": "/about/contact",
+    "text": "Contact us",
+    "type": "internal"
+  },
+  {
+    "href": "/about/our-campuses",
+    "text": "Find us",
+    "type": "internal"
+  },
+  {
+    "href": "/jobs-at-lbs",
+    "text": "Jobs at LBS",
+    "type": "internal"
+  },
+  {
+    "href": "/give-to-lbs",
+    "text": "Give to LBS",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/programmes?entry=true#subscribeScreen",
+    "text": "Sign up",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+    "text": "Privacy policy",
+    "type": "internal"
+  },
+  {
+    "href": "/about/london-business-school/policies-and-legislation",
+    "text": "Policies and legislation",
+    "type": "internal"
+  },
+  {
+    "href": "/sitemap",
+    "text": "Sitemap",
+    "type": "internal"
+  }
+]

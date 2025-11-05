@@ -1,0 +1,6591 @@
+{
+  "total_pages": 10,
+  "page_type_patterns": {
+    "url_patterns": {
+      "news": [
+        "news_7ce7f712571d",
+        "newsroom_608504dc2ebe"
+      ],
+      "about": [
+        "about_c5f70d891e17"
+      ],
+      "faculty": [
+        "faculty-and-research_c4fd78231318"
+      ],
+      "event": [
+        "events_86531ad8271f"
+      ],
+      "other": [
+        "give-to-lbs_98c8f2905162"
+      ],
+      "alumni": [
+        "alumni_a812cbeb0b88"
+      ],
+      "contact": [
+        "contact_61c0097e4724"
+      ],
+      "programme": [
+        "programmes_e941af89c7be"
+      ],
+      "homepage": [
+        "homepage_5002b6553ab6"
+      ]
+    },
+    "page_type_distribution": {
+      "news": 2,
+      "about": 1,
+      "faculty": 1,
+      "event": 1,
+      "other": 1,
+      "alumni": 1,
+      "contact": 1,
+      "programme": 1,
+      "homepage": 1
+    },
+    "title_patterns": [
+      {
+        "page": "news_7ce7f712571d",
+        "title": "News | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      },
+      {
+        "page": "about_c5f70d891e17",
+        "title": "About us | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      },
+      {
+        "page": "newsroom_608504dc2ebe",
+        "title": "Newsroom | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      },
+      {
+        "page": "faculty-and-research_c4fd78231318",
+        "title": "Faculty and Research | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      },
+      {
+        "page": "events_86531ad8271f",
+        "title": "Events | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      },
+      {
+        "page": "give-to-lbs_98c8f2905162",
+        "title": "Give to LBS | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      },
+      {
+        "page": "alumni_a812cbeb0b88",
+        "title": "Alumni | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      },
+      {
+        "page": "contact_61c0097e4724",
+        "title": "Contact us | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      },
+      {
+        "page": "programmes_e941af89c7be",
+        "title": "Programmes | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      },
+      {
+        "page": "homepage_5002b6553ab6",
+        "title": "Home | London Business School",
+        "structure": {
+          "has_separator": true,
+          "parts_count": 2,
+          "pattern": "<part> | <part>"
+        }
+      }
+    ],
+    "metadata_coverage": {
+      "title": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "version": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "build_date": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "description": {
+        "count": 9,
+        "percentage": 90.0
+      },
+      "viewport": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "theme-color": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "twitter_card": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "twitter_site": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "twitter_title": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "twitter_description": {
+        "count": 9,
+        "percentage": 90.0
+      },
+      "twitter_creator": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "twitter_image": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "og_title": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "og_type": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "og_description": {
+        "count": 9,
+        "percentage": 90.0
+      },
+      "og_site_name": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "og_locale": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "og_url": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "og_image": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "robots": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "google-site-verification": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "contenttypename": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "contenttypeid": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "pagetitle": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "pagedescription": {
+        "count": 9,
+        "percentage": 90.0
+      },
+      "next-head-count": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "canonical_url": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "language": {
+        "count": 10,
+        "percentage": 100.0
+      },
+      "keywords": {
+        "count": 4,
+        "percentage": 40.0
+      }
+    },
+    "total_pages": 10
+  },
+  "section_type_patterns": {
+    "section_types": {
+      "other": 30,
+      "header": 10,
+      "footer": 10
+    },
+    "common_tags": {
+      "div": 20,
+      "header": 10,
+      "main": 10,
+      "footer": 10
+    },
+    "common_classes": {
+      "coveo-ignore": 20,
+      "wrapper": 20,
+      "C01_SiteHeader_site-header__oNkDB": 10,
+      "C01_SiteHeader_wrapper__Vg4rk": 10,
+      "C02_Footer_site-footer__BVIbR": 10
+    },
+    "heading_levels": {
+      "h4": 526,
+      "h1": 10,
+      "h2": 18,
+      "h3": 17,
+      "h5": 2,
+      "h6": 4
+    },
+    "depth_distribution": {
+      "3": 30,
+      "4": 20
+    },
+    "avg_sections_per_page": 0.4
+  },
+  "content_patterns": {
+    "content_types": {
+      "short_text": 1070,
+      "heading_or_title": 533,
+      "paragraph": 71,
+      "long_content": 6
+    },
+    "text_statistics": {
+      "total_blocks": 1680,
+      "avg_length": 28.180357142857144,
+      "min_length": 1,
+      "max_length": 597,
+      "length_ranges": {
+        "0-50": 1533,
+        "51-200": 113,
+        "201-500": 30,
+        "501-1000": 4,
+        "1000+": 0
+      }
+    },
+    "media_usage": {
+      "image": 321,
+      "iframe": 13
+    },
+    "interactive_elements": {
+      "link": 1594,
+      "button": 185,
+      "input": 14,
+      "form": 2
+    }
+  },
+  "link_patterns": {
+    "link_types": {
+      "anchor": 199,
+      "internal": 1196,
+      "external": 43,
+      "relative": 12
+    },
+    "top_destinations": {
+      "/give-to-lbs": 51,
+      "/think": 36,
+      "/alumni/alumni-community/lbs-hub": 32,
+      "/recruiters-and-organisations": 31,
+      "/phd": 31,
+      "/newsroom": 30,
+      "/lbs-online": 23,
+      "/jobs-at-lbs": 22,
+      "/masters-degrees": 22,
+      "/executive-education": 22,
+      "/faculty-and-research": 22,
+      "/about/our-campuses": 22,
+      "/about/contact": 22,
+      "/masters-degrees/executive-mba": 21,
+      "/executive-education/programme-search-results": 20,
+      "/executive-education/programme-calendar": 20,
+      "/": 20,
+      "/about": 15,
+      "/about/london-business-school": 13,
+      "/about/diversity-inclusion-and-belonging": 13
+    },
+    "total_links": 1450,
+    "avg_links_per_page": 145.0,
+    "internal_link_graph": [
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/think",
+        "text": "Read more"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/news?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "news_7ce7f712571d",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about#",
+        "text": "PlayLearn more about the School"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about",
+        "text": "Overview"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/leadership",
+        "text": "Our leadership"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/programmes",
+        "text": "Programmes"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/our-local-impact",
+        "text": "Our local impact"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/rankings-and-accreditation",
+        "text": "Our rankings and accreditation"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/financial-statements",
+        "text": "Financial statements"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/learning-and-teaching-philosophy",
+        "text": "Learning and Teaching Philosophy"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/our-campuses/london",
+        "text": "London"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/our-campuses/dubai",
+        "text": "Dubai"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, inclusion and diversity"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/diversity-inclusion-and-belonging/black-at-lbs",
+        "text": "Black at LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/campaigns/masters-degrees/laidlaw",
+        "text": "Laidlaw Women\u2019s Leadership Fund"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/diversity-inclusion-and-belonging/lgbtq",
+        "text": "LGBTQ+"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/diversity-inclusion-and-belonging/social-mobility-at-lbs",
+        "text": "Social Mobility at LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Wellbeing services"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/contact/faqs",
+        "text": "Frequently asked questions"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/our-campuses/london",
+        "text": "London"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/our-campuses/dubai",
+        "text": "Dubai"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/leadership",
+        "text": "Our leadership"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/masters-degrees",
+        "text": "Masters degrees"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/rankings-and-accreditation",
+        "text": "Latest rankings"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and organisations"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Learn more"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Learn more"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/our-local-impact",
+        "text": "Learn more"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/jobs-at-lbs",
+        "text": "Interested in working at LBS?"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/jobs-at-lbs",
+        "text": "Find out more"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "about_c5f70d891e17",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/newsroom#media-coverage",
+        "text": "Media coverage"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/newsroom#media-resources",
+        "text": "Media resources"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/newsroom#more-from-lbs",
+        "text": "More from LBS"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/newsroom#contact-us",
+        "text": "Contact us"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/news",
+        "text": "News"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/news",
+        "text": "More news"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/newsroom/media-coverage",
+        "text": "More media coverage"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about",
+        "text": "About us"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/faculty-and-research/faculty-profiles",
+        "text": "View profiles"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/think",
+        "text": "Read more"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/newsroom?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "newsroom_608504dc2ebe",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/research",
+        "text": "Learn more about research at LBS"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/research/impact-stories",
+        "text": "See more impact stories"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/research/research-highlights#sortCriteria=%40articledateobject%20descending",
+        "text": "See more research highlights"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/academic-research",
+        "text": "See all"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/economics",
+        "text": "Economics"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/finance",
+        "text": "Finance"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/management-science-and-operations",
+        "text": "Management Science and Operations"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/organisational-behaviour",
+        "text": "Organisational Behaviour"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/strategy-and-entrepreneurship",
+        "text": "Strategy and Entrepreneurship"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/institute-of-entrepreneurship-and-private-capital",
+        "text": "Institute of Entrepreneurship and Private Capital"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/wheeler-institute-for-business-and-development",
+        "text": "Wheeler Institute for Business and Development"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/think",
+        "text": "Search all our articles"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research/faculty-profiles",
+        "text": "Learn more"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/faculty-and-research?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "faculty-and-research_c4fd78231318",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/events/calendar",
+        "text": "Go to the events calendar"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/events/calendar",
+        "text": "See the events calendar"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/events/calendar#sortCriteria=%40eventstartdatetime%20ascending&f-eventwhoisaimedatlist=Prospective%20students",
+        "text": "View our Degree programmes events"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/think-ahead",
+        "text": "think ahead"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/think/think-ahead",
+        "text": "Read more"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/events/gaining-ecosystem-advantage",
+        "text": "Find out more"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/events?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "events_86531ad8271f",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/forms/gift-aid-declaration",
+        "text": "Gift Aid Declaration"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give?"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs/why-give",
+        "text": "Read more"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Read more"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/give-to-lbs?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "give-to-lbs_98c8f2905162",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni",
+        "text": "Overview"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community",
+        "text": "Alumni community"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni Council"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/alumni-clubs",
+        "text": "Alumni Clubs"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "Alumni News"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiting at LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/events",
+        "text": "Events"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni careers2"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career coaching"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Resources and Insights"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career opportunities"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/volunteer",
+        "text": "Volunteer"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/news-and-stories",
+        "text": "News and stories"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/events#sort=%40eventstarts%20ascending",
+        "text": "Find out more"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/alumni-clubs",
+        "text": "Find out more"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/volunteer",
+        "text": "Find out more"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Find out more"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "Read more"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "Find out more"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/faculty-and-research/academic-research",
+        "text": "Academic research"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/faculty-and-research",
+        "text": "Faculty and research"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/think/think-digital/think-sustainability",
+        "text": "November 2023 Issue"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers 2"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Resources and insights"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Coaching"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career opportunities"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni/alumni-career-centre/alumni-career-centre-events",
+        "text": "Alumni Career Centre Events"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/forms/gift-aid-declaration",
+        "text": "Gift Aid Declaration"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/alumni?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "alumni_a812cbeb0b88",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about",
+        "text": "About us"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/our-campuses/london",
+        "text": "London main campus:"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/our-campuses/dubai",
+        "text": "Dubai campus:"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy Policy"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/contact?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "contact_61c0097e4724",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about",
+        "text": "About us"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about",
+        "text": "Overview"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/leadership",
+        "text": "Our leadership"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/programmes",
+        "text": "Programmes"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/our-local-impact",
+        "text": "Our local impact"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/rankings-and-accreditation",
+        "text": "Our rankings and accreditation"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/financial-statements",
+        "text": "Financial statements"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/learning-and-teaching-philosophy",
+        "text": "Learning and Teaching Philosophy"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/our-campuses/london",
+        "text": "London"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/our-campuses/dubai",
+        "text": "Dubai"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, inclusion and diversity"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/diversity-inclusion-and-belonging/black-at-lbs",
+        "text": "Black at LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/campaigns/masters-degrees/laidlaw",
+        "text": "Laidlaw Women\u2019s Leadership Fund"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/diversity-inclusion-and-belonging/lgbtq",
+        "text": "LGBTQ+"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/diversity-inclusion-and-belonging/social-mobility-at-lbs",
+        "text": "Social Mobility at LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Wellbeing services"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/contact/faqs",
+        "text": "Frequently asked questions"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/masters-degrees",
+        "text": "Explore our Masters programmes"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education",
+        "text": "Find out more"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/executive-education/our-work-with-organisations",
+        "text": "Find out more"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/lbs-online",
+        "text": "Find out more"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/phd",
+        "text": "Learn more"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/faculty-and-research/strategy-and-entrepreneurship/entrepreneurship-summer-school",
+        "text": "Read more"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/programmes?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "programmes_e941af89c7be",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/events",
+        "text": "Events"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/portal",
+        "text": "Portal"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/create-a-profile",
+        "text": "Create a profile"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/.netlify/functions/login",
+        "text": "Login"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about",
+        "text": "About"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni",
+        "text": "Alumni"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/london-business-school",
+        "text": "London Business School"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/our-campuses",
+        "text": "Our campuses"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/diversity-inclusion-and-belonging",
+        "text": "Diversity, Inclusion and Belonging"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/sustainability-at-london-business-school",
+        "text": "Sustainability at London Business School"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/inclusion-and-diversity/wellbeing-services",
+        "text": "Student Wellbeing Services"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/diversity-inclusion-and-belonging/women-at-lbs",
+        "text": "Women at LBS"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/recruiters-and-organisations",
+        "text": "Recruiters and Organisations"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online",
+        "text": "Online courses"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/our-work-with-organisations/customised-programmes",
+        "text": "Customised programmes"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/our-work-with-organisations/company-exclusive-open-programmes",
+        "text": "Open programmes for organisations"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/our-work-with-organisations/client-success-stories",
+        "text": "Client Success Stories"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/executive-education-alumni",
+        "text": "Executive Education alumni"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/womens-scholarships",
+        "text": "Womens scholarships"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course finder"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/programme-search-results",
+        "text": "Course search"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/our-work-with-organisations",
+        "text": "B2B offerings"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/programme-search-results#sortCriteria=%40eeprogrammestartdate%20ascending&f-programmelocation=Online",
+        "text": "Course search"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/programme-calendar",
+        "text": "Programme calendar"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/phd/profiles",
+        "text": "PhD Profiles"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/phd/transatlantic-doctoral-conference",
+        "text": "Transatlantic Doctoral Conference"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/faculty-and-research/research/research-highlights",
+        "text": "Research highlights"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Accounting",
+        "text": "Accounting"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Analytics%20and%20big%20data",
+        "text": "Analytics and big data"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Economics",
+        "text": "Economics"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Entrepreneurship",
+        "text": "Entrepreneurship"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Finance",
+        "text": "Finance"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Innovation",
+        "text": "Innovation"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Operations%20management",
+        "text": "Operations management"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=People%20management",
+        "text": "People management"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Personal%20development",
+        "text": "Personal development"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/articletopics?topics=Strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think/think-ahead",
+        "text": "Think Ahead events and podcast series"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think",
+        "text": "Editor's Choice"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-community",
+        "text": "Connect with your community"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-community/alumni-news",
+        "text": "AlumniNews"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-community/alumni-stories",
+        "text": "Alumni stories"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-community/alumni-council",
+        "text": "Alumni council"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/volunteer",
+        "text": "Volunteering"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/events",
+        "text": "Alumni events"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-career-centre",
+        "text": "Alumni Career Centre"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-career-centre/alumni-careers2",
+        "text": "Alumni Careers2"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-career-centre/career-opportunities",
+        "text": "Career Opportunities"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-career-centre/coaching",
+        "text": "Career Coaching"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-career-centre/resources-and-insights",
+        "text": "Career Development Resources"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-services-and-benefits",
+        "text": "Alumni services and benefits"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-services-and-benefits/forever-learning",
+        "text": "Forever Learning"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-services-and-benefits/alumni-discovery-circles",
+        "text": "Alumni Discovery Circles"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/news-and-stories",
+        "text": "Alumni news and stories"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/give-to-lbs/why-give",
+        "text": "Why give"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/give-to-lbs/acknowledging-your-support",
+        "text": "Acknowledging your support"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/alumni/alumni-community/lbs-hub",
+        "text": "LBS Hub"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education",
+        "text": "Executive Education"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees",
+        "text": "Masters Degrees"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/phd",
+        "text": "PhD"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/faculty-and-research",
+        "text": "Faculty and Research"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/think",
+        "text": "Think"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/",
+        "text": "Home"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbsmba",
+        "text": "Explore our MBA programmes"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/masters-in-management",
+        "text": "Master in Management"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/global-masters-in-management",
+        "text": "Global Masters in Management"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/masters-in-analytics-and-management",
+        "text": "Masters in Analytics and Management"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/masters-in-financial-analysis",
+        "text": "Masters in Financial Analysis"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/mba",
+        "text": "MBA"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/one-year-mba",
+        "text": "One-year MBA"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/campaigns/masters-degrees/masters-in-finance",
+        "text": "Masters in Finance"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/executive-mba",
+        "text": "Executive MBA"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/sloan-masters-in-leadership-and-strategy",
+        "text": "Sloan Masters in Leadership and Strategy"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/digital-transformation-and-innovation",
+        "text": "Digital Transformation and Innovation"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/finance",
+        "text": "Finance"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/general-management",
+        "text": "General Management"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/leadership",
+        "text": "Leadership"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/marketing",
+        "text": "Marketing"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/strategy",
+        "text": "Strategy"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online",
+        "text": "LBS Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/courses-in-london",
+        "text": "Courses in London"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/courses-in-dubai",
+        "text": "Courses in Dubai"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/certificates",
+        "text": "Certificates"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/ai",
+        "text": "AI"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/building-diverse-and-inclusive-teams",
+        "text": "Building Diverse and Inclusive Teams - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/business-analytics-in-the-age-of-generative-ai",
+        "text": "Business Analytics in the Age of Generative AI - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/cybersecurity-and-digital-trust-for-leaders",
+        "text": "Cybersecurity and Digital Trust for Leaders - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/esg-investing",
+        "text": "ESG Investing - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/fintech-strategy-a-playbook-from-the-experts",
+        "text": "Fintech Strategy: A Playbook from the Experts - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/innovation-through-design-thinking",
+        "text": "Innovation Through Design Thinking - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/leading-digital-transformation",
+        "text": "Leading Digital Transformation - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/mastering-digital-marketing-in-an-ai-world",
+        "text": "Mastering Digital Marketing in an AI world - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/negotiating-and-influencing-skills-for-leaders",
+        "text": "Negotiating and Influencing Skills for Leaders - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/sustainability-leadership-and-corporate-responsibility",
+        "text": "Sustainability Leadership and Corporate Responsibility - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/lbs-online/the-business-of-ai-strategies-for-leaders",
+        "text": "The Business of AI: Strategies for Leaders - Online"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/our-work-with-organisations",
+        "text": "Our work with organisations"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/our-work-with-organisations/corporate-partnerships/corporate100",
+        "text": "LBS Corporate 100"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/news/lbs-launches-corporate-100-alliance-to-address-critical-global-business-challenges",
+        "text": "LBS launches its Corporate 100 alliance to address critical global business challenges"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/news/lbs-launches-corporate-100-alliance-to-address-critical-global-business-challenges",
+        "text": "Learn more"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/masters-degrees/sloan-masters-in-leadership-and-strategy",
+        "text": "Learn more"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/events/calendar/m/mba-open-day-MBAOCL151125",
+        "text": "Learn more"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/leadership/women-in-leadership",
+        "text": "Women in Leadership"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/executive-education/leadership/women-in-leadership",
+        "text": "Read More"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/our-campuses/london/virtual-tour",
+        "text": "London Business School in 360\u00b0"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/our-campuses/london/virtual-tour",
+        "text": "Read more"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/?entry=true#subscribeScreen",
+        "text": "Sign up with your email"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/",
+        "text": "close"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/recruiters-and-organisations",
+        "text": "Organisations"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/recruiters-and-organisations/recruiters",
+        "text": "Recruiters"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/newsroom",
+        "text": "Newsroom"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/contact",
+        "text": "Contact us"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/our-campuses",
+        "text": "Find us"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/jobs-at-lbs",
+        "text": "Jobs at LBS"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/give-to-lbs",
+        "text": "Give to LBS"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/?entry=true#subscribeScreen",
+        "text": "Sign up"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/london-business-school/policies-and-legislation/website-privacy-policy",
+        "text": "Privacy policy"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/about/london-business-school/policies-and-legislation",
+        "text": "Policies and legislation"
+      },
+      {
+        "source": "homepage_5002b6553ab6",
+        "target": "/sitemap",
+        "text": "Sitemap"
+      }
+    ],
+    "link_text_samples": [
+      {
+        "text": "Skip to main content",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Give to LBS",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Newsroom",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Events",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Recruiters and Organisations",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Jobs at LBS",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "LBS Publishing",
+        "type": "external",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "LBS Hub",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Portal",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Create a profile",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Login",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "About",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Masters Degrees",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Executive Education",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "LBS Online",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "PhD",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Faculty and Research",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Think",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Alumni",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "London Business School",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Our campuses",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Diversity, Inclusion and Belonging",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Sustainability at London Business School",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Student Wellbeing Services",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Contact us",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Women at LBS",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Give to LBS",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Graduate Masters",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "MBA",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Masters in Finance",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Executive MBA",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Sloan",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Before you arrive",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Our Community",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Recruiters and Organisations",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Career support",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Masters in Analytics and Management",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Executive MBA",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Courses by topic",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Online courses",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "In-person courses",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Upcoming courses",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Customised programmes",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Open programmes for organisations",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Corporate partnerships",
+        "type": "anchor",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Client Success Stories",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Executive Education alumni",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Womens scholarships",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Course finder",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      },
+      {
+        "text": "Certificates",
+        "type": "internal",
+        "page": "news_7ce7f712571d"
+      }
+    ]
+  },
+  "dom_structure_patterns": {
+    "avg_max_depth": 21.1,
+    "avg_children_per_node": 0.9988540374258464,
+    "depth_distribution": {
+      

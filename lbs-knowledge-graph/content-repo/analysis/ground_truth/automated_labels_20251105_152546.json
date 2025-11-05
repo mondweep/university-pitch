@@ -1,0 +1,129 @@
+{
+  "name": "automated_labels_20251105_152546",
+  "description": "Automated heuristic labels",
+  "created_at": "2025-11-05T15:25:46.783758",
+  "entries": [
+    {
+      "entity_id": "newsroom_608504dc2ebe",
+      "entity_type": "page",
+      "label": "news",
+      "metadata": {
+        "title": "Newsroom | London Business School",
+        "automated": true
+      },
+      "labeled_by": "automated",
+      "labeled_at": "2025-11-05T15:25:46.783662",
+      "confidence": 0.7,
+      "notes": "Automated heuristic labeling"
+    },
+    {
+      "entity_id": "about_c5f70d891e17",
+      "entity_type": "page",
+      "label": "about",
+      "metadata": {
+        "title": "About us | London Business School",
+        "automated": true
+      },
+      "labeled_by": "automated",
+      "labeled_at": "2025-11-05T15:25:46.783690",
+      "confidence": 0.7,
+      "notes": "Automated heuristic labeling"
+    },
+    {
+      "entity_id": "faculty-and-research_c4fd78231318",
+      "entity_type": "page",
+      "label": "faculty",
+      "metadata": {
+        "title": "Faculty and Research | London Business School",
+        "automated": true
+      },
+      "labeled_by": "automated",
+      "labeled_at": "2025-11-05T15:25:46.783698",
+      "confidence": 0.7,
+      "notes": "Automated heuristic labeling"
+    },
+    {
+      "entity_id": "events_86531ad8271f",
+      "entity_type": "page",
+      "label": "event",
+      "metadata": {
+        "title": "Events | London Business School",
+        "automated": true
+      },
+      "labeled_by": "automated",
+      "labeled_at": "2025-11-05T15:25:46.783703",
+      "confidence": 0.7,
+      "notes": "Automated heuristic labeling"
+    },
+    {
+      "entity_id": "give-to-lbs_98c8f2905162",
+      "entity_type": "page",
+      "label": "other",
+      "metadata": {
+        "title": "Give to LBS | London Business School",
+        "automated": true
+      },
+      "labeled_by": "automated",
+      "labeled_at": "2025-11-05T15:25:46.783709",
+      "confidence": 0.3,
+      "notes": "Automated heuristic labeling"
+    },
+    {
+      "entity_id": "alumni_a812cbeb0b88",
+      "entity_type": "page",
+      "label": "alumni",
+      "metadata": {
+        "title": "Alumni | London Business School",
+        "automated": true
+      },
+      "labeled_by": "automated",
+      "labeled_at": "2025-11-05T15:25:46.783714",
+      "confidence": 0.7,
+      "notes": "Automated heuristic labeling"
+    },
+    {
+      "entity_id": "contact_61c0097e4724",
+      "entity_type": "page",
+      "label": "contact",
+      "metadata": {
+        "title": "Contact us | London Business School",
+        "automated": true
+      },
+      "labeled_by": "automated",
+      "labeled_at": "2025-11-05T15:25:46.783719",
+      "confidence": 0.7,
+      "notes": "Automated heuristic labeling"
+    },
+    {
+      "entity_id": "programmes_e941af89c7be",
+      "entity_type": "page",
+      "label": "programme",
+      "metadata": {
+        "title": "Programmes | London Business School",
+        "automated": true
+      },
+      "labeled_by": "automated",
+      "labeled_at": "2025-11-05T15:25:46.783724",
+      "confidence": 0.7,
+      "notes": "Automated heuristic labeling"
+    },
+    {
+      "entity_id": "homepage_5002b6553ab6",
+      "entity_type": "page",
+      "label": "homepage",
+      "metadata": {
+        "title": "Home | London Business School",
+        "automated": true
+      },
+      "labeled_by": "automated",
+      "labeled_at": "2025-11-05T15:25:46.783728",
+      "confidence": 0.7,
+      "notes": "Automated heuristic labeling"
+    }
+  ],
+  "metadata": {
+    "labeler": "automated",
+    "total_entries": 9,
+    "automated": true
+  }
+}

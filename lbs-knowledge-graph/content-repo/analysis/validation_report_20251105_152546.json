@@ -1,0 +1,187 @@
+{
+  "page_type_metrics": {
+    "overall": {
+      "true_positives": 9,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "total_samples": 10,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "accuracy": 0.9
+    }
+  },
+  "section_type_metrics": {
+    "overall": {
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "total_samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "accuracy": 0.0
+    }
+  },
+  "content_type_metrics": {
+    "overall": {
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "total_samples": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "accuracy": 0.0
+    }
+  },
+  "overall_metrics": {
+    "total_pages": 10,
+    "total_sections": 0,
+    "total_content_items": 0,
+    "avg_precision": 0.3333333333333333,
+    "avg_recall": 0.3333333333333333,
+    "avg_f1": 0.3333333333333333,
+    "avg_accuracy": 0.3
+  },
+  "confusion_matrices": {
+    "page_types": {
+      "matrix": {
+        "unknown": {
+          "unknown": 0,
+          "event": 0,
+          "about": 0,
+          "alumni": 0,
+          "other": 0,
+          "contact": 0,
+          "programme": 0,
+          "homepage": 0,
+          "news": 1,
+          "faculty": 0
+        },
+        "event": {
+          "unknown": 0,
+          "event": 1,
+          "about": 0,
+          "alumni": 0,
+          "other": 0,
+          "contact": 0,
+          "programme": 0,
+          "homepage": 0,
+          "news": 0,
+          "faculty": 0
+        },
+        "about": {
+          "unknown": 0,
+          "event": 0,
+          "about": 1,
+          "alumni": 0,
+          "other": 0,
+          "contact": 0,
+          "programme": 0,
+          "homepage": 0,
+          "news": 0,
+          "faculty": 0
+        },
+        "alumni": {
+          "unknown": 0,
+          "event": 0,
+          "about": 0,
+          "alumni": 1,
+          "other": 0,
+          "contact": 0,
+          "programme": 0,
+          "homepage": 0,
+          "news": 0,
+          "faculty": 0
+        },
+        "other": {
+          "unknown": 0,
+          "event": 0,
+          "about": 0,
+          "alumni": 0,
+          "other": 1,
+          "contact": 0,
+          "programme": 0,
+          "homepage": 0,
+          "news": 0,
+          "faculty": 0
+        },
+        "contact": {
+          "unknown": 0,
+          "event": 0,
+          "about": 0,
+          "alumni": 0,
+          "other": 0,
+          "contact": 1,
+          "programme": 0,
+          "homepage": 0,
+          "news": 0,
+          "faculty": 0
+        },
+        "programme": {
+          "unknown": 0,
+          "event": 0,
+          "about": 0,
+          "alumni": 0,
+          "other": 0,
+          "contact": 0,
+          "programme": 1,
+          "homepage": 0,
+          "news": 0,
+          "faculty": 0
+        },
+        "homepage": {
+          "unknown": 0,
+          "event": 0,
+          "about": 0,
+          "alumni": 0,
+          "other": 0,
+          "contact": 0,
+          "programme": 0,
+          "homepage": 1,
+          "news": 0,
+          "faculty": 0
+        },
+        "news": {
+          "unknown": 0,
+          "event": 0,
+          "about": 0,
+          "alumni": 0,
+          "other": 0,
+          "contact": 0,
+          "programme": 0,
+          "homepage": 0,
+          "news": 1,
+          "faculty": 0
+        },
+        "faculty": {
+          "unknown": 0,
+          "event": 0,
+          "about": 0,
+          "alumni": 0,
+          "other": 0,
+          "contact": 0,
+          "programme": 0,
+          "homepage": 0,
+          "news": 0,
+          "faculty": 1
+        }
+      },
+      "labels": [
+        "unknown",
+        "event",
+        "about",
+        "alumni",
+        "other",
+        "contact",
+        "programme",
+        "homepage",
+        "news",
+        "faculty"
+      ],
+      "total_samples": 10
+    }
+  },
+  "errors": []
+}

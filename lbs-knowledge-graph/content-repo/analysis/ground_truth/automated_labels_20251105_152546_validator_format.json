@@ -1,0 +1,20 @@
+{
+  "page_types": {
+    "newsroom_608504dc2ebe": "news",
+    "about_c5f70d891e17": "about",
+    "faculty-and-research_c4fd78231318": "faculty",
+    "events_86531ad8271f": "event",
+    "give-to-lbs_98c8f2905162": "other",
+    "alumni_a812cbeb0b88": "alumni",
+    "contact_61c0097e4724": "contact",
+    "programmes_e941af89c7be": "programme",
+    "homepage_5002b6553ab6": "homepage"
+  },
+  "section_types": {},
+  "content_types": {},
+  "metadata": {
+    "labeler": "automated",
+    "total_entries": 9,
+    "automated": true
+  }
+}

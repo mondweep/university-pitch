@@ -1,324 +1,268 @@
 """
 Entity Graph Builder
-Creates Entity nodes and MENTIONS relationships in the knowledge graph.
+
+Creates entity nodes and relationships (MENTIONS, AFFILIATED_WITH, LOCATED_AT)
+in the knowledge graph from NER extraction results.
 """
 
-import logging
+from typing import List, Dict, Optional
+from datetime import datetime
 import uuid
-from typing import Dict, List, Optional, Tuple
-from collections import defaultdict
 
-from ..graph.mgraph_compat import MGraph
-from .entity_models import Entity, EntityMention, EntityType
-
-logger = logging.getLogger(__name__)
+from src.graph.mgraph_compat import MGraph
+from .entity_models import Entity, EntityMention, EntityRelationship, NERExtractionResult
 
 
 class EntityGraphBuilder:
-    """Build entity nodes and relationships in graph."""
+    """
+    Builds entity nodes and relationships in the knowledge graph.
+
+    Creates Entity nodes and connects them to ContentItem nodes with
+    MENTIONS edges. Also creates inter-entity relationships like
+    AFFILIATED_WITH and LOCATED_AT.
+    """
 
     def __init__(self, graph: MGraph):
         """
         Initialize entity graph builder.
 
         Args:
-            graph: MGraph instance
+            graph: MGraph instance for graph operations
         """
         self.graph = graph
-        self.entity_id_map: Dict[str, str] = {}  # normalized_name -> node_id
+        self.entity_cache: Dict[str, str] = {}  # Map canonical names to entity IDs
 
-        logger.info("Initialized EntityGraphBuilder")
-
-    def create_entity_node(self, entity: Entity) -> str:
+    def build_entities(self, results: List[NERExtractionResult]) -> Dict[str, int]:
         """
-        Create or get existing Entity node in graph.
+        Build entity nodes and relationships from NER results.
 
         Args:
-            entity: Entity to create
+            results: List of NER extraction results
 
         Returns:
-            Entity node ID
+            Dictionary with statistics (entities_created, mentions_created, etc.)
         """
-        # Check if entity already exists
-        if entity.normalized_name in self.entity_id_map:
-            existing_id = self.entity_id_map[entity.normalized_name]
-            logger.debug(f"Entity already exists: {entity.name} -> {existing_id}")
-            return existing_id
-
-        # Create new entity node
-        node_id = entity.id or str(uuid.uuid4())
-
-        properties = {
-            "name": entity.name,
-            "type": entity.type.value,
-            "normalized_name": entity.normalized_name,
-            "confidence": entity.confidence,
-            "aliases": entity.aliases,
-            "prominence": entity.prominence,
-            "mention_count": len(entity.source_ids)
-        }
-
-        # Add metadata
-        if entity.metadata:
-            properties["metadata"] = entity.metadata
-
-        self.graph.add_node(
-            node_id=node_id,
-            node_type="Entity",
-            properties=properties
-        )
-
-        # Cache the ID
-        self.entity_id_map[entity.normalized_name] = node_id
-        entity.id = node_id
-
-        logger.debug(f"Created Entity node: {entity.name} ({entity.type.value}) -> {node_id}")
-
-        return node_id
-
-    def create_mentions_edge(
-        self,
-        source_id: str,
-        entity_id: str,
-        context: str = "",
-        position: int = 0,
-        confidence: float = 1.0
-    ) -> None:
-        """
-        Create MENTIONS relationship from Page/Section to Entity.
-
-        Args:
-            source_id: Source node ID (Page or Section)
-            entity_id: Entity node ID
-            context: Surrounding text context
-            position: Position in source text
-            confidence: Confidence score
-        """
-        properties = {
-            "context": context[:200],  # Limit context length
-            "position": position,
-            "confidence": confidence
-        }
-
-        self.graph.add_edge(
-            from_id=source_id,
-            to_id=entity_id,
-            edge_type="MENTIONS",
-            properties=properties
-        )
-
-        logger.debug(f"Created MENTIONS edge: {source_id} -> {entity_id}")
-
-    def build_entities_from_list(
-        self,
-        entities: List[Entity],
-        source_id: str,
-        source_type: str = "Page"
-    ) -> List[str]:
-        """
-        Build entity nodes and mentions edges for a list of entities.
-
-        Args:
-            entities: List of entities to build
-            source_id: Source node ID
-            source_type: Source node type (Page or Section)
-
-        Returns:
-            List of created entity node IDs
-        """
-        entity_ids = []
-
-        for idx, entity in enumerate(entities):
-            # Create entity node
-            entity_id = self.create_entity_node(entity)
-            entity_ids.append(entity_id)
-
-            # Create mentions edge
-            self.create_mentions_edge(
-                source_id=source_id,
-                entity_id=entity_id,
-                context=entity.context,
-                position=idx,
-                confidence=entity.confidence
-            )
-
-        logger.info(
-            f"Built {len(entity_ids)} entities for {source_type} {source_id}"
-        )
-
-        return entity_ids
-
-    def calculate_prominence(self, entity_id: str) -> float:
-        """
-        Calculate entity prominence score.
-
-        Prominence is based on:
-        - Number of mentions (frequency)
-        - Number of unique pages mentioning entity
-        - Average confidence of mentions
-
-        Args:
-            entity_id: Entity node ID
-
-        Returns:
-            Prominence score (0-1)
-        """
-        # Get all MENTIONS edges pointing to this entity
-        mentions = self.graph.get_edges_by_type("MENTIONS", to_id=entity_id)
-
-        if not mentions:
-            return 0.0
-
-        # Count unique sources (pages)
-        unique_sources = set()
-        total_confidence = 0.0
-
-        for mention in mentions:
-            source_id = mention.get("from_id")
-            confidence = mention.get("properties", {}).get("confidence", 1.0)
-
-            if source_id:
-                unique_sources.add(source_id)
-                total_confidence += confidence
-
-        # Calculate components
-        frequency_score = min(len(mentions) / 50.0, 1.0)  # Normalize to max 50 mentions
-        diversity_score = min(len(unique_sources) / 20.0, 1.0)  # Normalize to max 20 sources
-        confidence_score = total_confidence / len(mentions)
-
-        # Weighted average
-        prominence = (
-            0.4 * frequency_score +
-            0.4 * diversity_score +
-            0.2 * confidence_score
-        )
-
-        logger.debug(
-            f"Prominence for {entity_id}: {prominence:.3f} "
-            f"(mentions={len(mentions)}, sources={len(unique_sources)})"
-        )
-
-        return prominence
-
-    def update_entity_prominence(self, entity_id: str) -> None:
-        """
-        Update prominence score for an entity.
-
-        Args:
-            entity_id: Entity node ID
-        """
-        prominence = self.calculate_prominence(entity_id)
-
-        # Update entity node properties
-        self.graph.update_node(
-            node_id=entity_id,
-            properties={"prominence": prominence}
-        )
-
-        logger.debug(f"Updated prominence for {entity_id}: {prominence:.3f}")
-
-    def calculate_all_prominences(self) -> None:
-        """Calculate and update prominence for all entities."""
-        entity_nodes = self.graph.get_nodes_by_type("Entity")
-
-        logger.info(f"Calculating prominence for {len(entity_nodes)} entities")
-
-        for node in entity_nodes:
-            entity_id = node.get("id")
-            if entity_id:
-                self.update_entity_prominence(entity_id)
-
-        logger.info("Prominence calculation complete")
-
-    def get_entity_statistics(self) -> Dict:
-        """
-        Get statistics about entities in the graph.
-
-        Returns:
-            Statistics dictionary
-        """
-        entity_nodes = self.graph.get_nodes_by_type("Entity")
-        mentions_edges = self.graph.get_edges_by_type("MENTIONS")
-
-        # Count by type
-        type_counts = defaultdict(int)
-        for node in entity_nodes:
-            entity_type = node.get("properties", {}).get("type", "UNKNOWN")
-            type_counts[entity_type] += 1
-
-        # Get top entities by prominence
-        entities_with_prominence = [
-            (
-                node.get("properties", {}).get("name", "Unknown"),
-                node.get("properties", {}).get("prominence", 0.0)
-            )
-            for node in entity_nodes
-        ]
-        entities_with_prominence.sort(key=lambda x: x[1], reverse=True)
-        top_entities = entities_with_prominence[:20]
-
-        # Count sources mentioning entities
-        sources_with_entities = set()
-        for edge in mentions_edges:
-            source_id = edge.get("from_id")
-            if source_id:
-                sources_with_entities.add(source_id)
-
         stats = {
-            "total_entities": len(entity_nodes),
-            "total_mentions": len(mentions_edges),
-            "entities_by_type": dict(type_counts),
-            "sources_with_entities": len(sources_with_entities),
-            "top_entities": top_entities,
-            "avg_mentions_per_entity": (
-                len(mentions_edges) / len(entity_nodes)
-                if entity_nodes else 0.0
-            )
+            "entities_created": 0,
+            "entities_updated": 0,
+            "mentions_created": 0,
+            "relationships_created": 0
         }
 
-        logger.info(f"Entity statistics: {stats['total_entities']} entities, {stats['total_mentions']} mentions")
+        # Process all entities and merge duplicates
+        for result in results:
+            for entity in result.entities:
+                entity_id = self._create_or_update_entity(entity)
+                if entity_id:
+                    if entity.id == entity_id:
+                        stats["entities_created"] += 1
+                    else:
+                        stats["entities_updated"] += 1
+
+            # Create mentions (edges from content to entities)
+            for mention in result.mentions:
+                if self._create_mention(mention):
+                    stats["mentions_created"] += 1
+
+            # Create entity relationships
+            for relationship in result.relationships:
+                if self._create_relationship(relationship):
+                    stats["relationships_created"] += 1
 
         return stats
 
-    def get_entity_distribution(self) -> Dict[str, int]:
+    def _create_or_update_entity(self, entity: Entity) -> Optional[str]:
         """
-        Get distribution of entities across pages.
+        Create entity node or update existing entity.
 
-        Returns:
-            Dictionary mapping page_id to entity count
+        Merges entities with the same canonical name by:
+        - Combining aliases
+        - Incrementing mention count
+        - Updating prominence (max)
         """
-        mentions_edges = self.graph.get_edges_by_type("MENTIONS")
+        # Check if entity already exists (by canonical name)
+        canonical = entity.canonical_name
 
-        distribution = defaultdict(int)
-        for edge in mentions_edges:
-            source_id = edge.get("from_id")
-            if source_id:
-                distribution[source_id] += 1
+        if canonical in self.entity_cache:
+            # Update existing entity
+            entity_id = self.entity_cache[canonical]
 
-        return dict(distribution)
+            # Get existing entity data
+            existing = self.graph.get_node(entity_id)
+            if not existing:
+                return None
 
-    def export_entities(self, output_path: str) -> None:
+            # Merge aliases
+            existing_aliases = existing.data.get("aliases", [])
+            new_aliases = list(set(existing_aliases + entity.aliases + [entity.name]))
+
+            # Update entity by re-adding with merged data
+            merged_data = {
+                **existing.data,
+                "aliases": new_aliases,
+                "mention_count": existing.data.get("mention_count", 0) + 1,
+                "prominence": max(existing.data.get("prominence", 0), entity.prominence),
+                "metadata": {**existing.data.get("metadata", {}), **entity.metadata}
+            }
+            self.graph.add_node("Entity", entity_id, merged_data)
+
+            return entity_id
+        else:
+            # Create new entity
+            entity_id = entity.id
+
+            self.graph.add_node(
+                "Entity",
+                entity_id,
+                {
+                    "name": entity.name,
+                    "entity_type": entity.entity_type.value,
+                    "canonical_name": entity.canonical_name,
+                    "aliases": entity.aliases,
+                    "metadata": entity.metadata,
+                    "mention_count": entity.mention_count,
+                    "first_mentioned": entity.first_mentioned.isoformat() if entity.first_mentioned else None,
+                    "prominence": entity.prominence,
+                    "confidence": entity.confidence
+                }
+            )
+
+            # Cache entity
+            self.entity_cache[canonical] = entity_id
+
+            return entity_id
+
+    def _create_mention(self, mention: EntityMention) -> bool:
         """
-        Export entities to JSON file.
+        Create MENTIONS edge from ContentItem to Entity.
 
         Args:
-            output_path: Output file path
+            mention: EntityMention object
+
+        Returns:
+            True if edge created successfully
         """
-        import json
+        try:
+            # Get actual entity ID (may have been merged)
+            entity_id = mention.entity_id
 
-        entity_nodes = self.graph.get_nodes_by_type("Entity")
+            # Check if entity exists in cache (it may have been merged)
+            entity_node = self.graph.get_node(entity_id)
+            if entity_node:
+                canonical = entity_node.data.get("canonical_name")
+                if canonical and canonical in self.entity_cache:
+                    entity_id = self.entity_cache[canonical]
 
-        entities_data = []
-        for node in entity_nodes:
-            entities_data.append({
-                "id": node.get("id"),
-                "properties": node.get("properties", {})
-            })
+            self.graph.add_edge(
+                mention.content_id,
+                entity_id,
+                "MENTIONS",
+                {
+                    "entity_text": mention.entity_text,
+                    "context": mention.context,
+                    "prominence": mention.prominence,
+                    "confidence": mention.confidence,
+                    "position": mention.position,
+                    "extracted_by": mention.extracted_by,
+                    "created_at": datetime.now().isoformat()
+                }
+            )
+            return True
+        except Exception as e:
+            print(f"⚠️  Error creating mention: {e}")
+            return False
 
-        with open(output_path, 'w') as f:
-            json.dump({
-                "count": len(entities_data),
-                "entities": entities_data
-            }, f, indent=2)
+    def _create_relationship(self, relationship: EntityRelationship) -> bool:
+        """
+        Create relationship edge between entities.
 
-        logger.info(f"Exported {len(entities_data)} entities to {output_path}")
+        Args:
+            relationship: EntityRelationship object
+
+        Returns:
+            True if edge created successfully
+        """
+        try:
+            # Resolve actual entity IDs (may have been merged)
+            from_entity = self.graph.get_node(relationship.from_entity_id)
+            to_entity = self.graph.get_node(relationship.to_entity_id)
+
+            if not from_entity or not to_entity:
+                return False
+
+            # Get canonical IDs
+            from_id = self.entity_cache.get(
+                from_entity.data.get("canonical_name"),
+                relationship.from_entity_id
+            )
+            to_id = self.entity_cache.get(
+                to_entity.data.get("canonical_name"),
+                relationship.to_entity_id
+            )
+
+            self.graph.add_edge(
+                from_id,
+                to_id,
+                relationship.relationship_type,
+                {
+                    "confidence": relationship.confidence,
+                    "evidence": relationship.evidence,
+                    "metadata": relationship.metadata,
+                    "created_at": datetime.now().isoformat()
+                }
+            )
+            return True
+        except Exception as e:
+            print(f"⚠️  Error creating relationship: {e}")
+            return False
+
+    def get_entity_stats(self) -> Dict[str, int]:
+        """
+        Get entity statistics from graph.
+
+        Returns:
+            Dictionary with entity counts by type
+        """
+        stats = {
+            "total_entities": 0,
+            "PERSON": 0,
+            "ORGANIZATION": 0,
+            "LOCATION": 0,
+            "EVENT": 0
+        }
+
+        # Query all entities
+        entities = self.graph.query(
+            "SELECT id, entity_type FROM nodes WHERE type = 'Entity'"
+        )
+
+        for entity in entities:
+            stats["total_entities"] += 1
+            entity_type = entity.get("entity_type", "UNKNOWN")
+            if entity_type in stats:
+                stats[entity_type] += 1
+
+        return stats
+
+    def get_top_entities(self, limit: int = 20) -> List[Dict]:
+        """
+        Get top entities by prominence and mention count.
+
+        Args:
+            limit: Number of entities to return
+
+        Returns:
+            List of entity dictionaries sorted by prominence
+        """
+        entities = self.graph.query(
+            """
+            SELECT id, name, entity_type, canonical_name, mention_count, prominence
+            FROM nodes
+            WHERE type = 'Entity'
+            ORDER BY prominence DESC, mention_count DESC
+            LIMIT ?
+            """,
+            (limit,)
+        )
+
+        return entities

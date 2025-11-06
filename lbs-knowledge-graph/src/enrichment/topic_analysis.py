@@ -1,8 +1,8 @@
 """
-Topic Analysis for Knowledge Graph
+Topic Analysis for Knowledge Graph Insights
 
-Analyzes topic distribution, identifies trending/niche topics,
-and calculates co-occurrence statistics.
+Analyzes topic distribution, co-occurrence, and trends.
+Generates insights for topic clustering visualization.
 """
 
 import logging
@@ -11,395 +11,329 @@ from typing import Dict, List, Tuple, Set
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 
-from ..graph.mgraph_compat import MGraph, MNode
+from .topic_models import Topic
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-class TopicStats:
-    """Topic statistics"""
+class TopicInsight:
+    """Insight about topic usage and patterns."""
     topic_id: str
     topic_name: str
-    frequency: int  # Number of pages containing topic
-    avg_position: float  # Average position in page (0-1, lower = earlier)
-    co_occurrence_count: int  # Number of topics that co-occur with this one
-    centrality: float  # Topic centrality score
+    frequency: int
+    importance: float
+    category: str
+    co_occurring_topics: List[Tuple[str, int]]
+    pages_count: int
+    trend: str  # 'rising', 'stable', 'declining'
 
 
-class TopicAnalysis:
+class TopicAnalyzer:
     """
-    Analyze topic distribution and relationships in knowledge graph.
+    Analyze topic patterns and generate insights.
+
+    Features:
+    - Topic frequency distribution
+    - Topic co-occurrence matrix
+    - Trending topics detection
+    - Topic coverage analysis
     """
 
-    def __init__(self, graph: MGraph):
+    def __init__(self, topics: List[Topic], page_topics: Dict[str, List[str]]):
         """
-        Initialize topic analysis.
+        Initialize topic analyzer.
 
         Args:
-            graph: Knowledge graph instance
+            topics: List of all topics
+            page_topics: Mapping of page_id -> [topic_ids]
         """
-        self.graph = graph
-        logger.info("Initialized TopicAnalysis")
+        self.topics = topics
+        self.page_topics = page_topics
 
-    def analyze_distribution(self) -> Dict:
+        # Create topic lookup
+        self.topic_map = {t.id: t for t in topics}
+
+        logger.info(
+            f"Initialized TopicAnalyzer with {len(topics)} topics, "
+            f"{len(page_topics)} pages"
+        )
+
+    def calculate_frequency_distribution(self) -> Dict[str, int]:
         """
-        Analyze topic frequency distribution across pages.
+        Calculate topic frequency across all pages.
 
         Returns:
-            Dictionary with distribution statistics
+            Dictionary of topic_id -> frequency count
         """
-        topic_nodes = self.graph.query(node_type='Topic')
+        logger.info("Calculating topic frequency distribution...")
 
-        if not topic_nodes:
-            logger.warning("No topics found in graph")
-            return {}
+        frequency = Counter()
 
-        # Count pages per topic (via HAS_TOPIC edges)
-        frequencies = []
-        for topic in topic_nodes:
-            has_topic_edges = self.graph.get_edges(to_node_id=topic.id, edge_type='HAS_TOPIC')
-            frequency = len(has_topic_edges)
-            frequencies.append(frequency)
+        for page_id, topic_ids in self.page_topics.items():
+            frequency.update(topic_ids)
 
-        frequencies = np.array(frequencies)
+        logger.info(f"Processed {len(self.page_topics)} pages")
 
-        distribution = {
-            'total_topics': len(topic_nodes),
-            'total_frequency': int(frequencies.sum()),
-            'avg_frequency': float(frequencies.mean()),
-            'median_frequency': float(np.median(frequencies)),
-            'std_frequency': float(frequencies.std()),
-            'min_frequency': int(frequencies.min()),
-            'max_frequency': int(frequencies.max()),
-            'unique_topics': len([f for f in frequencies if f == 1]),
-            'common_topics': len([f for f in frequencies if f >= 5]),
+        return dict(frequency)
+
+    def calculate_co_occurrence_matrix(
+        self,
+        min_support: int = 2
+    ) -> Dict[Tuple[str, str], int]:
+        """
+        Calculate topic co-occurrence matrix.
+
+        Args:
+            min_support: Minimum co-occurrence count
+
+        Returns:
+            Dictionary of (topic_id1, topic_id2) -> co-occurrence count
+        """
+        logger.info("Calculating topic co-occurrence matrix...")
+
+        co_occurrence = Counter()
+
+        for page_id, topic_ids in self.page_topics.items():
+            # Get all pairs of topics on this page
+            for i, topic1 in enumerate(topic_ids):
+                for topic2 in topic_ids[i + 1:]:
+                    # Sort to ensure consistency
+                    pair = tuple(sorted([topic1, topic2]))
+                    co_occurrence[pair] += 1
+
+        # Filter by minimum support
+        filtered = {
+            pair: count
+            for pair, count in co_occurrence.items()
+            if count >= min_support
         }
 
         logger.info(
-            f"Topic distribution: {distribution['total_topics']} topics, "
-            f"avg freq={distribution['avg_frequency']:.2f}, "
-            f"{distribution['unique_topics']} unique, "
-            f"{distribution['common_topics']} common (5+)"
+            f"Found {len(filtered)} co-occurring topic pairs "
+            f"(min support: {min_support})"
         )
 
-        return distribution
+        return filtered
 
-    def find_trending_topics(self, threshold: int = 5) -> List[TopicStats]:
+    def identify_trending_topics(
+        self,
+        top_n: int = 10
+    ) -> List[TopicInsight]:
         """
-        Identify trending topics (high frequency, high centrality).
+        Identify trending topics based on frequency and importance.
 
         Args:
-            threshold: Minimum frequency to be considered trending
+            top_n: Number of top trending topics
 
         Returns:
-            List of trending topic statistics
+            List of trending topic insights
         """
-        topic_nodes = self.graph.query(node_type='Topic')
-        trending = []
+        logger.info("Identifying trending topics...")
 
-        for topic in topic_nodes:
-            # Count pages containing topic
-            has_topic_edges = self.graph.get_edges(to_node_id=topic.id, edge_type='HAS_TOPIC')
-            frequency = len(has_topic_edges)
+        frequency = self.calculate_frequency_distribution()
 
-            if frequency < threshold:
-                continue
+        # Calculate composite trend score
+        trending_scores = []
 
-            # Calculate average position in pages
-            positions = []
-            for edge in has_topic_edges:
-                position = edge.data.get('position', 0.5)  # Default to middle
-                positions.append(position)
-            avg_position = np.mean(positions) if positions else 0.5
+        for topic in self.topics:
+            freq = frequency.get(topic.id, 0)
 
-            # Count co-occurring topics
-            co_occurrence_count = len(self.graph.get_edges(from_node_id=topic.id, edge_type='RELATED_TOPIC'))
+            # Composite score: frequency * importance
+            score = freq * topic.importance
 
-            # Get centrality
-            centrality = topic.data.get('centrality', 0.0)
+            trending_scores.append({
+                'topic': topic,
+                'frequency': freq,
+                'score': score
+            })
 
-            stats = TopicStats(
+        # Sort by trend score
+        trending_scores.sort(key=lambda x: x['score'], reverse=True)
+
+        # Get co-occurring topics for each trending topic
+        co_occurrence = self.calculate_co_occurrence_matrix()
+
+        insights = []
+        for item in trending_scores[:top_n]:
+            topic = item['topic']
+
+            # Get co-occurring topics
+            co_occurring = []
+            for (topic1, topic2), count in co_occurrence.items():
+                if topic1 == topic.id:
+                    co_occurring.append((topic2, count))
+                elif topic2 == topic.id:
+                    co_occurring.append((topic1, count))
+
+            # Sort by co-occurrence count
+            co_occurring.sort(key=lambda x: x[1], reverse=True)
+
+            # Count pages
+            pages_count = sum(
+                1 for topic_ids in self.page_topics.values()
+                if topic.id in topic_ids
+            )
+
+            # Determine trend (simple heuristic based on score)
+            if item['score'] > np.percentile([s['score'] for s in trending_scores], 75):
+                trend = 'rising'
+            elif item['score'] < np.percentile([s['score'] for s in trending_scores], 25):
+                trend = 'declining'
+            else:
+                trend = 'stable'
+
+            insight = TopicInsight(
                 topic_id=topic.id,
-                topic_name=topic.data.get('name', topic.id),
-                frequency=frequency,
-                avg_position=avg_position,
-                co_occurrence_count=co_occurrence_count,
-                centrality=centrality
+                topic_name=topic.name,
+                frequency=item['frequency'],
+                importance=topic.importance,
+                category=topic.category.value,
+                co_occurring_topics=co_occurring[:5],
+                pages_count=pages_count,
+                trend=trend
             )
 
-            trending.append(stats)
+            insights.append(insight)
 
-        # Sort by combined score (frequency * centrality)
-        trending.sort(key=lambda t: t.frequency * (1 + t.centrality), reverse=True)
+        logger.info(f"Identified {len(insights)} trending topics")
 
-        logger.info(f"Found {len(trending)} trending topics (threshold={threshold})")
+        return insights
 
-        for i, stats in enumerate(trending[:10], 1):
-            logger.info(
-                f"  {i}. {stats.topic_name} (freq={stats.frequency}, "
-                f"cent={stats.centrality:.3f}, co-occ={stats.co_occurrence_count})"
-            )
-
-        return trending
-
-    def find_niche_topics(self, max_frequency: int = 2) -> List[TopicStats]:
+    def calculate_topic_coverage(self) -> Dict:
         """
-        Identify niche topics (low frequency but high relevance).
-
-        Args:
-            max_frequency: Maximum frequency to be considered niche
+        Calculate topic coverage metrics per page.
 
         Returns:
-            List of niche topic statistics
+            Dictionary with coverage statistics
         """
-        topic_nodes = self.graph.query(node_type='Topic')
-        niche = []
+        logger.info("Calculating topic coverage...")
 
-        for topic in topic_nodes:
-            # Count pages containing topic
-            has_topic_edges = self.graph.get_edges(to_node_id=topic.id, edge_type='HAS_TOPIC')
-            frequency = len(has_topic_edges)
+        topics_per_page = [
+            len(topic_ids) for topic_ids in self.page_topics.values()
+        ]
 
-            if frequency > max_frequency:
-                continue
-
-            # Calculate average position in pages
-            positions = []
-            for edge in has_topic_edges:
-                position = edge.data.get('position', 0.5)
-                positions.append(position)
-            avg_position = np.mean(positions) if positions else 0.5
-
-            # Count co-occurring topics
-            co_occurrence_count = len(self.graph.get_edges(from_node_id=topic.id, edge_type='RELATED_TOPIC'))
-
-            # Get centrality
-            centrality = topic.data.get('centrality', 0.0)
-
-            stats = TopicStats(
-                topic_id=topic.id,
-                topic_name=topic.data.get('name', topic.id),
-                frequency=frequency,
-                avg_position=avg_position,
-                co_occurrence_count=co_occurrence_count,
-                centrality=centrality
-            )
-
-            niche.append(stats)
-
-        # Sort by relevance (early position + centrality)
-        niche.sort(key=lambda t: (1 - t.avg_position) * (1 + t.centrality), reverse=True)
-
-        logger.info(f"Found {len(niche)} niche topics (max_freq={max_frequency})")
-
-        for i, stats in enumerate(niche[:10], 1):
-            logger.info(
-                f"  {i}. {stats.topic_name} (freq={stats.frequency}, "
-                f"pos={stats.avg_position:.2f}, cent={stats.centrality:.3f})"
-            )
-
-        return niche
-
-    def calculate_cooccurrence(self) -> np.ndarray:
-        """
-        Generate topic co-occurrence matrix.
-
-        Counts how many pages contain both topic A and topic B.
-
-        Returns:
-            NxN co-occurrence matrix (N = number of topics)
-        """
-        topic_nodes = self.graph.query(node_type='Topic')
-        n_topics = len(topic_nodes)
-
-        if n_topics == 0:
-            return np.array([])
-
-        # Create topic ID to index mapping
-        topic_to_idx = {topic.id: i for i, topic in enumerate(topic_nodes)}
-        idx_to_topic = {i: topic for i, topic in enumerate(topic_nodes)}
-
-        # Initialize co-occurrence matrix
-        cooccurrence = np.zeros((n_topics, n_topics), dtype=int)
-
-        # Get all pages
-        page_nodes = self.graph.query(node_type='Page')
-
-        for page in page_nodes:
-            # Get all topics in this page
-            topic_edges = self.graph.get_edges(from_node_id=page.id, edge_type='HAS_TOPIC')
-            page_topics = [edge.to_node for edge in topic_edges]
-
-            # Update co-occurrence counts
-            for i, topic1 in enumerate(page_topics):
-                if topic1 not in topic_to_idx:
-                    continue
-                idx1 = topic_to_idx[topic1]
-
-                for topic2 in page_topics[i:]:  # Include diagonal (self co-occurrence)
-                    if topic2 not in topic_to_idx:
-                        continue
-                    idx2 = topic_to_idx[topic2]
-
-                    cooccurrence[idx1, idx2] += 1
-                    if idx1 != idx2:  # Symmetric matrix
-                        cooccurrence[idx2, idx1] += 1
-
-        logger.info(
-            f"Calculated {n_topics}x{n_topics} co-occurrence matrix, "
-            f"total co-occurrences={cooccurrence.sum()}"
-        )
-
-        return cooccurrence
-
-    def calculate_diversity_metrics(self) -> Dict:
-        """
-        Calculate topic diversity metrics.
-
-        Metrics include:
-        - Topic coverage: % of pages with at least one topic
-        - Average topics per page
-        - Topic entropy (distribution uniformity)
-
-        Returns:
-            Dictionary with diversity metrics
-        """
-        page_nodes = self.graph.query(node_type='Page')
-        topic_nodes = self.graph.query(node_type='Topic')
-
-        if not page_nodes or not topic_nodes:
-            return {}
-
-        # Count topics per page
-        topics_per_page = []
-        pages_with_topics = 0
-
-        for page in page_nodes:
-            topic_edges = self.graph.get_edges(from_node_id=page.id, edge_type='HAS_TOPIC')
-            num_topics = len(topic_edges)
-            topics_per_page.append(num_topics)
-
-            if num_topics > 0:
-                pages_with_topics += 1
-
-        # Calculate topic frequency distribution for entropy
-        topic_frequencies = []
-        for topic in topic_nodes:
-            has_topic_edges = self.graph.get_edges(to_node_id=topic.id, edge_type='HAS_TOPIC')
-            topic_frequencies.append(len(has_topic_edges))
-
-        # Calculate entropy
-        topic_frequencies = np.array(topic_frequencies)
-        total_freq = topic_frequencies.sum()
-
-        if total_freq > 0:
-            probabilities = topic_frequencies / total_freq
-            probabilities = probabilities[probabilities > 0]  # Remove zeros
-            entropy = -np.sum(probabilities * np.log2(probabilities))
-            max_entropy = np.log2(len(topic_nodes))
-            normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0
-        else:
-            entropy = 0
-            normalized_entropy = 0
-
-        metrics = {
-            'total_pages': len(page_nodes),
-            'total_topics': len(topic_nodes),
-            'topic_coverage': pages_with_topics / len(page_nodes),
-            'avg_topics_per_page': np.mean(topics_per_page),
-            'median_topics_per_page': np.median(topics_per_page),
-            'max_topics_per_page': max(topics_per_page),
-            'topic_entropy': float(entropy),
-            'normalized_entropy': float(normalized_entropy),
+        coverage = {
+            'total_pages': len(self.page_topics),
+            'total_topics': len(self.topics),
+            'avg_topics_per_page': np.mean(topics_per_page) if topics_per_page else 0,
+            'median_topics_per_page': np.median(topics_per_page) if topics_per_page else 0,
+            'min_topics_per_page': min(topics_per_page) if topics_per_page else 0,
+            'max_topics_per_page': max(topics_per_page) if topics_per_page else 0,
+            'pages_without_topics': sum(1 for count in topics_per_page if count == 0)
         }
 
         logger.info(
-            f"Diversity metrics: {metrics['topic_coverage']:.1%} coverage, "
-            f"{metrics['avg_topics_per_page']:.2f} topics/page, "
-            f"entropy={metrics['normalized_entropy']:.3f}"
+            f"Coverage: {coverage['avg_topics_per_page']:.1f} avg topics/page"
         )
 
-        return metrics
+        return coverage
 
-    def get_topic_page_mapping(self) -> Dict[str, List[str]]:
+    def generate_topic_report(self) -> Dict:
         """
-        Get mapping of topics to pages that contain them.
+        Generate comprehensive topic analysis report.
 
         Returns:
-            Dictionary mapping topic IDs to list of page IDs
+            Report dictionary with all analysis results
         """
-        topic_nodes = self.graph.query(node_type='Topic')
-        mapping = {}
+        logger.info("Generating topic analysis report...")
 
-        for topic in topic_nodes:
-            has_topic_edges = self.graph.get_edges(to_node_id=topic.id, edge_type='HAS_TOPIC')
-            page_ids = [edge.from_node for edge in has_topic_edges]
-            mapping[topic.id] = page_ids
+        frequency = self.calculate_frequency_distribution()
+        co_occurrence = self.calculate_co_occurrence_matrix()
+        trending = self.identify_trending_topics(top_n=10)
+        coverage = self.calculate_topic_coverage()
 
-        return mapping
+        # Topic distribution by category
+        category_dist = Counter()
+        for topic in self.topics:
+            category_dist[topic.category.value] += 1
 
-    def get_page_topic_mapping(self) -> Dict[str, List[str]]:
-        """
-        Get mapping of pages to topics they contain.
-
-        Returns:
-            Dictionary mapping page IDs to list of topic IDs
-        """
-        page_nodes = self.graph.query(node_type='Page')
-        mapping = {}
-
-        for page in page_nodes:
-            topic_edges = self.graph.get_edges(from_node_id=page.id, edge_type='HAS_TOPIC')
-            topic_ids = [edge.to_node for edge in topic_edges]
-            mapping[page.id] = topic_ids
-
-        return mapping
-
-    def export_analysis_report(self, output_path: str) -> None:
-        """
-        Export comprehensive topic analysis report.
-
-        Args:
-            output_path: Output file path for report
-        """
-        from pathlib import Path
-        import json
-
-        # Gather all statistics
-        distribution = self.analyze_distribution()
-        trending = self.find_trending_topics(threshold=5)
-        niche = self.find_niche_topics(max_frequency=2)
-        diversity = self.calculate_diversity_metrics()
-
-        # Create report
         report = {
-            'distribution': distribution,
-            'diversity': diversity,
+            'summary': {
+                'total_topics': len(self.topics),
+                'total_pages': len(self.page_topics),
+                'avg_topics_per_page': coverage['avg_topics_per_page'],
+                'total_topic_assignments': sum(frequency.values())
+            },
+            'frequency_distribution': {
+                'top_10_topics': sorted(
+                    frequency.items(),
+                    key=lambda x: x[1],
+                    reverse=True
+                )[:10],
+                'distribution': frequency
+            },
+            'category_distribution': dict(category_dist),
+            'co_occurrence': {
+                'total_pairs': len(co_occurrence),
+                'top_10_pairs': sorted(
+                    co_occurrence.items(),
+                    key=lambda x: x[1],
+                    reverse=True
+                )[:10]
+            },
             'trending_topics': [
                 {
-                    'topic_id': t.topic_id,
                     'name': t.topic_name,
                     'frequency': t.frequency,
-                    'centrality': t.centrality,
-                    'co_occurrence': t.co_occurrence_count
+                    'importance': t.importance,
+                    'category': t.category,
+                    'trend': t.trend,
+                    'pages_count': t.pages_count,
+                    'co_occurring': [
+                        self.topic_map[tid].name for tid, _ in t.co_occurring_topics[:3]
+                    ]
                 }
-                for t in trending[:20]
+                for t in trending
             ],
-            'niche_topics': [
-                {
-                    'topic_id': t.topic_id,
-                    'name': t.topic_name,
-                    'frequency': t.frequency,
-                    'avg_position': t.avg_position,
-                    'centrality': t.centrality
-                }
-                for t in niche[:20]
-            ],
+            'coverage': coverage
         }
 
-        # Write report
-        with open(output_path, 'w') as f:
-            json.dump(report, f, indent=2)
+        logger.info("Topic analysis report generated")
 
-        logger.info(f"Exported topic analysis report to {output_path}")
+        return report
+
+    def export_heatmap_data(
+        self,
+        top_n: int = 20
+    ) -> Tuple[List[str], np.ndarray]:
+        """
+        Export topic co-occurrence data for heatmap visualization.
+
+        Args:
+            top_n: Number of top topics to include
+
+        Returns:
+            Tuple of (topic_names, co_occurrence_matrix)
+        """
+        logger.info(f"Exporting heatmap data for top {top_n} topics...")
+
+        # Get top N most frequent topics
+        frequency = self.calculate_frequency_distribution()
+        top_topics = sorted(
+            frequency.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )[:top_n]
+
+        topic_ids = [tid for tid, _ in top_topics]
+        topic_names = [self.topic_map[tid].name for tid in topic_ids]
+
+        # Calculate co-occurrence for top topics
+        co_occurrence = self.calculate_co_occurrence_matrix(min_support=1)
+
+        # Build matrix
+        n = len(topic_ids)
+        matrix = np.zeros((n, n))
+
+        for i, topic1 in enumerate(topic_ids):
+            for j, topic2 in enumerate(topic_ids):
+                if i == j:
+                    matrix[i, j] = frequency[topic1]
+                else:
+                    pair = tuple(sorted([topic1, topic2]))
+                    matrix[i, j] = co_occurrence.get(pair, 0)
+
+        logger.info(f"Generated {n}x{n} co-occurrence matrix")
+
+        return topic_names, matrix

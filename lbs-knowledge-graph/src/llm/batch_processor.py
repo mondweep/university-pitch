@@ -1,68 +1,35 @@
 """
-Batch Processor for efficient LLM enrichment operations.
+Batch processor for efficient LLM-based enrichment tasks.
 
-Handles batching, parallel processing, progress tracking, and cost monitoring.
+Optimizations:
+- Batches items into groups for single API calls
+- Parallel processing with asyncio
+- Progress tracking
+- Error handling and retry
+- Results caching
 """
 
 import asyncio
-import logging
+import json
 from typing import List, Dict, Any, Optional, Callable
+from tqdm.asyncio import tqdm as async_tqdm
 from datetime import datetime
-from dataclasses import dataclass, field
 
 from .llm_client import LLMClient
-from .prompts import PromptTemplates
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
-class ProcessingStatistics:
-    """Statistics for batch processing run."""
-
-    total_items: int = 0
-    processed_items: int = 0
-    failed_items: int = 0
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
-    total_cost: float = 0.0
-    batches_processed: int = 0
-    errors: List[Dict[str, Any]] = field(default_factory=list)
-
-    @property
-    def success_rate(self) -> float:
-        """Calculate success rate percentage."""
-        if self.total_items == 0:
-            return 0.0
-        return (self.processed_items / self.total_items) * 100
-
-    @property
-    def elapsed_time(self) -> float:
-        """Calculate elapsed time in seconds."""
-        if self.start_time is None:
-            return 0.0
-        end = self.end_time or datetime.now()
-        return (end - self.start_time).total_seconds()
-
-    @property
-    def items_per_second(self) -> float:
-        """Calculate processing rate."""
-        if self.elapsed_time == 0:
-            return 0.0
-        return self.processed_items / self.elapsed_time
+from .prompts import (
+    SENTIMENT_BATCH_PROMPT,
+    TOPIC_BATCH_PROMPT,
+    PERSONA_BATCH_PROMPT,
+    NER_BATCH_PROMPT,
+    JOURNEY_BATCH_PROMPT,
+    format_batch_prompt
+)
+from .response_parser import ResponseParser
 
 
 class BatchProcessor:
     """
-    Batch processor for LLM enrichment operations.
-
-    Features:
-    - Efficient batching of items for API optimization
-    - Parallel processing with configurable concurrency
-    - Progress tracking and reporting
-    - Cost accumulation and monitoring
-    - Automatic retries for failed batches
-    - Result validation and quality checks
+    Processes large datasets through LLM with batching and parallelization.
     """
 
     def __init__(
@@ -70,325 +37,319 @@ class BatchProcessor:
         llm_client: LLMClient,
         batch_size: int = 50,
         max_concurrent: int = 5,
-        validation_callback: Optional[Callable[[Dict], bool]] = None
+        cache_results: bool = True
     ):
         """
         Initialize batch processor.
 
         Args:
-            llm_client: LLM client for API calls
-            batch_size: Number of items per batch
+            llm_client: LLM client instance
+            batch_size: Items per batch (per API call)
             max_concurrent: Maximum concurrent API requests
-            validation_callback: Optional callback to validate results
+            cache_results: Whether to cache results
         """
         self.llm_client = llm_client
         self.batch_size = batch_size
         self.max_concurrent = max_concurrent
-        self.validation_callback = validation_callback
+        self.cache_results = cache_results
 
-        self.stats = ProcessingStatistics()
-        self.prompt_templates = PromptTemplates()
+        self.response_parser = ResponseParser()
 
-    def _create_batch_prompt(
+        # Results cache
+        self.results_cache: Dict[str, Any] = {}
+
+        # Processing stats
+        self.stats = {
+            "total_items": 0,
+            "processed_items": 0,
+            "failed_items": 0,
+            "batches_processed": 0,
+            "cache_hits": 0,
+            "start_time": None,
+            "end_time": None
+        }
+
+    async def process_items(
         self,
         items: List[Dict],
-        template_name: str,
-        **template_kwargs
-    ) -> str:
+        task_type: str,
+        max_tokens: int = 1000,
+        temperature: float = 0.3,
+        **kwargs
+    ) -> List[Dict]:
         """
-        Create a batched prompt from multiple items.
+        Process items in optimized batches.
 
         Args:
             items: List of items to process
-            template_name: Name of prompt template to use
-            template_kwargs: Additional template parameters
+            task_type: Type of enrichment task
+            max_tokens: Maximum tokens per response
+            temperature: Sampling temperature
+            **kwargs: Additional parameters
 
         Returns:
-            Formatted batch prompt
+            List of enriched results
         """
-        # Get template method
-        template_method = getattr(self.prompt_templates, template_name)
+        self.stats["start_time"] = datetime.now()
+        self.stats["total_items"] = len(items)
 
-        # Build batch prompt
-        batch_prompts = []
-        for idx, item in enumerate(items):
-            item_prompt = template_method(
-                content=item.get('content', ''),
-                **template_kwargs
-            )
-            batch_prompts.append(f"Item {idx + 1}:\n{item_prompt}\n")
-
-        return "\n".join(batch_prompts)
-
-    async def process_batch(
-        self,
-        items: List[Dict],
-        prompt_template: str,
-        max_tokens: int = 500,
-        **template_kwargs
-    ) -> List[Dict]:
-        """
-        Process a batch of items through LLM.
-
-        Args:
-            items: List of items with 'content' field
-            prompt_template: Name of prompt template (e.g., 'sentiment_analysis')
-            max_tokens: Maximum tokens per completion
-            template_kwargs: Additional parameters for prompt template
-
-        Returns:
-            List of enriched items with LLM responses
-        """
-        if not items:
-            return []
-
-        results = []
-
-        # Process in batches
-        for i in range(0, len(items), self.batch_size):
-            batch = items[i:i + self.batch_size]
-
-            try:
-                # Create batch prompt
-                batch_prompt = self._create_batch_prompt(
-                    batch,
-                    prompt_template,
-                    **template_kwargs
-                )
-
-                # Estimate cost
-                estimated_cost = self.llm_client.estimate_cost(batch_prompt, max_tokens)
-                logger.info(
-                    f"Processing batch {i // self.batch_size + 1} "
-                    f"({len(batch)} items, estimated cost: ${estimated_cost:.4f})"
-                )
-
-                # Get completion
-                response = await self.llm_client.complete(batch_prompt, max_tokens)
-
-                # Parse batch response
-                batch_results = self._parse_batch_response(response, batch)
-
-                # Validate results if callback provided
-                if self.validation_callback:
-                    batch_results = [
-                        result for result in batch_results
-                        if self.validation_callback(result)
-                    ]
-
-                results.extend(batch_results)
-                self.stats.processed_items += len(batch_results)
-                self.stats.batches_processed += 1
-
-            except Exception as e:
-                logger.error(f"Error processing batch {i // self.batch_size + 1}: {e}")
-                self.stats.failed_items += len(batch)
-                self.stats.errors.append({
-                    'batch_index': i // self.batch_size,
-                    'error': str(e),
-                    'items': batch
-                })
-
-                # Add empty results for failed items
-                for item in batch:
-                    results.append({**item, 'error': str(e)})
-
-        return results
-
-    def _parse_batch_response(
-        self,
-        response: str,
-        original_items: List[Dict]
-    ) -> List[Dict]:
-        """
-        Parse batch response and match with original items.
-
-        Args:
-            response: LLM response text
-            original_items: Original items in batch
-
-        Returns:
-            List of items enriched with LLM responses
-        """
-        # Split response by item markers
-        import re
-
-        item_pattern = r"Item (\d+):\s*(.*?)(?=Item \d+:|$)"
-        matches = re.findall(item_pattern, response, re.DOTALL)
-
-        results = []
-        for item, (idx_str, item_response) in zip(original_items, matches):
-            enriched = {
-                **item,
-                'llm_response': item_response.strip(),
-                'processed_at': datetime.now().isoformat()
-            }
-            results.append(enriched)
-
-        # If parsing failed, return items with full response
-        if len(results) != len(original_items):
-            logger.warning(
-                f"Batch response parsing mismatch: "
-                f"expected {len(original_items)}, got {len(results)}"
-            )
-            results = [
-                {
-                    **item,
-                    'llm_response': response,
-                    'processed_at': datetime.now().isoformat()
-                }
-                for item in original_items
-            ]
-
-        return results
-
-    async def process_items_parallel(
-        self,
-        items: List[Dict],
-        prompt_template: str,
-        max_tokens: int = 500,
-        progress_callback: Optional[Callable[[int, int], None]] = None,
-        **template_kwargs
-    ) -> List[Dict]:
-        """
-        Process items in parallel with progress tracking.
-
-        Args:
-            items: List of items to process
-            prompt_template: Name of prompt template
-            max_tokens: Maximum tokens per completion
-            progress_callback: Optional callback for progress updates (processed, total)
-            template_kwargs: Additional template parameters
-
-        Returns:
-            List of enriched items
-        """
-        self.stats = ProcessingStatistics(
-            total_items=len(items),
-            start_time=datetime.now()
-        )
-
-        logger.info(f"Starting parallel processing of {len(items)} items")
-
-        # Create batches
+        # Split into batches
         batches = [
             items[i:i + self.batch_size]
             for i in range(0, len(items), self.batch_size)
         ]
 
-        # Process batches with concurrency control
+        print(f"Processing {len(items)} items in {len(batches)} batches...")
+
+        # Process batches with concurrency limit
         semaphore = asyncio.Semaphore(self.max_concurrent)
 
-        async def process_with_semaphore(batch: List[Dict]) -> List[Dict]:
+        async def process_batch_with_limit(batch, batch_idx):
             async with semaphore:
-                result = await self.process_batch(
+                return await self._process_batch(
                     batch,
-                    prompt_template,
+                    batch_idx,
+                    task_type,
                     max_tokens,
-                    **template_kwargs
+                    temperature,
+                    **kwargs
                 )
 
-                # Progress callback
-                if progress_callback:
-                    progress_callback(self.stats.processed_items, self.stats.total_items)
-
-                return result
-
-        # Process all batches
-        batch_results = await asyncio.gather(
-            *[process_with_semaphore(batch) for batch in batches],
-            return_exceptions=True
-        )
-
-        # Flatten results
+        # Process all batches with progress tracking
         results = []
-        for batch_result in batch_results:
-            if isinstance(batch_result, Exception):
-                logger.error(f"Batch processing error: {batch_result}")
-                continue
-            results.extend(batch_result)
+        for idx, batch in enumerate(batches):
+            print(f"Processing batch {idx+1}/{len(batches)}...")
+            batch_results = await process_batch_with_limit(batch, idx)
+            results.extend(batch_results)
 
-        self.stats.end_time = datetime.now()
-
-        # Update cost from LLM client
-        self.stats.total_cost = self.llm_client.get_statistics()['estimated_cost']
-
-        logger.info(
-            f"Processing complete: {self.stats.processed_items}/{self.stats.total_items} items "
-            f"({self.stats.success_rate:.1f}% success rate) in {self.stats.elapsed_time:.1f}s. "
-            f"Total cost: ${self.stats.total_cost:.2f}"
-        )
+        self.stats["end_time"] = datetime.now()
+        self.stats["processed_items"] = len([r for r in results if not r.get("error")])
+        self.stats["failed_items"] = len([r for r in results if r.get("error")])
 
         return results
 
-    def track_cost(self) -> float:
+    async def _process_batch(
+        self,
+        batch: List[Dict],
+        batch_idx: int,
+        task_type: str,
+        max_tokens: int,
+        temperature: float,
+        **kwargs
+    ) -> List[Dict]:
         """
-        Get total API costs for this processor.
-
-        Returns:
-            Total cost in USD
-        """
-        return self.llm_client.get_statistics()['estimated_cost']
-
-    def get_statistics(self) -> Dict[str, Any]:
-        """
-        Get comprehensive processing statistics.
-
-        Returns:
-            Dictionary with processing statistics
-        """
-        return {
-            'total_items': self.stats.total_items,
-            'processed_items': self.stats.processed_items,
-            'failed_items': self.stats.failed_items,
-            'success_rate': self.stats.success_rate,
-            'batches_processed': self.stats.batches_processed,
-            'elapsed_time': self.stats.elapsed_time,
-            'items_per_second': self.stats.items_per_second,
-            'total_cost': self.stats.total_cost,
-            'errors': self.stats.errors,
-            'llm_statistics': self.llm_client.get_statistics()
-        }
-
-    async def retry_failed_items(self, max_retries: int = 3) -> List[Dict]:
-        """
-        Retry processing failed items from previous run.
+        Process single batch of items.
 
         Args:
-            max_retries: Maximum number of retry attempts
+            batch: Batch of items
+            batch_idx: Batch index for tracking
+            task_type: Type of enrichment task
+            max_tokens: Maximum tokens
+            temperature: Sampling temperature
+            **kwargs: Additional parameters
 
         Returns:
-            List of successfully processed items from retries
+            List of results for batch items
         """
-        if not self.stats.errors:
-            logger.info("No failed items to retry")
-            return []
+        try:
+            # Create batch prompt
+            prompt = self._create_batch_prompt(batch, task_type)
 
-        logger.info(f"Retrying {len(self.stats.errors)} failed batches")
+            # Check cache
+            if self.cache_results:
+                cache_key = f"{task_type}:{batch_idx}"
+                if cache_key in self.results_cache:
+                    self.stats["cache_hits"] += 1
+                    return self.results_cache[cache_key]
 
-        results = []
-        for error_info in self.stats.errors:
-            failed_items = error_info['items']
+            # Make LLM request
+            response = await self.llm_client.complete(
+                prompt=prompt,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                **kwargs
+            )
 
-            for attempt in range(max_retries):
-                try:
-                    batch_results = await self.process_batch(
-                        failed_items,
-                        prompt_template='sentiment_analysis',  # Default
-                        max_tokens=500
-                    )
-                    results.extend(batch_results)
-                    logger.info(
-                        f"Successfully retried batch (attempt {attempt + 1})"
-                    )
-                    break
+            # Parse response
+            results = self._parse_batch_response(
+                response["content"],
+                batch,
+                task_type
+            )
 
-                except Exception as e:
-                    if attempt == max_retries - 1:
-                        logger.error(
-                            f"Failed to retry batch after {max_retries} attempts: {e}"
-                        )
-                    else:
-                        await asyncio.sleep(2 ** attempt)
+            # Update cache
+            if self.cache_results:
+                self.results_cache[cache_key] = results
 
-        return results
+            self.stats["batches_processed"] += 1
+
+            return results
+
+        except Exception as e:
+            print(f"Error processing batch {batch_idx}: {str(e)}")
+            # Return error results for each item
+            return [
+                {
+                    "id": item.get("id", f"item_{i}"),
+                    "error": str(e),
+                    "success": False
+                }
+                for i, item in enumerate(batch)
+            ]
+
+    def _create_batch_prompt(self, batch: List[Dict], task_type: str) -> str:
+        """
+        Create prompt for batch of items.
+
+        Args:
+            batch: Batch of items
+            task_type: Type of enrichment task
+
+        Returns:
+            Formatted prompt string
+        """
+        # Map task type to prompt template
+        prompt_map = {
+            "sentiment": SENTIMENT_BATCH_PROMPT,
+            "topics": TOPIC_BATCH_PROMPT,
+            "personas": PERSONA_BATCH_PROMPT,
+            "ner": NER_BATCH_PROMPT,
+            "entities": NER_BATCH_PROMPT,
+            "journey": JOURNEY_BATCH_PROMPT,
+            "journey_stages": JOURNEY_BATCH_PROMPT
+        }
+
+        if task_type not in prompt_map:
+            raise ValueError(f"Unsupported task type: {task_type}")
+
+        template = prompt_map[task_type]
+        return format_batch_prompt(template, batch, self.batch_size)
+
+    def _parse_batch_response(
+        self,
+        response_text: str,
+        batch: List[Dict],
+        task_type: str
+    ) -> List[Dict]:
+        """
+        Parse batch response into individual results.
+
+        Args:
+            response_text: LLM response text
+            batch: Original batch items
+            task_type: Type of enrichment task
+
+        Returns:
+            List of parsed results
+        """
+        try:
+            # Parse JSON response
+            parsed = self.response_parser.parse_json_response(response_text)
+
+            if not isinstance(parsed, list):
+                raise ValueError("Expected JSON array response")
+
+            # Validate response structure
+            validated = self.response_parser.validate_batch_response(
+                parsed,
+                task_type,
+                len(batch)
+            )
+
+            # Match results to original items
+            results = []
+            for item, result in zip(batch, validated):
+                results.append({
+                    **result,
+                    "original_id": item.get("id"),
+                    "success": True
+                })
+
+            # Handle cases where response length doesn't match batch
+            if len(validated) < len(batch):
+                for i in range(len(validated), len(batch)):
+                    results.append({
+                        "id": batch[i].get("id"),
+                        "error": "Missing result in batch response",
+                        "success": False
+                    })
+
+            return results
+
+        except Exception as e:
+            print(f"Error parsing batch response: {str(e)}")
+            print(f"Response text: {response_text[:500]}...")
+
+            # Return error results
+            return [
+                {
+                    "id": item.get("id", f"item_{i}"),
+                    "error": f"Parse error: {str(e)}",
+                    "success": False
+                }
+                for i, item in enumerate(batch)
+            ]
+
+    def get_stats(self) -> Dict:
+        """Get processing statistics."""
+        stats = self.stats.copy()
+
+        if stats["start_time"] and stats["end_time"]:
+            duration = (stats["end_time"] - stats["start_time"]).total_seconds()
+            stats["duration_seconds"] = duration
+            stats["items_per_second"] = stats["processed_items"] / duration if duration > 0 else 0
+
+        stats["success_rate"] = (
+            stats["processed_items"] / max(stats["total_items"], 1)
+        ) * 100
+
+        return stats
+
+    def reset_stats(self):
+        """Reset processing statistics."""
+        self.stats = {
+            "total_items": 0,
+            "processed_items": 0,
+            "failed_items": 0,
+            "batches_processed": 0,
+            "cache_hits": 0,
+            "start_time": None,
+            "end_time": None
+        }
+
+    def clear_cache(self):
+        """Clear results cache."""
+        self.results_cache.clear()
+
+
+async def process_with_progress(
+    items: List[Dict],
+    processor: BatchProcessor,
+    task_type: str,
+    description: str = "Processing"
+) -> List[Dict]:
+    """
+    Convenience function to process items with progress bar.
+
+    Args:
+        items: Items to process
+        processor: BatchProcessor instance
+        task_type: Type of enrichment task
+        description: Progress bar description
+
+    Returns:
+        List of results
+    """
+    print(f"\n{description}...")
+    results = await processor.process_items(items, task_type)
+
+    # Print summary
+    stats = processor.get_stats()
+    print(f"\nCompleted: {stats['processed_items']}/{stats['total_items']} items")
+    print(f"Success rate: {stats['success_rate']:.1f}%")
+    print(f"Failed: {stats['failed_items']} items")
+    if stats.get('duration_seconds'):
+        print(f"Duration: {stats['duration_seconds']:.1f}s")
+        print(f"Speed: {stats['items_per_second']:.1f} items/sec")
+
+    return results

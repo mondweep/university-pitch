@@ -45,13 +45,13 @@ async def main():
     config = {
         'api_key': os.getenv('OPENAI_API_KEY'),
         'embedding_model': 'text-embedding-3-small',
-        'graph_path': 'data/graphs/lbs-kg-enriched.json',
+        'graph_path': 'data/graph/graph.json',
         'output_dir': 'data/enrichment/similarity',
         'top_k': 5,
         'threshold': 0.7,
         'use_multi_signal': True,
         'use_ann': True,
-        'node_types': ['Page', 'Section']
+        'node_types': ['Page']
     }
 
     # Validate API key
@@ -166,7 +166,7 @@ async def main():
         logger.info("STEP 7: Saving enriched graph")
         logger.info("=" * 80)
 
-        enriched_graph_path = Path('data/graphs/lbs-kg-with-similarity.json')
+        enriched_graph_path = Path('data/graph/graph_with_similarity.json')
         enriched_graph_path.parent.mkdir(parents=True, exist_ok=True)
 
         graph_loader.save(graph, str(enriched_graph_path))

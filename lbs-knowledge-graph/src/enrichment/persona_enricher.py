@@ -1,319 +1,271 @@
 """
-Persona Enricher - Orchestrates persona classification and graph enrichment.
+Persona Enrichment Orchestrator
+
+Master script for persona classification and TARGETS relationship creation.
+Coordinates persona classification, node creation, and relationship building.
 """
 
 import asyncio
-import logging
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 import json
+import os
+from datetime import datetime
+from typing import Dict, Any
 
-from ..graph.graph_loader import GraphLoader
-from ..graph.mgraph_compat import MGraph
-from ..llm.llm_client import LLMClient
+from src.graph.mgraph_wrapper import MGraph
+
+from .llm_client import LLMClient
 from .persona_classifier import PersonaClassifier
 from .targets_builder import TargetsBuilder
-from .persona_models import get_all_personas
-
-
-logger = logging.getLogger(__name__)
 
 
 class PersonaEnricher:
-    """Enrich knowledge graph with persona targeting."""
+    """
+    Master orchestrator for persona enrichment.
+
+    Workflow:
+    1. Initialize LLM client and graph connection
+    2. Create Persona nodes
+    3. Classify content by target personas
+    4. Create TARGETS relationships
+    5. Update statistics and generate report
+    """
 
     def __init__(
         self,
-        llm_client: LLMClient,
-        graph_path: Path,
-        output_dir: Path,
-        relevance_threshold: float = 0.6
+        api_key: str = None,
+        model: str = "gpt-4o-mini",
+        graph_host: str = "localhost",
+        graph_port: int = 7687
     ):
         """
         Initialize persona enricher.
 
         Args:
-            llm_client: LLM client for classification
-            graph_path: Path to input graph JSON
-            output_dir: Output directory for enriched graph
-            relevance_threshold: Minimum relevance score
+            api_key: OpenAI API key
+            model: LLM model to use
+            graph_host: Memgraph host
+            graph_port: Memgraph port
         """
-        self.llm_client = llm_client
-        self.graph_path = graph_path
-        self.output_dir = output_dir
-        self.relevance_threshold = relevance_threshold
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+        self.model = model
+
+        # Initialize clients
+        self.llm_client = LLMClient(api_key=self.api_key, model=self.model)
+        self.graph = MGraph(host=graph_host, port=graph_port)
 
         # Initialize components
         self.classifier = PersonaClassifier(
-            llm_client=llm_client,
-            relevance_threshold=relevance_threshold,
-            max_personas_per_content=3
-        )
-        self.graph: Optional[MGraph] = None
-        self.builder: Optional[TargetsBuilder] = None
-
-        logger.info(f"Initialized PersonaEnricher: graph={graph_path}")
-
-    def load_graph(self) -> MGraph:
-        """Load graph from file."""
-        logger.info(f"Loading graph from {self.graph_path}")
-        loader = GraphLoader()
-        self.graph = loader.load(str(self.graph_path))
-        self.builder = TargetsBuilder(self.graph)
-        logger.info(f"Loaded graph with {self.graph.node_count()} nodes, {self.graph.edge_count()} edges")
-        return self.graph
-
-    async def enrich_pages(self) -> List[Dict[str, Any]]:
-        """
-        Classify all Page nodes by personas.
-
-        Returns:
-            List of classification results
-        """
-        if not self.graph:
-            raise ValueError("Graph not loaded. Call load_graph() first.")
-
-        logger.info("Enriching Page nodes with persona targeting...")
-
-        # Get all Page nodes
-        page_nodes = self.graph.get_nodes_by_type("Page")
-        logger.info(f"Found {len(page_nodes)} Page nodes")
-
-        # Prepare classification items
-        items = []
-        for node_id in page_nodes:
-            node = self.graph.get_node(node_id)
-            if not node:
-                continue
-
-            # Combine title and description for classification
-            title = node.get('title', '')
-            description = node.get('description', '')
-            text = f"{title}\n\n{description}" if description else title
-
-            items.append({
-                'node_id': node_id,
-                'text': text,
-                'metadata': {
-                    'page_type': node.get('type', 'unknown'),
-                    'title': title,
-                    'url': node.get('url', '')
-                }
-            })
-
-        # Classify in batches
-        logger.info(f"Classifying {len(items)} pages...")
-        classifications = await self.classifier.classify_batch(items, batch_size=50)
-
-        # Combine results
-        results = []
-        for item, targets in zip(items, classifications):
-            results.append({
-                'node_id': item['node_id'],
-                'targets': targets,
-                'metadata': item['metadata']
-            })
-
-        logger.info(
-            f"Classified {len(results)} pages, "
-            f"total targets: {sum(len(r['targets']) for r in results)}"
+            llm_client=self.llm_client,
+            graph=self.graph,
+            min_relevance=0.6,
+            batch_size=50
         )
 
-        return results
+        self.builder = TargetsBuilder(graph=self.graph)
 
-    async def enrich_sections(self) -> List[Dict[str, Any]]:
+        self.report = {}
+
+    async def enrich_all(self, content_type: str = "both") -> Dict[str, Any]:
         """
-        Classify all Section nodes by personas.
-
-        Returns:
-            List of classification results
-        """
-        if not self.graph:
-            raise ValueError("Graph not loaded. Call load_graph() first.")
-
-        logger.info("Enriching Section nodes with persona targeting...")
-
-        # Get all Section nodes
-        section_nodes = self.graph.get_nodes_by_type("Section")
-        logger.info(f"Found {len(section_nodes)} Section nodes")
-
-        # Prepare classification items
-        items = []
-        for node_id in section_nodes:
-            node = self.graph.get_node(node_id)
-            if not node:
-                continue
-
-            # Use heading and text for classification
-            heading = node.get('heading', '')
-            text_content = node.get('text', '')
-            text = f"{heading}\n\n{text_content}" if text_content else heading
-
-            # Skip if no meaningful content
-            if not text.strip():
-                continue
-
-            # Get parent page for context
-            parent_edges = self.graph.get_edges_to(node_id)
-            page_type = 'unknown'
-            for edge_id in parent_edges:
-                edge = self.graph.get_edge(edge_id)
-                if edge.get('type') == 'CONTAINS':
-                    parent = self.graph.get_node(edge['source'])
-                    if parent.get('type') == 'Page':
-                        page_type = parent.get('type', 'unknown')
-                        break
-
-            items.append({
-                'node_id': node_id,
-                'text': text,
-                'metadata': {
-                    'page_type': page_type,
-                    'title': heading,
-                    'section_type': node.get('type', 'unknown')
-                }
-            })
-
-        # Classify in batches
-        logger.info(f"Classifying {len(items)} sections...")
-        classifications = await self.classifier.classify_batch(items, batch_size=50)
-
-        # Combine results
-        results = []
-        for item, targets in zip(items, classifications):
-            results.append({
-                'node_id': item['node_id'],
-                'targets': targets,
-                'metadata': item['metadata']
-            })
-
-        logger.info(
-            f"Classified {len(results)} sections, "
-            f"total targets: {sum(len(r['targets']) for r in results)}"
-        )
-
-        return results
-
-    async def enrich_graph(self) -> MGraph:
-        """
-        Enrich entire graph with persona targeting.
-
-        Returns:
-            Enriched MGraph
-        """
-        # Load graph
-        self.load_graph()
-
-        # Classify pages and sections
-        page_results = await self.enrich_pages()
-        section_results = await self.enrich_sections()
-
-        # Build persona graph
-        all_results = page_results + section_results
-        logger.info(f"Building persona graph with {len(all_results)} classified nodes...")
-        self.graph = self.builder.build_persona_graph(all_results)
-
-        logger.info("Persona enrichment complete!")
-        return self.graph
-
-    def export_graph(self, output_path: Optional[Path] = None) -> Path:
-        """
-        Export enriched graph to JSON.
+        Run complete persona enrichment workflow.
 
         Args:
-            output_path: Output file path (default: output_dir/graph_enriched.json)
+            content_type: Type to enrich ('page', 'section', or 'both')
 
         Returns:
-            Path to exported file
+            Enrichment report
         """
-        if not self.graph:
-            raise ValueError("Graph not enriched. Call enrich_graph() first.")
+        print("=" * 70)
+        print("PERSONA ENRICHMENT - Phase 3")
+        print("=" * 70)
+        print(f"Model: {self.model}")
+        print(f"Content type: {content_type}")
+        print(f"Min relevance: {self.classifier.min_relevance}")
+        print(f"Batch size: {self.classifier.batch_size}")
+        print()
 
-        if output_path is None:
-            output_path = self.output_dir / "graph_enriched.json"
+        start_time = datetime.now()
 
-        output_path.parent.mkdir(parents=True, exist_ok=True)
+        # Step 1: Create Persona nodes
+        personas_created = self.builder.create_persona_nodes()
 
-        # Export graph
-        graph_data = {
-            'metadata': {
-                'total_nodes': self.graph.node_count(),
-                'total_edges': self.graph.edge_count(),
-                'personas': len(self.builder.persona_nodes),
-                'targets_edges': sum(
-                    len([e for e in self.graph.get_edges_to(nid)
-                         if self.graph.get_edge(e).get('type') == 'TARGETS'])
-                    for nid in self.builder.persona_nodes.values()
-                )
-            },
-            'nodes': [
-                {'id': nid, **self.graph.get_node(nid)}
-                for nid in self.graph.get_all_nodes()
-            ],
-            'edges': [
-                {'id': eid, **self.graph.get_edge(eid)}
-                for eid in self.graph.get_all_edges()
-            ]
-        }
+        # Step 2: Classify content
+        classifications = await self.classifier.classify_content(content_type=content_type)
 
-        with open(output_path, 'w') as f:
-            json.dump(graph_data, f, indent=2)
+        if not classifications:
+            print("\n⚠️  No classifications generated. Check content availability.")
+            return {"error": "No classifications generated"}
 
-        logger.info(f"Exported enriched graph to {output_path}")
-        logger.info(f"  Nodes: {graph_data['metadata']['total_nodes']}")
-        logger.info(f"  Edges: {graph_data['metadata']['total_edges']}")
-        logger.info(f"  Personas: {graph_data['metadata']['personas']}")
-        logger.info(f"  TARGETS edges: {graph_data['metadata']['targets_edges']}")
+        # Step 3: Create TARGETS relationships
+        relationships_created = self.builder.create_targets_relationships(classifications)
 
-        return output_path
+        # Step 4: Update statistics
+        persona_stats = self.builder.update_persona_statistics()
 
-    def generate_report(self, output_path: Optional[Path] = None) -> Dict[str, Any]:
-        """
-        Generate persona targeting report.
+        # Step 5: Generate report
+        end_time = datetime.now()
+        duration = (end_time - start_time).total_seconds()
 
-        Args:
-            output_path: Output file path (default: output_dir/persona_report.json)
+        self.report = self._generate_report(
+            personas_created=personas_created,
+            classifications=classifications,
+            relationships_created=relationships_created,
+            persona_stats=persona_stats,
+            duration=duration
+        )
 
-        Returns:
-            Report data
-        """
-        if not self.builder:
-            raise ValueError("Graph not enriched. Call enrich_graph() first.")
+        # Save report
+        self._save_report()
 
-        if output_path is None:
-            output_path = self.output_dir / "persona_report.json"
+        # Print summary
+        self._print_summary()
 
-        report = self.builder.generate_report(output_path)
+        return self.report
 
-        # Add LLM usage stats
-        report['llm_usage'] = self.classifier.get_usage_stats()
+    def _generate_report(
+        self,
+        personas_created: int,
+        classifications: list,
+        relationships_created: int,
+        persona_stats: dict,
+        duration: float
+    ) -> Dict[str, Any]:
+        """Generate enrichment report."""
 
-        # Save updated report
-        with open(output_path, 'w') as f:
-            json.dump(report, f, indent=2)
+        # Get classifier statistics
+        classifier_stats = self.classifier.get_statistics()
 
-        return report
+        # Get multi-target content
+        multi_target_content = self.builder.get_multi_target_content()
 
-    def get_summary(self) -> Dict[str, Any]:
-        """Get enrichment summary."""
-        if not self.graph or not self.builder:
-            return {'status': 'not_enriched'}
+        # Get persona overlap matrix
+        overlap_matrix = self.builder.get_persona_overlap_matrix()
 
-        distribution = self.builder.get_persona_distribution()
-        stats = self.classifier.get_usage_stats()
+        # Get journey stage distribution
+        journey_distribution = self.builder.get_journey_stage_distribution()
+
+        # Validate relationships
+        validation_report = self.builder.validate_relationships()
 
         return {
-            'status': 'enriched',
-            'graph': {
-                'total_nodes': self.graph.node_count(),
-                'total_edges': self.graph.edge_count(),
-                'personas': len(self.builder.persona_nodes),
-                'targets_edges': sum(
-                    len([e for e in self.graph.get_edges_to(nid)
-                         if self.graph.get_edge(e).get('type') == 'TARGETS'])
-                    for nid in self.builder.persona_nodes.values()
-                )
+            "timestamp": datetime.now().isoformat(),
+            "model": self.model,
+            "duration_seconds": round(duration, 1),
+            "personas": {
+                "created": personas_created,
+                "distribution": persona_stats
             },
-            'persona_distribution': distribution,
-            'llm_usage': stats
+            "classifications": {
+                "total": len(classifications),
+                "multi_target_count": classifier_stats.get("multi_target_count", 0),
+                "multi_target_rate": classifier_stats.get("multi_target_rate", 0),
+                "avg_personas_per_content": classifier_stats.get("avg_personas_per_content", 0),
+                "avg_relevance": classifier_stats.get("avg_relevance", 0)
+            },
+            "relationships": {
+                "created": relationships_created,
+                "avg_per_content": round(relationships_created / len(classifications), 2) if classifications else 0
+            },
+            "persona_distribution": classifier_stats.get("persona_distribution", {}),
+            "primary_persona_distribution": classifier_stats.get("primary_persona_distribution", {}),
+            "multi_target_examples": multi_target_content[:10],
+            "persona_overlap_matrix": overlap_matrix,
+            "journey_stage_distribution": journey_distribution,
+            "validation": validation_report,
+            "llm_usage": classifier_stats.get("llm_stats", {}),
+            "cost_estimate": {
+                "total_usd": classifier_stats.get("llm_stats", {}).get("total_cost", 0),
+                "per_classification": round(
+                    classifier_stats.get("llm_stats", {}).get("total_cost", 0) / len(classifications),
+                    4
+                ) if classifications else 0
+            }
         }
+
+    def _save_report(self):
+        """Save report to file."""
+        report_dir = "data/reports"
+        os.makedirs(report_dir, exist_ok=True)
+
+        # Save full report
+        report_path = f"{report_dir}/persona_enrichment_report.json"
+        with open(report_path, "w") as f:
+            json.dump(self.report, f, indent=2)
+        print(f"\n📄 Report saved: {report_path}")
+
+        # Save persona statistics
+        stats_path = "data/persona_stats.json"
+        stats = {
+            "timestamp": self.report["timestamp"],
+            "personas": self.report["personas"],
+            "classifications": self.report["classifications"],
+            "persona_distribution": self.report["persona_distribution"],
+            "primary_persona_distribution": self.report["primary_persona_distribution"]
+        }
+
+        with open(stats_path, "w") as f:
+            json.dump(stats, f, indent=2)
+        print(f"📊 Statistics saved: {stats_path}")
+
+    def _print_summary(self):
+        """Print enrichment summary."""
+        print("\n" + "=" * 70)
+        print("PERSONA ENRICHMENT SUMMARY")
+        print("=" * 70)
+
+        print(f"\n⏱️  Duration: {self.report['duration_seconds']}s")
+        print(f"\n👥 Personas Created: {self.report['personas']['created']}")
+
+        print(f"\n📊 Classifications:")
+        print(f"   Total: {self.report['classifications']['total']}")
+        print(f"   Multi-target: {self.report['classifications']['multi_target_count']} ({self.report['classifications']['multi_target_rate']*100:.1f}%)")
+        print(f"   Avg personas/content: {self.report['classifications']['avg_personas_per_content']}")
+        print(f"   Avg relevance: {self.report['classifications']['avg_relevance']}")
+
+        print(f"\n🎯 Relationships Created: {self.report['relationships']['created']}")
+
+        print(f"\n📈 Persona Distribution:")
+        for persona, count in sorted(
+            self.report['persona_distribution'].items(),
+            key=lambda x: x[1],
+            reverse=True
+        ):
+            print(f"   {persona}: {count}")
+
+        print(f"\n💰 Cost:")
+        print(f"   Total: ${self.report['cost_estimate']['total_usd']:.2f}")
+        print(f"   Per classification: ${self.report['cost_estimate']['per_classification']:.4f}")
+
+        print(f"\n✅ LLM Usage:")
+        llm_stats = self.report['llm_usage']
+        print(f"   API calls: {llm_stats.get('api_calls', 0)}")
+        print(f"   Total tokens: {llm_stats.get('total_tokens', 0):,}")
+        print(f"   Avg tokens/call: {llm_stats.get('avg_tokens_per_call', 0)}")
+
+        print("\n" + "=" * 70)
+
+
+async def main():
+    """Main entry point for persona enrichment."""
+    enricher = PersonaEnricher()
+
+    try:
+        report = await enricher.enrich_all(content_type="both")
+
+        if "error" in report:
+            print(f"\n❌ Enrichment failed: {report['error']}")
+            return 1
+
+        print("\n✅ Persona enrichment completed successfully!")
+        return 0
+
+    except Exception as e:
+        print(f"\n❌ Enrichment failed with error: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+
+if __name__ == "__main__":
+    exit_code = asyncio.run(main())
+    exit(exit_code)

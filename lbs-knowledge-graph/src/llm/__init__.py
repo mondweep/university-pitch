@@ -7,12 +7,28 @@ cost optimization, and intelligent caching.
 
 from .llm_client import LLMClient
 from .batch_processor import BatchProcessor
-from .cost_tracker import CostTracker
 from .response_parser import ResponseParser
+from .prompts import (
+    SENTIMENT_BATCH_PROMPT,
+    TOPIC_BATCH_PROMPT,
+    PERSONA_BATCH_PROMPT,
+    NER_BATCH_PROMPT,
+    JOURNEY_BATCH_PROMPT,
+    SIMILARITY_PROMPT,
+    format_batch_prompt,
+    format_single_item_prompt
+)
 
 __all__ = [
     'LLMClient',
     'BatchProcessor',
-    'CostTracker',
-    'ResponseParser'
+    'ResponseParser',
+    'SENTIMENT_BATCH_PROMPT',
+    'TOPIC_BATCH_PROMPT',
+    'PERSONA_BATCH_PROMPT',
+    'NER_BATCH_PROMPT',
+    'JOURNEY_BATCH_PROMPT',
+    'SIMILARITY_PROMPT',
+    'format_batch_prompt',
+    'format_single_item_prompt'
 ]

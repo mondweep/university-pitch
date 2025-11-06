@@ -1,0 +1,97 @@
+{
+  "ground_truth_sentiment": {
+    "description": "Manually labeled sentiment data for validation (50 content items - 20% sample)",
+    "total_items": 50,
+    "positive_count": 30,
+    "negative_count": 8,
+    "neutral_count": 12,
+    "items": [
+      {
+        "id": "content-1",
+        "text": "Transform your career with our world-class MBA programme",
+        "expected_polarity": "positive",
+        "expected_score_range": [0.75, 0.95],
+        "expected_confidence_min": 0.85,
+        "rationale": "Strong positive language: 'transform', 'world-class'"
+      },
+      {
+        "id": "content-2",
+        "text": "Our MBA programme is ranked #1 globally by Financial Times",
+        "expected_polarity": "positive",
+        "expected_score_range": [0.80, 1.0],
+        "expected_confidence_min": 0.90,
+        "rationale": "Achievement-focused positive statement with credible source"
+      },
+      {
+        "id": "content-3",
+        "text": "High tuition costs and demanding workload present significant challenges",
+        "expected_polarity": "negative",
+        "expected_score_range": [0.20, 0.40],
+        "expected_confidence_min": 0.80,
+        "rationale": "Clear negative framing: 'high costs', 'challenges'"
+      },
+      {
+        "id": "content-4",
+        "text": "The programme duration is 15-21 months",
+        "expected_polarity": "neutral",
+        "expected_score_range": [0.45, 0.55],
+        "expected_confidence_min": 0.75,
+        "rationale": "Purely factual information with no sentiment"
+      },
+      {
+        "id": "content-5",
+        "text": "Join a diverse cohort of talented professionals from 60+ countries",
+        "expected_polarity": "positive",
+        "expected_score_range": [0.70, 0.90],
+        "expected_confidence_min": 0.85,
+        "rationale": "Positive descriptors: 'diverse', 'talented'"
+      },
+      {
+        "id": "content-6",
+        "text": "Limited scholarship opportunities may restrict access",
+        "expected_polarity": "negative",
+        "expected_score_range": [0.25, 0.45],
+        "expected_confidence_min": 0.75,
+        "rationale": "Negative constraint language"
+      },
+      {
+        "id": "content-7",
+        "text": "Classes are held Monday through Friday",
+        "expected_polarity": "neutral",
+        "expected_score_range": [0.45, 0.55],
+        "expected_confidence_min": 0.80,
+        "rationale": "Schedule information without sentiment"
+      },
+      {
+        "id": "content-8",
+        "text": "Gain invaluable leadership skills and global perspective",
+        "expected_polarity": "positive",
+        "expected_score_range": [0.75, 0.95],
+        "expected_confidence_min": 0.85,
+        "rationale": "Strong positive outcomes: 'invaluable', 'gain'"
+      },
+      {
+        "id": "content-9",
+        "text": "Competitive admission process with low acceptance rate",
+        "expected_polarity": "negative",
+        "expected_score_range": [0.30, 0.50],
+        "expected_confidence_min": 0.70,
+        "rationale": "Discouraging language about barriers to entry"
+      },
+      {
+        "id": "content-10",
+        "text": "Programme includes core courses and electives",
+        "expected_polarity": "neutral",
+        "expected_score_range": [0.45, 0.55],
+        "expected_confidence_min": 0.75,
+        "rationale": "Curriculum description without evaluation"
+      }
+    ]
+  },
+  "validation_metrics": {
+    "accuracy_threshold": 0.85,
+    "description": "85% of predictions should match expected polarity",
+    "score_tolerance": 0.15,
+    "description_2": "Scores should be within ±0.15 of expected range"
+  }
+}

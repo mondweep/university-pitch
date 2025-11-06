@@ -1,303 +1,324 @@
 """
-TARGETS Relationship Builder for Knowledge Graph.
-Creates Persona nodes and TARGETS edges from content to personas.
+TARGETS Relationship Builder
+
+Creates Persona nodes and TARGETS relationships from content to personas
+with relevance scores and journey stage information.
 """
 
-import logging
-from typing import Dict, List, Optional, Any
-from pathlib import Path
-import json
+from typing import List, Dict, Any, Optional
+from src.graph.mgraph_wrapper import MGraph
 
-from ..graph.mgraph_compat import MGraph
-from .persona_models import Persona, PersonaTarget, get_all_personas
-
-
-logger = logging.getLogger(__name__)
+from .persona_models import get_all_personas, PersonaType
+from .persona_classifier import PersonaClassification
 
 
 class TargetsBuilder:
-    """Build TARGETS relationships in knowledge graph."""
+    """
+    Builder for TARGETS relationships between content and personas.
+
+    Creates:
+    - Persona nodes with metadata
+    - TARGETS edges from Page/Section to Persona
+    - Multi-target support (content can target multiple personas)
+    - Relevance scores and journey stage information
+    """
 
     def __init__(self, graph: MGraph):
         """
-        Initialize targets builder.
+        Initialize TARGETS builder.
 
         Args:
-            graph: MGraph instance
+            graph: Memgraph connection
         """
         self.graph = graph
-        self.persona_nodes = {}  # persona_id -> node_id mapping
-        logger.info("Initialized TargetsBuilder")
+        self.personas_created = 0
+        self.relationships_created = 0
 
-    def create_persona_node(self, persona: Persona) -> str:
+    def create_persona_nodes(self) -> int:
         """
-        Create Persona node in graph.
-
-        Args:
-            persona: Persona definition
+        Create Persona nodes in the graph.
 
         Returns:
-            Node ID
+            Number of personas created
         """
-        # Check if persona already exists
-        existing = self.graph.get_nodes_by_type("Persona")
-        for node_id in existing:
-            node = self.graph.get_node(node_id)
-            if node and node.get('persona_id') == persona.id:
-                logger.debug(f"Persona node already exists: {persona.name}")
-                self.persona_nodes[persona.id] = node_id
-                return node_id
+        print("👥 Creating Persona nodes...")
 
-        # Create new persona node
-        node_data = {
-            'type': 'Persona',
-            'persona_id': persona.id,
-            'name': persona.name,
-            'slug': persona.slug,
-            'persona_type': persona.type.value,
-            'description': persona.description,
-            'characteristics': persona.characteristics,
-            'goals': persona.goals,
-            'pain_points': persona.pain_points,
-            'interests': persona.interests,
-            'priority': persona.priority,
-            'content_count': 0,
-            'page_count': 0,
-            'metadata': persona.metadata
-        }
+        personas = get_all_personas()
 
-        node_id = self.graph.add_node(**node_data)
-        self.persona_nodes[persona.id] = node_id
+        for persona in personas:
+            query = """
+            MERGE (p:Persona {id: $id})
+            SET p.name = $name,
+                p.type = $type,
+                p.slug = $slug,
+                p.description = $description,
+                p.characteristics = $characteristics,
+                p.goals = $goals,
+                p.pain_points = $pain_points,
+                p.interests = $interests,
+                p.priority = $priority,
+                p.targeted_content_count = 0
+            """
 
-        logger.info(f"Created Persona node: {persona.name} (id={node_id})")
-        return node_id
+            self.graph.execute(query, {
+                "id": persona.id,
+                "name": persona.name,
+                "type": persona.type.value,
+                "slug": persona.slug,
+                "description": persona.description,
+                "characteristics": persona.characteristics,
+                "goals": persona.goals,
+                "pain_points": persona.pain_points,
+                "interests": persona.interests,
+                "priority": persona.priority
+            })
 
-    def create_targets_edge(
+            self.personas_created += 1
+
+        print(f"   ✅ Created {self.personas_created} Persona nodes")
+        return self.personas_created
+
+    def create_targets_relationships(
         self,
-        source_id: str,
-        persona_id: str,
-        relevance: float,
-        journey_stage: str,
-        intent: str = "",
-        confidence: float = 1.0,
-        metadata: Optional[Dict[str, Any]] = None
-    ) -> str:
+        classifications: List[PersonaClassification]
+    ) -> int:
         """
-        Create TARGETS relationship from content to persona.
+        Create TARGETS relationships from classifications.
 
         Args:
-            source_id: Source node ID (Page or Section)
-            persona_id: Persona ID
-            relevance: Relevance score (0-1)
-            journey_stage: Journey stage name
-            intent: Why content targets this persona
-            confidence: Classification confidence
-            metadata: Additional metadata
+            classifications: List of PersonaClassification objects
 
         Returns:
-            Edge ID
+            Number of relationships created
         """
-        # Get persona node ID
-        persona_node_id = self.persona_nodes.get(persona_id)
-        if not persona_node_id:
-            logger.error(f"Persona node not found: {persona_id}")
-            return None
+        print("\n🎯 Creating TARGETS relationships...")
 
-        # Create edge data
-        edge_data = {
-            'type': 'TARGETS',
-            'relevance': relevance,
-            'journey_stage': journey_stage,
-            'intent': intent,
-            'confidence': confidence,
-            'metadata': metadata or {}
-        }
+        for classification in classifications:
+            for persona_data in classification.personas:
+                self._create_relationship(
+                    content_id=classification.content_id,
+                    content_type=classification.content_type,
+                    persona_data=persona_data,
+                    extracted_by=classification.extracted_by
+                )
 
-        # Check if edge already exists
-        existing_edges = self.graph.get_edges_from(source_id)
-        for edge_id in existing_edges:
-            edge = self.graph.get_edge(edge_id)
-            if (edge and edge.get('type') == 'TARGETS' and
-                edge['target'] == persona_node_id):
-                # Update existing edge
-                for key, value in edge_data.items():
-                    edge[key] = value
-                logger.debug(f"Updated existing TARGETS edge: {source_id} -> {persona_node_id}")
-                return edge_id
+        print(f"   ✅ Created {self.relationships_created} TARGETS relationships")
+        return self.relationships_created
 
-        # Create new edge
-        edge_id = self.graph.add_edge(
-            source=source_id,
-            target=persona_node_id,
-            **edge_data
-        )
-
-        logger.debug(f"Created TARGETS edge: {source_id} -> {persona_node_id} (rel={relevance:.2f})")
-        return edge_id
-
-    def build_persona_graph(
+    def _create_relationship(
         self,
-        classifications: List[Dict[str, Any]]
-    ) -> MGraph:
-        """
-        Build complete persona graph with nodes and relationships.
+        content_id: str,
+        content_type: str,
+        persona_data: Dict[str, Any],
+        extracted_by: str
+    ):
+        """Create a single TARGETS relationship."""
+        # Determine content node label
+        content_label = "Page" if content_type == "page" else "Section"
 
-        Args:
-            classifications: List of classification results
-                Each item should have:
-                - node_id: Source node ID
-                - targets: List of PersonaTarget objects
+        query = f"""
+        MATCH (c:{content_label} {{id: $content_id}})
+        MATCH (p:Persona {{id: $persona_id}})
+        MERGE (c)-[r:TARGETS]->(p)
+        SET r.relationship_type = 'TARGETS',
+            r.persona_id = $persona_id,
+            r.relevance = $relevance,
+            r.is_primary = $is_primary,
+            r.journey_stage = $journey_stage,
+            r.signals = $signals,
+            r.intent = $intent,
+            r.confidence = $confidence,
+            r.extracted_by = $extracted_by
+        """
+
+        try:
+            self.graph.execute(query, {
+                "content_id": content_id,
+                "persona_id": persona_data["persona_id"],
+                "relevance": persona_data["relevance"],
+                "is_primary": persona_data.get("is_primary", False),
+                "journey_stage": persona_data["journey_stage"],
+                "signals": persona_data.get("signals", []),
+                "intent": persona_data.get("intent", ""),
+                "confidence": persona_data.get("confidence", 0.9),
+                "extracted_by": extracted_by
+            })
+
+            self.relationships_created += 1
+
+        except Exception as e:
+            print(f"⚠️  Error creating TARGETS relationship: {e}")
+
+    def update_persona_statistics(self) -> Dict[str, int]:
+        """
+        Update targeted_content_count for all personas.
 
         Returns:
-            Updated MGraph
+            Dictionary of persona_id -> count
         """
-        # Create all persona nodes first
-        logger.info("Creating persona nodes...")
-        for persona in get_all_personas():
-            self.create_persona_node(persona)
+        print("\n📊 Updating persona statistics...")
 
-        # Create TARGETS edges
-        logger.info("Creating TARGETS edges...")
-        total_edges = 0
-        for item in classifications:
-            node_id = item.get('node_id')
-            targets = item.get('targets', [])
-
-            for target in targets:
-                if isinstance(target, PersonaTarget):
-                    edge_id = self.create_targets_edge(
-                        source_id=node_id,
-                        persona_id=target.persona_id,
-                        relevance=target.relevance,
-                        journey_stage=target.journey_stage.value,
-                        intent=target.intent,
-                        confidence=target.confidence,
-                        metadata=target.metadata
-                    )
-                    if edge_id:
-                        total_edges += 1
-
-        logger.info(f"Created {total_edges} TARGETS edges for {len(classifications)} nodes")
-
-        # Update persona node counts
-        self._update_persona_counts()
-
-        return self.graph
-
-    def _update_persona_counts(self):
-        """Update content_count and page_count for persona nodes."""
-        for persona_id, node_id in self.persona_nodes.items():
-            # Count incoming TARGETS edges
-            incoming = self.graph.get_edges_to(node_id)
-            targets_edges = [
-                e for e in incoming
-                if self.graph.get_edge(e).get('type') == 'TARGETS'
-            ]
-
-            # Count unique pages
-            page_sources = set()
-            content_count = 0
-
-            for edge_id in targets_edges:
-                edge = self.graph.get_edge(edge_id)
-                source_node = self.graph.get_node(edge['source'])
-
-                if source_node.get('type') == 'Page':
-                    page_sources.add(edge['source'])
-                    content_count += 1
-                elif source_node.get('type') == 'Section':
-                    # Find parent page
-                    section_edges = self.graph.get_edges_to(edge['source'])
-                    for se in section_edges:
-                        sec_edge = self.graph.get_edge(se)
-                        if sec_edge.get('type') == 'CONTAINS':
-                            parent = self.graph.get_node(sec_edge['source'])
-                            if parent.get('type') == 'Page':
-                                page_sources.add(sec_edge['source'])
-                                break
-                    content_count += 1
-
-            # Update node
-            node = self.graph.get_node(node_id)
-            node['content_count'] = content_count
-            node['page_count'] = len(page_sources)
-
-            logger.debug(f"Updated persona {persona_id}: {content_count} content, {len(page_sources)} pages")
-
-    def get_persona_distribution(self) -> Dict[str, Dict[str, int]]:
+        query = """
+        MATCH (p:Persona)<-[r:TARGETS]-(content)
+        WITH p, count(content) AS content_count
+        SET p.targeted_content_count = content_count
+        RETURN p.id AS persona_id, p.name AS name, content_count
         """
-        Get distribution of content across personas.
+
+        results = self.graph.execute_and_fetch(query)
+        stats = {}
+
+        for row in results:
+            persona_id = row["persona_id"]
+            name = row["name"]
+            count = row["content_count"]
+            stats[persona_id] = count
+            print(f"   {name}: {count} targeted items")
+
+        return stats
+
+    def get_multi_target_content(self) -> List[Dict[str, Any]]:
+        """
+        Get content that targets multiple personas.
 
         Returns:
-            Dict mapping persona_id to counts
+            List of content items with their target personas
         """
+        query = """
+        MATCH (content)-[r:TARGETS]->(p:Persona)
+        WITH content, count(p) AS persona_count, collect({
+            persona_name: p.name,
+            relevance: r.relevance,
+            is_primary: r.is_primary
+        }) AS personas
+        WHERE persona_count > 1
+        RETURN
+            labels(content)[0] AS content_type,
+            content.id AS content_id,
+            content.title AS title,
+            persona_count,
+            personas
+        ORDER BY persona_count DESC
+        LIMIT 50
+        """
+
+        results = self.graph.execute_and_fetch(query)
+        return [dict(row) for row in results]
+
+    def get_persona_overlap_matrix(self) -> Dict[str, Dict[str, int]]:
+        """
+        Calculate persona overlap matrix (how often personas co-target content).
+
+        Returns:
+            Matrix of persona_id -> persona_id -> count
+        """
+        query = """
+        MATCH (content)-[:TARGETS]->(p1:Persona)
+        MATCH (content)-[:TARGETS]->(p2:Persona)
+        WHERE p1.id < p2.id
+        RETURN p1.name AS persona1, p2.name AS persona2, count(content) AS overlap_count
+        ORDER BY overlap_count DESC
+        """
+
+        results = self.graph.execute_and_fetch(query)
+
+        matrix = {}
+        for row in results:
+            p1 = row["persona1"]
+            p2 = row["persona2"]
+            count = row["overlap_count"]
+
+            if p1 not in matrix:
+                matrix[p1] = {}
+            matrix[p1][p2] = count
+
+        return matrix
+
+    def get_journey_stage_distribution(self) -> Dict[str, Dict[str, int]]:
+        """
+        Get distribution of journey stages by persona.
+
+        Returns:
+            Dictionary of persona -> journey_stage -> count
+        """
+        query = """
+        MATCH (content)-[r:TARGETS]->(p:Persona)
+        RETURN
+            p.name AS persona_name,
+            r.journey_stage AS journey_stage,
+            count(*) AS count
+        ORDER BY persona_name, count DESC
+        """
+
+        results = self.graph.execute_and_fetch(query)
+
         distribution = {}
+        for row in results:
+            persona = row["persona_name"]
+            stage = row["journey_stage"]
+            count = row["count"]
 
-        for persona_id, node_id in self.persona_nodes.items():
-            node = self.graph.get_node(node_id)
-            distribution[persona_id] = {
-                'name': node.get('name', ''),
-                'content_count': node.get('content_count', 0),
-                'page_count': node.get('page_count', 0),
-                'priority': node.get('priority', 3)
-            }
+            if persona not in distribution:
+                distribution[persona] = {}
+            distribution[persona][stage] = count
 
         return distribution
 
-    def generate_report(self, output_path: Path) -> Dict[str, Any]:
+    def validate_relationships(self) -> Dict[str, Any]:
         """
-        Generate persona targeting report.
-
-        Args:
-            output_path: Output file path for JSON report
+        Validate TARGETS relationships.
 
         Returns:
-            Report data
+            Validation report
         """
-        distribution = self.get_persona_distribution()
+        print("\n🔍 Validating TARGETS relationships...")
 
-        # Calculate statistics
-        total_content = sum(p['content_count'] for p in distribution.values())
-        total_pages = sum(p['page_count'] for p in distribution.values())
+        # Check for orphaned personas
+        orphaned_query = """
+        MATCH (p:Persona)
+        WHERE NOT (p)<-[:TARGETS]-()
+        RETURN count(p) AS orphaned_count, collect(p.name) AS orphaned_personas
+        """
 
-        # Journey stage distribution
-        journey_stages = {}
-        for persona_id, node_id in self.persona_nodes.items():
-            incoming = self.graph.get_edges_to(node_id)
-            for edge_id in incoming:
-                edge = self.graph.get_edge(edge_id)
-                if edge.get('type') == 'TARGETS':
-                    stage = edge.get('journey_stage', 'unknown')
-                    journey_stages[stage] = journey_stages.get(stage, 0) + 1
+        orphaned_result = list(self.graph.execute_and_fetch(orphaned_query))[0]
+
+        # Check relevance score distribution
+        relevance_query = """
+        MATCH ()-[r:TARGETS]->()
+        RETURN
+            min(r.relevance) AS min_relevance,
+            max(r.relevance) AS max_relevance,
+            avg(r.relevance) AS avg_relevance,
+            count(r) AS total_relationships
+        """
+
+        relevance_result = list(self.graph.execute_and_fetch(relevance_query))[0]
+
+        # Check primary persona coverage
+        primary_query = """
+        MATCH (content)-[r:TARGETS {is_primary: true}]->()
+        RETURN count(DISTINCT content) AS content_with_primary
+        """
+
+        primary_result = list(self.graph.execute_and_fetch(primary_query))[0]
 
         report = {
-            'summary': {
-                'total_personas': len(self.persona_nodes),
-                'total_targets_edges': sum(len(self.graph.get_edges_to(nid)) for nid in self.persona_nodes.values()),
-                'total_content_targeted': total_content,
-                'total_pages_targeted': total_pages,
-                'avg_personas_per_content': total_content / len(distribution) if distribution else 0
+            "orphaned_personas": {
+                "count": orphaned_result["orphaned_count"],
+                "personas": orphaned_result.get("orphaned_personas", [])
             },
-            'persona_distribution': distribution,
-            'journey_stage_distribution': journey_stages,
-            'personas': {
-                pid: {
-                    'id': pid,
-                    'node_id': nid,
-                    **distribution[pid]
-                }
-                for pid, nid in self.persona_nodes.items()
-            }
+            "relevance_scores": {
+                "min": round(relevance_result["min_relevance"], 2),
+                "max": round(relevance_result["max_relevance"], 2),
+                "avg": round(relevance_result["avg_relevance"], 2)
+            },
+            "total_relationships": relevance_result["total_relationships"],
+            "content_with_primary_persona": primary_result["content_with_primary"]
         }
 
-        # Save report
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, 'w') as f:
-            json.dump(report, f, indent=2)
-
-        logger.info(f"Generated persona targeting report: {output_path}")
-        logger.info(f"  Total personas: {report['summary']['total_personas']}")
-        logger.info(f"  Total TARGETS edges: {report['summary']['total_targets_edges']}")
-        logger.info(f"  Avg personas per content: {report['summary']['avg_personas_per_content']:.2f}")
+        print(f"   Total TARGETS relationships: {report['total_relationships']}")
+        print(f"   Orphaned personas: {report['orphaned_personas']['count']}")
+        print(f"   Avg relevance score: {report['relevance_scores']['avg']}")
+        print(f"   Content with primary persona: {report['content_with_primary_persona']}")
 
         return report

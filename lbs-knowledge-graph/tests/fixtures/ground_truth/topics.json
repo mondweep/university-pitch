@@ -1,0 +1,175 @@
+{
+  "ground_truth_topics": {
+    "description": "Manually labeled topic data for validation (10 pages)",
+    "total_pages": 10,
+    "pages": [
+      {
+        "page_id": "mba-overview",
+        "page_type": "programme",
+        "title": "MBA Programme Overview",
+        "content_sample": "Transform your career with our world-class MBA programme. Develop leadership skills, global perspective, and strategic thinking.",
+        "expected_topics": [
+          {
+            "name": "Business Education",
+            "category": "education",
+            "relevance_min": 0.90,
+            "description": "Primary topic about MBA education"
+          },
+          {
+            "name": "Leadership Development",
+            "category": "skills",
+            "relevance_min": 0.85,
+            "description": "Key skill development area"
+          },
+          {
+            "name": "Career Advancement",
+            "category": "career",
+            "relevance_min": 0.80,
+            "description": "Career transformation focus"
+          },
+          {
+            "name": "Global Business",
+            "category": "subject",
+            "relevance_min": 0.75,
+            "description": "International business perspective"
+          }
+        ],
+        "unexpected_topics": ["Technology", "Healthcare", "Real Estate"]
+      },
+      {
+        "page_id": "finance-elective",
+        "page_type": "course",
+        "title": "Corporate Finance Elective",
+        "content_sample": "Learn advanced financial analysis, valuation techniques, and capital structure decisions. Apply theory to real-world cases.",
+        "expected_topics": [
+          {
+            "name": "Corporate Finance",
+            "category": "subject",
+            "relevance_min": 0.95,
+            "description": "Primary course topic"
+          },
+          {
+            "name": "Financial Analysis",
+            "category": "skills",
+            "relevance_min": 0.90,
+            "description": "Core skill taught"
+          },
+          {
+            "name": "Valuation",
+            "category": "subject",
+            "relevance_min": 0.85,
+            "description": "Key technique covered"
+          }
+        ],
+        "unexpected_topics": ["Marketing", "Operations", "HR"]
+      },
+      {
+        "page_id": "admissions-requirements",
+        "page_type": "admissions",
+        "title": "MBA Admissions Requirements",
+        "content_sample": "Requirements include bachelor's degree, GMAT/GRE, work experience, essays, and interviews.",
+        "expected_topics": [
+          {
+            "name": "Admissions Process",
+            "category": "process",
+            "relevance_min": 0.95,
+            "description": "Primary page focus"
+          },
+          {
+            "name": "Academic Requirements",
+            "category": "requirements",
+            "relevance_min": 0.90,
+            "description": "Education prerequisites"
+          },
+          {
+            "name": "Standardized Tests",
+            "category": "requirements",
+            "relevance_min": 0.85,
+            "description": "GMAT/GRE requirements"
+          },
+          {
+            "name": "Work Experience",
+            "category": "requirements",
+            "relevance_min": 0.80,
+            "description": "Professional background needed"
+          }
+        ],
+        "unexpected_topics": ["Curriculum", "Faculty", "Campus Life"]
+      },
+      {
+        "page_id": "career-services",
+        "page_type": "careers",
+        "title": "Career Services",
+        "content_sample": "Our dedicated career team provides coaching, networking events, and employer connections to help you achieve your career goals.",
+        "expected_topics": [
+          {
+            "name": "Career Development",
+            "category": "career",
+            "relevance_min": 0.95,
+            "description": "Primary service focus"
+          },
+          {
+            "name": "Coaching",
+            "category": "support",
+            "relevance_min": 0.85,
+            "description": "Individual support"
+          },
+          {
+            "name": "Networking",
+            "category": "career",
+            "relevance_min": 0.85,
+            "description": "Professional connections"
+          },
+          {
+            "name": "Employer Relations",
+            "category": "career",
+            "relevance_min": 0.80,
+            "description": "Corporate partnerships"
+          }
+        ],
+        "unexpected_topics": ["Admissions", "Curriculum", "Research"]
+      },
+      {
+        "page_id": "faculty-profile",
+        "page_type": "faculty",
+        "title": "Professor John Smith - Finance Faculty",
+        "content_sample": "Professor Smith teaches corporate finance and conducts research on capital markets. PhD from Stanford, 20+ years experience.",
+        "expected_topics": [
+          {
+            "name": "Faculty Expertise",
+            "category": "people",
+            "relevance_min": 0.90,
+            "description": "Faculty profile focus"
+          },
+          {
+            "name": "Corporate Finance",
+            "category": "subject",
+            "relevance_min": 0.85,
+            "description": "Teaching specialty"
+          },
+          {
+            "name": "Research",
+            "category": "academic",
+            "relevance_min": 0.80,
+            "description": "Academic contributions"
+          },
+          {
+            "name": "Capital Markets",
+            "category": "subject",
+            "relevance_min": 0.75,
+            "description": "Research area"
+          }
+        ],
+        "unexpected_topics": ["Admissions", "Student Life", "Career Services"]
+      }
+    ]
+  },
+  "validation_metrics": {
+    "recall_threshold": 0.80,
+    "description": "Should find 80%+ of expected topics",
+    "precision_threshold": 0.75,
+    "description_2": "75%+ of extracted topics should be expected",
+    "relevance_accuracy": 0.20,
+    "description_3": "Relevance scores within ±0.20 of expected"
+  }
+}

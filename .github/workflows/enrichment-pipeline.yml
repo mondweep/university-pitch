@@ -1,0 +1,193 @@
+name: Semantic Enrichment Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_pages:
+        description: 'Maximum pages to crawl'
+        required: false
+        default: '10'
+      skip_crawl:
+        description: 'Skip crawl and use existing data'
+        required: false
+        default: 'false'
+      enrichment_stages:
+        description: 'Enrichment stages to run (comma-separated: sentiment,topics,ner,personas,similarity,journeys)'
+        required: false
+        default: 'sentiment,topics,ner,personas,similarity,journeys'
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sundays at midnight UTC
+
+env:
+  PROJECT_DIR: lbs-knowledge-graph
+  MAX_COST_BUDGET: 50
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: write
+      actions: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: '${{ env.PROJECT_DIR }}/requirements.txt'
+
+      - name: Install dependencies
+        run: |
+          cd ${{ env.PROJECT_DIR }}
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-llm.txt
+
+      - name: Create data directories
+        run: |
+          cd ${{ env.PROJECT_DIR }}
+          mkdir -p data/{raw,parsed,checkpoints,exports}
+          mkdir -p logs
+
+      - name: Run enrichment pipeline
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          cd ${{ env.PROJECT_DIR }}
+          python scripts/full_pipeline.py \
+            --max-pages ${{ github.event.inputs.max_pages || '10' }} \
+            --skip-crawl ${{ github.event.inputs.skip_crawl || 'false' }} \
+            --stages "${{ github.event.inputs.enrichment_stages || 'sentiment,topics,ner,personas,similarity,journeys' }}" \
+            --log-level INFO
+
+      - name: Run Phase 3 validation
+        run: |
+          cd ${{ env.PROJECT_DIR }}
+          python src/validation/run_phase3_validation.py \
+            --graph-path data/checkpoints/graph_enriched_final.json \
+            --output-dir data/validation
+
+      - name: Check cost budget
+        id: cost_check
+        run: |
+          cd ${{ env.PROJECT_DIR }}
+          python scripts/check_budget.py \
+            --limit ${{ env.MAX_COST_BUDGET }} \
+            --log-file logs/enrichment_cost.json \
+            --output-format github
+
+      - name: Generate enrichment report
+        if: always()
+        run: |
+          cd ${{ env.PROJECT_DIR }}
+          python scripts/generate_enrichment_report.py \
+            --graph-path data/checkpoints/graph_enriched_final.json \
+            --validation-dir data/validation \
+            --cost-log logs/enrichment_cost.json \
+            --output docs/ENRICHMENT_REPORT.md
+
+      - name: Upload enriched graph
+        uses: actions/upload-artifact@v4
+        with:
+          name: enriched-graph-${{ github.run_number }}
+          path: |
+            ${{ env.PROJECT_DIR }}/data/checkpoints/graph_enriched_final.json
+            ${{ env.PROJECT_DIR }}/data/checkpoints/graph_*.json
+          retention-days: 30
+
+      - name: Upload validation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-reports-${{ github.run_number }}
+          path: |
+            ${{ env.PROJECT_DIR }}/data/validation/*.json
+            ${{ env.PROJECT_DIR }}/docs/ENRICHMENT_REPORT.md
+          retention-days: 30
+
+      - name: Upload cost logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cost-logs-${{ github.run_number }}
+          path: ${{ env.PROJECT_DIR }}/logs/enrichment_cost.json
+          retention-days: 90
+
+      - name: Upload pipeline logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-logs-${{ github.run_number }}
+          path: ${{ env.PROJECT_DIR }}/logs/*.log
+          retention-days: 30
+
+      - name: Create deployment summary
+        if: success()
+        run: |
+          cd ${{ env.PROJECT_DIR }}
+          cat > $GITHUB_STEP_SUMMARY << 'EOF'
+          # 🎉 Enrichment Pipeline Complete
+
+          **Run:** ${{ github.run_number }}
+          **Timestamp:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          **Commit:** ${{ github.sha }}
+
+          ## ✅ Pipeline Stages
+
+          - ✅ Crawling/Data Loading
+          - ✅ Parsing & Extraction
+          - ✅ Graph Construction
+          - ✅ Semantic Enrichment
+          - ✅ Validation
+          - ✅ Cost Check
+
+          ## 📊 Validation Summary
+
+          $(cat data/validation/phase3_validation_summary.json | python -m json.tool 2>/dev/null || echo "Validation summary not available")
+
+          ## 💰 Cost Summary
+
+          $(cat logs/enrichment_cost.json | python -m json.tool 2>/dev/null || echo "Cost summary not available")
+
+          ## 📦 Artifacts
+
+          - Enriched Graph: `enriched-graph-${{ github.run_number }}`
+          - Validation Reports: `validation-reports-${{ github.run_number }}`
+          - Cost Logs: `cost-logs-${{ github.run_number }}`
+
+          ## 🚀 Next Steps
+
+          - Review validation reports
+          - Deploy to Phase 4 (API + Neo4j)
+          - Update documentation
+          EOF
+
+          cat $GITHUB_STEP_SUMMARY
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error::Enrichment pipeline failed. Check logs for details."
+          echo "Cost budget exceeded: ${{ steps.cost_check.outputs.budget_exceeded }}"
+
+      - name: Comment on budget warning
+        if: steps.cost_check.outputs.budget_warning == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const message = `⚠️ **Cost Budget Warning**\n\nEnrichment cost is approaching budget limit.\n\n**Current:** $${process.env.CURRENT_COST}\n**Budget:** $${process.env.MAX_COST_BUDGET}\n**Usage:** ${process.env.COST_PERCENTAGE}%`;
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Cost Budget Warning - Enrichment Pipeline',
+              body: message,
+              labels: ['cost-warning', 'automation']
+            });

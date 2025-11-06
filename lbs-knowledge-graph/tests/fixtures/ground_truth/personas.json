@@ -1,0 +1,210 @@
+{
+  "ground_truth_personas": {
+    "description": "Manually labeled persona targeting data for validation (10 pages)",
+    "total_pages": 10,
+    "persona_types": ["prospective_students", "current_students", "alumni", "faculty_staff", "recruiters", "media"],
+    "pages": [
+      {
+        "page_id": "mba-overview",
+        "page_type": "programme",
+        "title": "MBA Programme Overview",
+        "primary_personas": [
+          {
+            "persona": "prospective_students",
+            "relevance_min": 0.95,
+            "journey_stage": "awareness",
+            "rationale": "Programme overview targets potential applicants learning about MBA"
+          }
+        ],
+        "secondary_personas": [
+          {
+            "persona": "current_students",
+            "relevance_min": 0.60,
+            "journey_stage": "retention",
+            "rationale": "Current students may reference programme details"
+          },
+          {
+            "persona": "recruiters",
+            "relevance_min": 0.50,
+            "journey_stage": "awareness",
+            "rationale": "Recruiters learn about candidate education"
+          }
+        ],
+        "excluded_personas": ["media"]
+      },
+      {
+        "page_id": "admissions-requirements",
+        "page_type": "admissions",
+        "title": "MBA Admissions Requirements",
+        "primary_personas": [
+          {
+            "persona": "prospective_students",
+            "relevance_min": 0.98,
+            "journey_stage": "consideration",
+            "rationale": "Admissions requirements directly target applicants"
+          }
+        ],
+        "secondary_personas": [],
+        "excluded_personas": ["current_students", "alumni", "faculty_staff", "recruiters", "media"]
+      },
+      {
+        "page_id": "current-student-resources",
+        "page_type": "resources",
+        "title": "Current Student Resources",
+        "primary_personas": [
+          {
+            "persona": "current_students",
+            "relevance_min": 0.98,
+            "journey_stage": "retention",
+            "rationale": "Resources explicitly for enrolled students"
+          }
+        ],
+        "secondary_personas": [
+          {
+            "persona": "prospective_students",
+            "relevance_min": 0.40,
+            "journey_stage": "decision",
+            "rationale": "Prospects may preview student experience"
+          }
+        ],
+        "excluded_personas": ["alumni", "recruiters", "media"]
+      },
+      {
+        "page_id": "alumni-network",
+        "page_type": "alumni",
+        "title": "Alumni Network & Benefits",
+        "primary_personas": [
+          {
+            "persona": "alumni",
+            "relevance_min": 0.98,
+            "journey_stage": "retention",
+            "rationale": "Alumni-specific benefits and network"
+          }
+        ],
+        "secondary_personas": [
+          {
+            "persona": "prospective_students",
+            "relevance_min": 0.60,
+            "journey_stage": "consideration",
+            "rationale": "Prospects evaluate long-term value"
+          }
+        ],
+        "excluded_personas": ["current_students", "recruiters", "media"]
+      },
+      {
+        "page_id": "career-outcomes",
+        "page_type": "careers",
+        "title": "MBA Career Outcomes & Statistics",
+        "primary_personas": [
+          {
+            "persona": "prospective_students",
+            "relevance_min": 0.95,
+            "journey_stage": "consideration",
+            "rationale": "Career outcomes influence decision to apply"
+          },
+          {
+            "persona": "recruiters",
+            "relevance_min": 0.90,
+            "journey_stage": "awareness",
+            "rationale": "Recruiters assess candidate quality"
+          }
+        ],
+        "secondary_personas": [
+          {
+            "persona": "media",
+            "relevance_min": 0.50,
+            "journey_stage": "awareness",
+            "rationale": "Media may report on outcomes data"
+          }
+        ],
+        "excluded_personas": []
+      },
+      {
+        "page_id": "faculty-research",
+        "page_type": "research",
+        "title": "Faculty Research Publications",
+        "primary_personas": [
+          {
+            "persona": "faculty_staff",
+            "relevance_min": 0.95,
+            "journey_stage": "retention",
+            "rationale": "Faculty showcase research achievements"
+          }
+        ],
+        "secondary_personas": [
+          {
+            "persona": "prospective_students",
+            "relevance_min": 0.55,
+            "journey_stage": "consideration",
+            "rationale": "Research quality indicates programme prestige"
+          },
+          {
+            "persona": "media",
+            "relevance_min": 0.60,
+            "journey_stage": "awareness",
+            "rationale": "Media covers academic research"
+          }
+        ],
+        "excluded_personas": ["recruiters"]
+      },
+      {
+        "page_id": "recruiting-hire-mbas",
+        "page_type": "recruiters",
+        "title": "Recruit LBS MBA Graduates",
+        "primary_personas": [
+          {
+            "persona": "recruiters",
+            "relevance_min": 0.98,
+            "journey_stage": "action",
+            "rationale": "Direct recruitment services for employers"
+          }
+        ],
+        "secondary_personas": [
+          {
+            "persona": "current_students",
+            "relevance_min": 0.50,
+            "journey_stage": "retention",
+            "rationale": "Students benefit from employer interest"
+          }
+        ],
+        "excluded_personas": ["prospective_students", "alumni", "media"]
+      },
+      {
+        "page_id": "press-releases",
+        "page_type": "news",
+        "title": "Press Releases & Media Center",
+        "primary_personas": [
+          {
+            "persona": "media",
+            "relevance_min": 0.98,
+            "journey_stage": "awareness",
+            "rationale": "Media resources and official announcements"
+          }
+        ],
+        "secondary_personas": [
+          {
+            "persona": "prospective_students",
+            "relevance_min": 0.40,
+            "journey_stage": "awareness",
+            "rationale": "Prospects may read news about school"
+          },
+          {
+            "persona": "alumni",
+            "relevance_min": 0.45,
+            "journey_stage": "retention",
+            "rationale": "Alumni follow school news"
+          }
+        ],
+        "excluded_personas": ["recruiters"]
+      }
+    ]
+  },
+  "validation_metrics": {
+    "primary_persona_accuracy": 0.90,
+    "description": "90% accuracy identifying primary personas",
+    "relevance_tolerance": 0.15,
+    "description_2": "Relevance scores within ±0.15 of expected",
+    "journey_stage_accuracy": 0.85,
+    "description_3": "85% accuracy on journey stage classification"
+  }
+}

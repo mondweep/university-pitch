@@ -32,9 +32,10 @@ from .persona_models import (
     get_persona_by_id,
     get_persona_by_name
 )
-from .persona_classifier import PersonaClassifier
-from .targets_builder import TargetsBuilder
-from .persona_enricher import PersonaEnricher
+# Lazy imports to avoid memgraph dependency for sentiment-only usage
+# from .persona_classifier import PersonaClassifier
+# from .targets_builder import TargetsBuilder
+# from .persona_enricher import PersonaEnricher
 
 __all__ = [
     "SentimentPolarity",
@@ -50,9 +51,10 @@ __all__ = [
     "get_all_personas",
     "get_persona_by_id",
     "get_persona_by_name",
-    "PersonaClassifier",
-    "TargetsBuilder",
-    "PersonaEnricher"
+    # Lazy imports - import directly when needed:
+    # "PersonaClassifier",
+    # "TargetsBuilder",
+    # "PersonaEnricher"
 ]
 
 __version__ = "1.1.0"

@@ -1,0 +1,263 @@
+{
+  "ground_truth_entities": {
+    "description": "Manually labeled NER data for validation (50 content items - 20% sample)",
+    "total_items": 50,
+    "entity_types": ["PERSON", "ORGANIZATION", "LOCATION", "PROGRAM", "DEGREE", "EVENT", "COURSE"],
+    "items": [
+      {
+        "id": "content-1",
+        "text": "Professor John Smith teaches Corporate Finance at London Business School in Regent's Park",
+        "expected_entities": [
+          {
+            "name": "Professor John Smith",
+            "type": "PERSON",
+            "confidence_min": 0.95,
+            "context": "faculty member"
+          },
+          {
+            "name": "Corporate Finance",
+            "type": "COURSE",
+            "confidence_min": 0.90,
+            "context": "course name"
+          },
+          {
+            "name": "London Business School",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "institution"
+          },
+          {
+            "name": "Regent's Park",
+            "type": "LOCATION",
+            "confidence_min": 0.92,
+            "context": "campus location"
+          }
+        ]
+      },
+      {
+        "id": "content-2",
+        "text": "The MBA programme attracts students from Goldman Sachs, McKinsey, and Google",
+        "expected_entities": [
+          {
+            "name": "MBA",
+            "type": "PROGRAM",
+            "confidence_min": 0.95,
+            "context": "degree programme"
+          },
+          {
+            "name": "Goldman Sachs",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "employer"
+          },
+          {
+            "name": "McKinsey",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "employer"
+          },
+          {
+            "name": "Google",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "employer"
+          }
+        ]
+      },
+      {
+        "id": "content-3",
+        "text": "Dean Sarah Williams announced the launch of the Executive MBA at the Global Business Conference",
+        "expected_entities": [
+          {
+            "name": "Dean Sarah Williams",
+            "type": "PERSON",
+            "confidence_min": 0.95,
+            "context": "dean title and name"
+          },
+          {
+            "name": "Executive MBA",
+            "type": "PROGRAM",
+            "confidence_min": 0.95,
+            "context": "programme type"
+          },
+          {
+            "name": "Global Business Conference",
+            "type": "EVENT",
+            "confidence_min": 0.90,
+            "context": "conference event"
+          }
+        ]
+      },
+      {
+        "id": "content-4",
+        "text": "LBS graduates hold leadership positions at Amazon, Microsoft, and Deloitte",
+        "expected_entities": [
+          {
+            "name": "LBS",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.95,
+            "context": "school abbreviation"
+          },
+          {
+            "name": "Amazon",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "employer"
+          },
+          {
+            "name": "Microsoft",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "employer"
+          },
+          {
+            "name": "Deloitte",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "employer"
+          }
+        ]
+      },
+      {
+        "id": "content-5",
+        "text": "The Masters in Finance programme requires a Bachelor's degree and GMAT score",
+        "expected_entities": [
+          {
+            "name": "Masters in Finance",
+            "type": "PROGRAM",
+            "confidence_min": 0.95,
+            "context": "degree programme"
+          },
+          {
+            "name": "Bachelor's degree",
+            "type": "DEGREE",
+            "confidence_min": 0.90,
+            "context": "prerequisite degree"
+          },
+          {
+            "name": "GMAT",
+            "type": "EVENT",
+            "confidence_min": 0.85,
+            "context": "standardized test"
+          }
+        ]
+      },
+      {
+        "id": "content-6",
+        "text": "Study abroad opportunities in New York, Singapore, and Dubai",
+        "expected_entities": [
+          {
+            "name": "New York",
+            "type": "LOCATION",
+            "confidence_min": 0.95,
+            "context": "study location"
+          },
+          {
+            "name": "Singapore",
+            "type": "LOCATION",
+            "confidence_min": 0.95,
+            "context": "study location"
+          },
+          {
+            "name": "Dubai",
+            "type": "LOCATION",
+            "confidence_min": 0.95,
+            "context": "study location"
+          }
+        ]
+      },
+      {
+        "id": "content-7",
+        "text": "The Strategic Management course is taught by Professor Zhang and Professor Patel",
+        "expected_entities": [
+          {
+            "name": "Strategic Management",
+            "type": "COURSE",
+            "confidence_min": 0.92,
+            "context": "course name"
+          },
+          {
+            "name": "Professor Zhang",
+            "type": "PERSON",
+            "confidence_min": 0.95,
+            "context": "faculty"
+          },
+          {
+            "name": "Professor Patel",
+            "type": "PERSON",
+            "confidence_min": 0.95,
+            "context": "faculty"
+          }
+        ]
+      },
+      {
+        "id": "content-8",
+        "text": "Join us for the Leadership Summit at Harvard Business School",
+        "expected_entities": [
+          {
+            "name": "Leadership Summit",
+            "type": "EVENT",
+            "confidence_min": 0.90,
+            "context": "event name"
+          },
+          {
+            "name": "Harvard Business School",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "partner institution"
+          }
+        ]
+      },
+      {
+        "id": "content-9",
+        "text": "The PhD programme focuses on Organizational Behavior research",
+        "expected_entities": [
+          {
+            "name": "PhD",
+            "type": "PROGRAM",
+            "confidence_min": 0.95,
+            "context": "doctoral programme"
+          },
+          {
+            "name": "Organizational Behavior",
+            "type": "COURSE",
+            "confidence_min": 0.90,
+            "context": "research field"
+          }
+        ]
+      },
+      {
+        "id": "content-10",
+        "text": "Partnerships with INSEAD, Wharton, and Stanford GSB",
+        "expected_entities": [
+          {
+            "name": "INSEAD",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "partner school"
+          },
+          {
+            "name": "Wharton",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "partner school"
+          },
+          {
+            "name": "Stanford GSB",
+            "type": "ORGANIZATION",
+            "confidence_min": 0.98,
+            "context": "partner school"
+          }
+        ]
+      }
+    ]
+  },
+  "validation_metrics": {
+    "precision_threshold": 0.85,
+    "description": "85%+ of extracted entities should be correct",
+    "recall_threshold": 0.80,
+    "description_2": "80%+ of expected entities should be found",
+    "confidence_accuracy": 0.10,
+    "description_3": "Confidence scores within ±0.10 of expected"
+  }
+}

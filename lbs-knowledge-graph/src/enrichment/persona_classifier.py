@@ -10,7 +10,7 @@ import json
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 
-from memgraph import Memgraph as MGraph
+from src.graph.mgraph_wrapper import MGraph
 from .llm_client import LLMClient
 from .persona_models import (
     PersonaType, PersonaTarget, JourneyStage,

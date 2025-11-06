@@ -4,33 +4,45 @@ Prompt templates for knowledge graph enrichment tasks.
 All prompts are designed for batch processing with structured JSON output.
 """
 
-# Sentiment Analysis - Batch format
+# Sentiment Analysis - Batch format with numeric scores (0-1 scale)
 SENTIMENT_BATCH_PROMPT = """
-Analyze the sentiment of the following content items from a university website. Return a JSON array with sentiment scores.
+Analyze the sentiment of the following content items from London Business School's website.
+Score each item on a scale from 0 to 1, where:
+- 0.0-0.3 = Negative (challenges, problems, barriers, concerns)
+- 0.4-0.6 = Neutral (informational, factual, educational content)
+- 0.7-1.0 = Positive (opportunities, benefits, success, achievements)
 
 Items to analyze:
 {items_json}
 
 For each item, analyze the overall tone and sentiment, considering:
 - Word choice and emotional language
-- Context and subject matter
-- Target audience (prospective students, current students, faculty, etc.)
+- Context and subject matter (educational content is typically neutral)
+- Value proposition (marketing content is typically positive)
+- Target audience perspective
 
 Return JSON array in this exact format:
 [
   {{
     "id": "content_item_id",
-    "sentiment": "positive|neutral|negative",
+    "sentiment": 0.0-1.0,
     "confidence": 0.0-1.0,
-    "reasoning": "brief explanation of sentiment classification"
+    "reasoning": "brief explanation"
   }}
 ]
 
-Guidelines:
-- "positive": Encouraging, enthusiastic, optimistic language
-- "neutral": Informational, factual, balanced tone
-- "negative": Critical, concerning, or challenging content
-- confidence: 0.8+ for clear sentiment, 0.5-0.8 for mixed, <0.5 for unclear
+Scoring guidelines:
+- Educational/informational content: 0.5-0.6 (neutral)
+- Marketing/promotional content: 0.7-0.9 (positive)
+- Requirements/challenges: 0.3-0.4 (slightly negative)
+- Success stories/outcomes: 0.8-1.0 (very positive)
+- Navigation/links: 0.5 (neutral)
+
+Confidence guidelines:
+- 0.8-1.0: Clear sentiment, strong indicators
+- 0.6-0.8: Moderate sentiment, some indicators
+- 0.4-0.6: Mixed or unclear sentiment
+- <0.4: Insufficient information
 
 Return ONLY the JSON array, no additional text.
 """

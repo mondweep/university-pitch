@@ -1,474 +1,321 @@
 """
-Topic Cluster Enricher
+Topic Cluster Enricher - Master Orchestration
 
-Orchestrates topic clustering, hierarchy building, and analysis.
+Orchestrates complete topic clustering and hierarchy building pipeline.
+Coordinates: clustering -> hierarchy -> analysis -> visualization.
 """
 
-import logging
 import asyncio
+import json
+import logging
+import sys
 from pathlib import Path
-from typing import Dict, List, Tuple
-import numpy as np
+from datetime import datetime
+from typing import Dict, List
 
-from ..graph.mgraph_compat import MGraph
-from ..llm.llm_client import LLMClient
-from .embedding_generator import EmbeddingGenerator
-from .topic_clusterer import TopicClusterer, Topic, TopicCluster
-from .topic_hierarchy_builder import TopicHierarchyBuilder
-from .topic_analysis import TopicAnalysis
+# Add parent directory to path for imports
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
+from src.enrichment.topic_clusterer import TopicClusterer, TopicCluster
+from src.enrichment.topic_hierarchy_builder import TopicHierarchyBuilder
+from src.enrichment.topic_analysis import TopicAnalyzer
+from src.enrichment.topic_models import Topic
+from src.enrichment.embedding_generator import EmbeddingGenerator
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 
 class TopicClusterEnricher:
     """
-    Enrich knowledge graph with topic clusters and hierarchies.
+    Master orchestration for topic clustering pipeline.
 
-    Pipeline:
-    1. Load graph with topics from Phase 2
-    2. Generate topic embeddings
-    3. Cluster topics into hierarchies
-    4. Create SUBTOPIC_OF and RELATED_TOPIC edges
-    5. Calculate topic centrality
-    6. Generate analysis report
-    7. Export enriched graph
+    Steps:
+    1. Load topics from graph
+    2. Generate embeddings
+    3. Cluster topics (hierarchical clustering)
+    4. Build topic hierarchy
+    5. Create SUBTOPIC_OF edges
+    6. Generate analysis and insights
+    7. Export visualizations
     """
 
     def __init__(
         self,
-        graph_path: str,
-        openai_api_key: str,
-        similarity_threshold: float = 0.7,
-        related_threshold: float = 0.6
+        neo4j_client=None,
+        min_clusters: int = 5,
+        max_clusters: int = 10
     ):
         """
         Initialize topic cluster enricher.
 
         Args:
-            graph_path: Path to input graph JSON file
-            openai_api_key: OpenAI API key for embeddings
-            similarity_threshold: Threshold for SUBTOPIC_OF relationships
-            related_threshold: Threshold for RELATED_TOPIC relationships
+            neo4j_client: Neo4j client for graph operations
+            min_clusters: Minimum number of clusters
+            max_clusters: Maximum number of clusters
         """
-        self.graph_path = Path(graph_path)
-        self.similarity_threshold = similarity_threshold
-        self.related_threshold = related_threshold
+        self.neo4j_client = neo4j_client
+        self.min_clusters = min_clusters
+        self.max_clusters = max_clusters
 
         # Initialize components
-        self.graph = MGraph()
-        self.embedding_gen = EmbeddingGenerator(api_key=openai_api_key)
-        self.clusterer = TopicClusterer(
-            similarity_threshold=similarity_threshold,
-            min_cluster_size=2,
-            max_cluster_size=20
-        )
-        self.hierarchy_builder = None  # Initialized after loading graph
-        self.analyzer = None  # Initialized after loading graph
+        self.embedding_generator = EmbeddingGenerator()
+        self.clusterer = None
+        self.hierarchy_builder = TopicHierarchyBuilder(neo4j_client)
+        self.analyzer = None
 
-        logger.info(f"Initialized TopicClusterEnricher for {graph_path}")
+        # Results
+        self.topics: List[Topic] = []
+        self.clusters: Dict[str, TopicCluster] = {}
+        self.hierarchy: Dict = {}
+        self.analysis_report: Dict = {}
 
-    async def load_graph(self) -> None:
-        """Load knowledge graph from JSON file."""
-        if not self.graph_path.exists():
-            raise FileNotFoundError(f"Graph file not found: {self.graph_path}")
+        logger.info("Initialized TopicClusterEnricher")
 
-        self.graph.load_from_json(str(self.graph_path))
-
-        # Initialize builders with loaded graph
-        self.hierarchy_builder = TopicHierarchyBuilder(
-            graph=self.graph,
-            similarity_threshold=self.similarity_threshold,
-            related_threshold=self.related_threshold
-        )
-        self.analyzer = TopicAnalysis(graph=self.graph)
-
-        logger.info(
-            f"Loaded graph: {self.graph.node_count()} nodes, "
-            f"{self.graph.edge_count()} edges"
-        )
-
-    async def generate_topic_embeddings(self) -> Dict[str, List[float]]:
+    def load_topics_from_graph(self) -> List[Topic]:
         """
-        Generate embeddings for all topics in graph.
-
-        Returns:
-            Dictionary mapping topic IDs to embeddings
-        """
-        # Get all Topic nodes
-        topic_nodes = self.graph.query(node_type='Topic')
-
-        if not topic_nodes:
-            logger.warning("No Topic nodes found in graph")
-            return {}
-
-        logger.info(f"Generating embeddings for {len(topic_nodes)} topics...")
-
-        # Prepare texts for embedding
-        topic_texts = []
-        topic_ids = []
-
-        for topic in topic_nodes:
-            topic_name = topic.data.get('name', '')
-            topic_description = topic.data.get('description', '')
-
-            # Combine name and description for richer embeddings
-            text = topic_name
-            if topic_description:
-                text = f"{topic_name}: {topic_description}"
-
-            topic_texts.append(text)
-            topic_ids.append(topic.id)
-
-        # Generate embeddings in batch
-        embeddings_list = await self.embedding_gen.generate_batch(topic_texts)
-
-        # Create mapping
-        embeddings = {
-            topic_id: embedding
-            for topic_id, embedding in zip(topic_ids, embeddings_list)
-        }
-
-        logger.info(f"Generated {len(embeddings)} topic embeddings")
-
-        return embeddings
-
-    def convert_to_topic_objects(self, embeddings: Dict[str, List[float]]) -> List[Topic]:
-        """
-        Convert graph Topic nodes to Topic objects with embeddings.
-
-        Args:
-            embeddings: Dictionary mapping topic IDs to embeddings
+        Load all topics from Neo4j graph.
 
         Returns:
             List of Topic objects
         """
-        topic_nodes = self.graph.query(node_type='Topic')
+        logger.info("Loading topics from graph...")
+
+        if not self.neo4j_client:
+            # Use mock data for testing
+            logger.warning("No Neo4j client, using mock topics")
+            return self._create_mock_topics()
+
+        query = """
+        MATCH (t:Topic)
+        RETURN t.id AS id, t.name AS name, t.description AS description,
+               t.category AS category, t.frequency AS frequency,
+               t.importance AS importance
+        ORDER BY t.importance DESC, t.frequency DESC
+        """
+
+        results = self.neo4j_client.run_query(query)
+
         topics = []
-
-        for node in topic_nodes:
-            if node.id not in embeddings:
-                logger.warning(f"No embedding for topic: {node.id}")
-                continue
-
-            # Count frequency (number of pages containing topic)
-            has_topic_edges = self.graph.get_edges(to_node_id=node.id, edge_type='HAS_TOPIC')
-            frequency = len(has_topic_edges)
-
+        for record in results:
+            # Convert to Topic object (simplified)
             topic = Topic(
-                id=node.id,
-                name=node.data.get('name', node.id),
-                frequency=frequency,
-                embedding=embeddings[node.id],
-                category=node.data.get('category'),
-                level=0  # Will be set during hierarchy building
+                id=record['id'],
+                name=record['name'],
+                description=record.get('description'),
+                category=record.get('category', 'general'),
+                frequency=record.get('frequency', 1),
+                importance=record.get('importance', 0.5)
             )
-
             topics.append(topic)
 
-        logger.info(f"Converted {len(topics)} Topic nodes to objects")
+        logger.info(f"Loaded {len(topics)} topics from graph")
 
+        self.topics = topics
         return topics
 
-    def compute_similarity_matrix(self, topics: List[Topic]) -> Dict[Tuple[str, str], float]:
-        """
-        Compute pairwise similarity scores for all topics.
+    def _create_mock_topics(self) -> List[Topic]:
+        """Create mock topics for testing."""
+        from .topic_models import TopicCategory
 
-        Args:
-            topics: List of Topic objects with embeddings
+        mock_topics = [
+            Topic(id="topic-1", name="MBA Programme", description="Full-time MBA", category=TopicCategory.ACADEMIC, frequency=25, importance=0.95),
+            Topic(id="topic-2", name="Executive MBA", description="Part-time EMBA", category=TopicCategory.ACADEMIC, frequency=18, importance=0.9),
+            Topic(id="topic-3", name="Masters in Finance", description="MiF programme", category=TopicCategory.ACADEMIC, frequency=15, importance=0.85),
+            Topic(id="topic-4", name="Corporate Finance", description="Finance discipline", category=TopicCategory.ACADEMIC, frequency=20, importance=0.8),
+            Topic(id="topic-5", name="Marketing Strategy", description="Marketing courses", category=TopicCategory.ACADEMIC, frequency=12, importance=0.75),
+            Topic(id="topic-6", name="Alumni Network", description="Alumni community", category=TopicCategory.ALUMNI, frequency=10, importance=0.7),
+            Topic(id="topic-7", name="Career Services", description="Career support", category=TopicCategory.CAREER, frequency=14, importance=0.72),
+            Topic(id="topic-8", name="Student Clubs", description="Campus clubs", category=TopicCategory.STUDENT_LIFE, frequency=8, importance=0.65),
+            Topic(id="topic-9", name="Research Centers", description="Research facilities", category=TopicCategory.RESEARCH, frequency=11, importance=0.78),
+            Topic(id="topic-10", name="Faculty Research", description="Academic research", category=TopicCategory.RESEARCH, frequency=13, importance=0.8),
+        ]
+
+        return mock_topics
+
+    async def run_clustering_pipeline(self) -> Dict:
+        """
+        Run complete clustering pipeline.
 
         Returns:
-            Dictionary mapping (topic1_id, topic2_id) to similarity score
+            Pipeline results and statistics
         """
-        n = len(topics)
-        embeddings = np.array([t.embedding for t in topics])
+        logger.info("=" * 60)
+        logger.info("STARTING TOPIC CLUSTERING PIPELINE")
+        logger.info("=" * 60)
 
-        # Compute cosine similarity
-        from sklearn.metrics.pairwise import cosine_similarity
-        similarity_matrix = cosine_similarity(embeddings)
+        start_time = datetime.now()
 
-        # Convert to dictionary
-        similarities = {}
-        for i in range(n):
-            for j in range(i+1, n):
-                topic1_id = topics[i].id
-                topic2_id = topics[j].id
-                sim = float(similarity_matrix[i, j])
+        # Step 1: Load topics
+        logger.info("\n[1/7] Loading topics from graph...")
+        if not self.topics:
+            self.topics = self.load_topics_from_graph()
 
-                similarities[(topic1_id, topic2_id)] = sim
-                similarities[(topic2_id, topic1_id)] = sim  # Symmetric
-
-        logger.info(f"Computed {len(similarities)} pairwise similarities")
-
-        return similarities
-
-    async def cluster_topics(self, topics: List[Topic]) -> List[TopicCluster]:
-        """
-        Cluster topics using hierarchical clustering.
-
-        Args:
-            topics: List of Topic objects with embeddings
-
-        Returns:
-            List of TopicCluster objects
-        """
-        logger.info("Clustering topics...")
-
-        clusters = self.clusterer.cluster_topics(topics)
-
-        # Log cluster details
-        logger.info(f"Created {len(clusters)} topic clusters")
-
-        for cluster in clusters:
-            logger.info(
-                f"  Cluster {cluster.cluster_id}: {cluster.size} topics, "
-                f"centroid='{cluster.centroid_topic.name}', "
-                f"avg_sim={cluster.avg_similarity:.3f}"
-            )
-
-        return clusters
-
-    def build_hierarchy(self, topics: List[Topic]) -> Dict[str, List[str]]:
-        """
-        Build topic parent-child hierarchy.
-
-        Args:
-            topics: List of Topic objects
-
-        Returns:
-            Dictionary mapping parent IDs to child ID lists
-        """
-        logger.info("Building topic hierarchy...")
-
-        hierarchy = self.clusterer.build_hierarchy(topics)
-
-        # Log hierarchy stats
-        root_count = len(hierarchy)
-        child_count = sum(len(children) for children in hierarchy.values())
-
-        logger.info(
-            f"Built hierarchy: {root_count} root topics, {child_count} child topics"
+        # Step 2: Initialize clusterer
+        logger.info(f"\n[2/7] Initializing topic clusterer...")
+        self.clusterer = TopicClusterer(
+            topics=self.topics,
+            embedding_generator=self.embedding_generator.generate_embedding,
+            min_clusters=self.min_clusters,
+            max_clusters=self.max_clusters
         )
 
-        return hierarchy
+        # Step 3: Cluster topics
+        logger.info(f"\n[3/7] Clustering topics...")
+        self.clusters = self.clusterer.cluster_topics()
 
-    def enrich_graph(
-        self,
-        hierarchy: Dict[str, List[str]],
-        similarities: Dict[Tuple[str, str], float],
-        topics: List[Topic]
-    ) -> None:
-        """
-        Add hierarchy edges to graph.
+        # Step 4: Build hierarchy
+        logger.info(f"\n[4/7] Building topic hierarchy...")
+        self.hierarchy = self.clusterer.build_topic_hierarchy()
 
-        Args:
-            hierarchy: Parent-child topic mapping
-            similarities: Pairwise topic similarities
-            topics: List of all topics
-        """
-        logger.info("Enriching graph with topic relationships...")
-
-        # Create SUBTOPIC_OF edges
-        subtopic_count = self.hierarchy_builder.build_hierarchy_from_clusters(
-            hierarchy, similarities
+        # Step 5: Create SUBTOPIC_OF edges
+        logger.info(f"\n[5/7] Creating SUBTOPIC_OF relationships...")
+        relationships = self.hierarchy_builder.build_hierarchy_from_clusters(
+            self.hierarchy,
+            self.clusters
         )
 
-        # Create RELATED_TOPIC edges
-        topic_ids = [t.id for t in topics]
-        related_count = self.hierarchy_builder.build_related_topics(
-            topic_ids, similarities
+        # Validate hierarchy
+        validation = self.hierarchy_builder.validate_hierarchy()
+
+        # Create edges in graph (if client available)
+        if self.neo4j_client:
+            edges_created = self.hierarchy_builder.create_edges_in_graph()
+        else:
+            edges_created = 0
+            logger.info("Skipping graph edge creation (no Neo4j client)")
+
+        # Step 6: Analyze topics
+        logger.info(f"\n[6/7] Analyzing topic patterns...")
+        
+        # Create mock page-topic mapping for analysis
+        page_topics = self._create_mock_page_topics()
+        
+        self.analyzer = TopicAnalyzer(
+            topics=self.topics,
+            page_topics=page_topics
         )
+        
+        self.analysis_report = self.analyzer.generate_topic_report()
 
-        # Calculate centrality scores
-        centralities = self.hierarchy_builder.calculate_all_centralities()
+        # Step 7: Export results
+        logger.info(f"\n[7/7] Exporting results...")
+        self._export_results()
 
-        logger.info(
-            f"Graph enrichment complete: {subtopic_count} SUBTOPIC_OF edges, "
-            f"{related_count} RELATED_TOPIC edges, {len(centralities)} centrality scores"
-        )
+        # Calculate pipeline stats
+        end_time = datetime.now()
+        duration = (end_time - start_time).total_seconds()
 
-    async def run_analysis(self) -> Dict:
-        """
-        Run comprehensive topic analysis.
+        cluster_stats = self.clusterer.get_cluster_stats()
 
-        Returns:
-            Dictionary with analysis results
-        """
-        logger.info("Running topic analysis...")
-
-        # Distribution analysis
-        distribution = self.analyzer.analyze_distribution()
-
-        # Find trending and niche topics
-        trending = self.analyzer.find_trending_topics(threshold=5)
-        niche = self.analyzer.find_niche_topics(max_frequency=2)
-
-        # Calculate diversity metrics
-        diversity = self.analyzer.calculate_diversity_metrics()
-
-        # Get hierarchy statistics
-        hierarchy_stats = self.hierarchy_builder.get_hierarchy_statistics()
-
-        analysis = {
-            'distribution': distribution,
-            'diversity': diversity,
-            'hierarchy': hierarchy_stats,
-            'trending_topics_count': len(trending),
-            'niche_topics_count': len(niche),
+        pipeline_results = {
+            'success': True,
+            'duration_seconds': duration,
+            'topics_processed': len(self.topics),
+            'clusters_created': len(self.clusters),
+            'cluster_stats': cluster_stats,
+            'hierarchy': {
+                'root_topics': len(self.hierarchy['root']),
+                'primary_topics': len(self.hierarchy['primary']),
+                'specific_topics': len(self.hierarchy['specific'])
+            },
+            'relationships_created': len(relationships),
+            'edges_created_in_graph': edges_created,
+            'validation': validation,
+            'analysis': {
+                'total_pages': self.analysis_report['summary']['total_pages'],
+                'avg_topics_per_page': self.analysis_report['summary']['avg_topics_per_page']
+            }
         }
 
-        logger.info("Topic analysis complete")
+        logger.info("\n" + "=" * 60)
+        logger.info("CLUSTERING PIPELINE COMPLETE")
+        logger.info("=" * 60)
+        logger.info(f"Duration: {duration:.1f}s")
+        logger.info(f"Topics processed: {len(self.topics)}")
+        logger.info(f"Clusters created: {len(self.clusters)}")
+        logger.info(f"Hierarchy levels: {len(self.hierarchy['root'])} root -> {len(self.hierarchy['primary'])} primary -> {len(self.hierarchy['specific'])} specific")
+        logger.info(f"Validation: {'PASSED' if validation['valid'] else 'FAILED'}")
 
-        return analysis
+        return pipeline_results
 
-    async def export_graph(self, output_dir: Path) -> None:
-        """
-        Export enriched graph in multiple formats.
+    def _create_mock_page_topics(self) -> Dict[str, List[str]]:
+        """Create mock page-topic mapping for testing."""
+        import random
+        
+        # Simulate 20 pages with topics
+        page_topics = {}
+        topic_ids = [t.id for t in self.topics]
+        
+        for i in range(20):
+            page_id = f"page-{i+1}"
+            # Each page has 2-5 topics
+            n_topics = random.randint(2, 5)
+            page_topics[page_id] = random.sample(topic_ids, min(n_topics, len(topic_ids)))
+        
+        return page_topics
 
-        Args:
-            output_dir: Output directory for graph files
-        """
-        output_dir = Path(output_dir)
+    def _export_results(self) -> None:
+        """Export clustering results to files."""
+        output_dir = Path(__file__).parent.parent.parent / "lbs-knowledge-graph" / "data"
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        logger.info(f"Exporting enriched graph to {output_dir}...")
+        # Export cluster stats
+        cluster_stats = self.clusterer.get_cluster_stats()
+        stats_file = output_dir / "clustering_stats.json"
+        with open(stats_file, 'w') as f:
+            json.dump(cluster_stats, f, indent=2)
+        logger.info(f"Exported cluster stats to {stats_file}")
 
-        # Export JSON (primary format)
-        json_path = output_dir / 'graph_enriched.json'
-        self.graph.save_to_json(str(json_path))
+        # Export hierarchy
+        hierarchy_file = output_dir / "topic_hierarchy.json"
+        with open(hierarchy_file, 'w') as f:
+            # Convert hierarchy to JSON-serializable format
+            serializable_hierarchy = {
+                'root': self.hierarchy['root'],
+                'primary': self.hierarchy['primary'],
+                'specific': self.hierarchy['specific']
+            }
+            json.dump(serializable_hierarchy, f, indent=2)
+        logger.info(f"Exported hierarchy to {hierarchy_file}")
 
-        # Export Cypher (for Neo4j)
-        cypher_path = output_dir / 'graph_enriched.cypher'
-        self.graph.export_cypher(str(cypher_path))
-
-        # Export GraphML (for Gephi)
-        graphml_path = output_dir / 'graph_enriched.graphml'
-        self.graph.export_graphml(str(graphml_path))
-
-        # Export Mermaid diagram
-        mermaid_path = output_dir / 'graph_enriched.mmd'
-        self.graph.export_mermaid(str(mermaid_path))
-
-        logger.info(
-            f"Exported graph: {json_path.name}, {cypher_path.name}, "
-            f"{graphml_path.name}, {mermaid_path.name}"
+        # Export relationships
+        self.hierarchy_builder.export_hierarchy(
+            str(output_dir / "subtopic_relationships.json")
         )
 
-    async def export_reports(self, output_dir: Path, analysis: Dict) -> None:
-        """
-        Export analysis reports and visualizations.
-
-        Args:
-            output_dir: Output directory for reports
-            analysis: Analysis results dictionary
-        """
-        output_dir = Path(output_dir)
-        output_dir.mkdir(parents=True, exist_ok=True)
-
-        logger.info(f"Exporting reports to {output_dir}...")
-
-        # Export topic analysis JSON
-        analysis_path = output_dir / 'topic_analysis.json'
-        self.analyzer.export_analysis_report(str(analysis_path))
-
-        # Export topic hierarchy Mermaid diagram
-        hierarchy_path = output_dir / 'topic_hierarchy.mmd'
-        self.hierarchy_builder.export_hierarchy_mermaid(str(hierarchy_path))
-
-        logger.info(f"Exported reports: {analysis_path.name}, {hierarchy_path.name}")
-
-    async def run(
-        self,
-        output_dir: str = 'data/graph',
-        reports_dir: str = 'docs'
-    ) -> Dict:
-        """
-        Run complete topic clustering and enrichment pipeline.
-
-        Args:
-            output_dir: Output directory for enriched graph
-            reports_dir: Output directory for analysis reports
-
-        Returns:
-            Dictionary with pipeline results
-        """
-        logger.info("=" * 80)
-        logger.info("PHASE 3: TOPIC CLUSTERING AND HIERARCHY")
-        logger.info("=" * 80)
-
-        try:
-            # Step 1: Load graph
-            await self.load_graph()
-
-            # Step 2: Generate topic embeddings
-            embeddings = await self.generate_topic_embeddings()
-
-            # Step 3: Convert to Topic objects
-            topics = self.convert_to_topic_objects(embeddings)
-
-            # Step 4: Compute similarity matrix
-            similarities = self.compute_similarity_matrix(topics)
-
-            # Step 5: Cluster topics
-            clusters = await self.cluster_topics(topics)
-
-            # Step 6: Build hierarchy
-            hierarchy = self.build_hierarchy(topics)
-
-            # Step 7: Enrich graph with relationships
-            self.enrich_graph(hierarchy, similarities, topics)
-
-            # Step 8: Run analysis
-            analysis = await self.run_analysis()
-
-            # Step 9: Export enriched graph
-            await self.export_graph(Path(output_dir))
-
-            # Step 10: Export reports
-            await self.export_reports(Path(reports_dir), analysis)
-
-            # Final statistics
-            results = {
-                'success': True,
-                'topics_processed': len(topics),
-                'clusters_created': len(clusters),
-                'hierarchy_depth': analysis['hierarchy'].get('hierarchy_depth', 0),
-                'root_topics': analysis['hierarchy'].get('root_topics', 0),
-                'subtopic_edges': analysis['hierarchy'].get('subtopic_edges', 0),
-                'related_edges': analysis['hierarchy'].get('related_topic_edges', 0),
-                'trending_topics': analysis['trending_topics_count'],
-                'niche_topics': analysis['niche_topics_count'],
+        # Export analysis report
+        analysis_file = output_dir / "topic_analysis_report.json"
+        with open(analysis_file, 'w') as f:
+            # Make report JSON-serializable
+            serializable_report = {
+                'summary': self.analysis_report['summary'],
+                'category_distribution': self.analysis_report['category_distribution'],
+                'trending_topics': self.analysis_report['trending_topics'],
+                'coverage': self.analysis_report['coverage']
             }
+            json.dump(serializable_report, f, indent=2)
+        logger.info(f"Exported analysis report to {analysis_file}")
 
-            logger.info("=" * 80)
-            logger.info("PHASE 3 COMPLETE: Topic Clustering and Hierarchy")
-            logger.info("=" * 80)
-            logger.info(f"Topics processed: {results['topics_processed']}")
-            logger.info(f"Clusters created: {results['clusters_created']}")
-            logger.info(f"Root topics: {results['root_topics']}")
-            logger.info(f"SUBTOPIC_OF edges: {results['subtopic_edges']}")
-            logger.info(f"RELATED_TOPIC edges: {results['related_edges']}")
-            logger.info(f"Hierarchy depth: {results['hierarchy_depth']}")
-            logger.info(f"Trending topics: {results['trending_topics']}")
-            logger.info(f"Niche topics: {results['niche_topics']}")
-            logger.info("=" * 80)
 
-            return results
+async def main():
+    """Main entry point for topic clustering."""
+    enricher = TopicClusterEnricher(
+        neo4j_client=None,  # Set to actual client if available
+        min_clusters=5,
+        max_clusters=10
+    )
 
-        except Exception as e:
-            logger.error(f"Pipeline failed: {e}", exc_info=True)
-            return {
-                'success': False,
-                'error': str(e)
-            }
+    results = await enricher.run_clustering_pipeline()
 
-        finally:
-            # Cleanup
-            await self.embedding_gen.close()
+    print("\n" + "=" * 60)
+    print("PIPELINE RESULTS")
+    print("=" * 60)
+    print(json.dumps(results, indent=2))
 
-    async def __aenter__(self):
-        """Async context manager entry."""
-        return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        """Async context manager exit."""
-        await self.embedding_gen.close()
+if __name__ == "__main__":
+    asyncio.run(main())

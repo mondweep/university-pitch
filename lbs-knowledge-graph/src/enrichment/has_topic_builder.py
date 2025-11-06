@@ -1,33 +1,22 @@
 """
 HAS_TOPIC Relationship Builder
 
-Creates Topic nodes and HAS_TOPIC edges in the knowledge graph.
+Creates Topic nodes and HAS_TOPIC edges from Page/Section to Topic.
 """
 
-import logging
-from typing import Dict, List, Optional, Tuple
+from typing import List, Dict, Set, Optional
 from datetime import datetime
+import uuid
 
-try:
-    from mgraph import MGraph
-except ImportError:
-    # Fallback for testing
-    MGraph = None
-
-from .topic_models import Topic, TopicRelevance, TopicExtractionResult
-
-logger = logging.getLogger(__name__)
+from mgraph import MGraph
+from .topic_models import Topic, TopicRelevance, TopicCategory, TopicExtractionResult
 
 
 class HasTopicBuilder:
     """
-    Build Topic nodes and HAS_TOPIC relationships in knowledge graph.
+    Build HAS_TOPIC relationships in the knowledge graph.
 
-    Features:
-    - Create/update Topic nodes
-    - Build HAS_TOPIC edges with relevance scores
-    - Support multi-topic relationships
-    - Handle topic hierarchy
+    Creates Topic nodes and edges from Page/Section nodes to Topics.
     """
 
     def __init__(self, graph: MGraph):
@@ -35,281 +24,259 @@ class HasTopicBuilder:
         Initialize HAS_TOPIC builder.
 
         Args:
-            graph: MGraph database instance
+            graph: MGraph instance
         """
-        if graph is None:
-            raise ValueError("MGraph instance is required")
-
         self.graph = graph
+        self.topics_created = 0
+        self.edges_created = 0
+        self.topics_cache: Dict[str, Dict] = {}  # topic_id -> topic_node
 
-        # Track created topics
-        self.topic_nodes: Dict[str, str] = {}  # name -> node_id
-        self.topic_stats = {
-            'topics_created': 0,
-            'topics_updated': 0,
-            'edges_created': 0
+    def build_from_extraction_results(
+        self,
+        results: List[TopicExtractionResult],
+        overwrite: bool = False
+    ) -> Dict:
+        """
+        Build HAS_TOPIC relationships from extraction results.
+
+        Args:
+            results: List of TopicExtractionResult objects
+            overwrite: If True, remove existing HAS_TOPIC edges first
+
+        Returns:
+            Statistics dictionary
+        """
+        print(f"\n🔨 Building HAS_TOPIC relationships...")
+        print(f"   Processing {len(results)} extraction results")
+
+        if overwrite:
+            self._clear_existing_topics()
+
+        # Create all unique topics first
+        all_topics = self._collect_all_topics(results)
+        self._create_topic_nodes(all_topics)
+
+        # Create edges from pages to topics
+        for result in results:
+            self._create_edges_for_result(result)
+
+        stats = {
+            'topics_created': self.topics_created,
+            'edges_created': self.edges_created,
+            'results_processed': len(results)
         }
 
-        logger.info("Initialized HasTopicBuilder")
+        print(f"\n✅ HAS_TOPIC build complete:")
+        print(f"   • {self.topics_created} topics created")
+        print(f"   • {self.edges_created} edges created")
 
-    def create_topic_node(self, topic: Topic) -> str:
+        return stats
+
+    def _collect_all_topics(self, results: List[TopicExtractionResult]) -> List[Dict]:
         """
-        Create or update Topic node in graph.
+        Collect all unique topics from results.
 
         Args:
-            topic: Topic object
+            results: Extraction results
 
         Returns:
-            Topic node ID
+            List of unique topic dictionaries
         """
-        # Check if topic already exists
-        if topic.name in self.topic_nodes:
-            # Update existing topic
-            node_id = self.topic_nodes[topic.name]
+        topics_map: Dict[str, Dict] = {}
 
-            # Update frequency and importance
-            self.graph.update_node(
-                node_id=node_id,
-                properties={
-                    'frequency': topic.frequency,
-                    'importance': topic.importance
-                }
+        for result in results:
+            for topic_data in result.topics:
+                topic_id = topic_data['id']
+
+                if topic_id not in topics_map:
+                    topics_map[topic_id] = topic_data
+                else:
+                    # Merge: use higher relevance, accumulate pages
+                    existing = topics_map[topic_id]
+                    if topic_data['relevance'] > existing['relevance']:
+                        existing['relevance'] = topic_data['relevance']
+
+        return list(topics_map.values())
+
+    def _create_topic_nodes(self, topics: List[Dict]) -> None:
+        """
+        Create Topic nodes in the graph.
+
+        Args:
+            topics: List of topic dictionaries
+        """
+        print(f"\n📝 Creating {len(topics)} topic nodes...")
+
+        for topic_data in topics:
+            # Check if topic already exists
+            existing = self.graph.search_nodes(
+                node_type="Topic",
+                filters={'id': topic_data['id']},
+                limit=1
             )
 
-            self.topic_stats['topics_updated'] += 1
-            logger.debug(f"Updated topic: {topic.name} (frequency={topic.frequency})")
+            if existing:
+                # Update existing topic
+                topic_node = existing[0]
+                self.topics_cache[topic_data['id']] = topic_node
+                continue
 
-            return node_id
-
-        # Create new topic node
-        node_id = self.graph.add_node(
-            node_type='Topic',
-            properties={
-                'id': topic.id,
-                'name': topic.name,
-                'slug': topic.name.lower().replace(' ', '-'),
-                'description': topic.description or '',
-                'category': topic.category.value,
-                'discipline': topic.discipline.value if topic.discipline else None,
-                'theme': topic.theme.value if topic.theme else None,
-                'frequency': topic.frequency,
-                'importance': topic.importance,
-                'aliases': topic.aliases,
-                'keywords': topic.keywords,
-                'source': topic.source,
-                'extracted_at': topic.extracted_at or datetime.now().isoformat()
+            # Create new topic node
+            topic_node = {
+                'id': topic_data['id'],
+                'name': topic_data['name'],
+                'category': topic_data['category'],
+                'frequency': 1,
+                'importance': topic_data['relevance'],
+                'source': topic_data['source'],
+                'extracted_at': datetime.now().isoformat(),
+                'keywords': [topic_data['name']],
+                'aliases': [topic_data.get('original_name', topic_data['name'])]
             }
-        )
 
-        self.topic_nodes[topic.name] = node_id
-        self.topic_stats['topics_created'] += 1
+            # Add discipline if present
+            if 'discipline' in topic_data:
+                topic_node['discipline'] = topic_data['discipline']
 
-        logger.info(f"Created topic node: {topic.name} (id={node_id})")
+            # Add theme if present
+            if 'theme' in topic_data:
+                topic_node['theme'] = topic_data['theme']
 
-        return node_id
+            # Create node in graph
+            self.graph.add_node(
+                node_id=topic_node['id'],
+                node_type="Topic",
+                data=topic_node
+            )
 
-    def create_has_topic_edge(
-        self,
-        source_id: str,
-        topic_id: str,
-        relevance: float,
-        context: Optional[str] = None
-    ) -> str:
+            self.topics_cache[topic_data['id']] = topic_node
+            self.topics_created += 1
+
+        print(f"   ✅ Created {self.topics_created} new topics")
+
+    def _create_edges_for_result(self, result: TopicExtractionResult) -> None:
         """
-        Create HAS_TOPIC relationship.
+        Create HAS_TOPIC edges for a single extraction result.
 
         Args:
-            source_id: Source node ID (Page or Section)
-            topic_id: Topic node ID
-            relevance: Relevance score (0-1)
-            context: Optional context snippet
-
-        Returns:
-            Edge ID
+            result: TopicExtractionResult
         """
-        edge_id = self.graph.add_edge(
-            from_node=source_id,
-            to_node=topic_id,
-            edge_type='HAS_TOPIC',
-            properties={
-                'confidence': relevance,
-                'relevance': relevance,
-                'source': 'llm',
-                'context': context or '',
-                'extracted_at': datetime.now().isoformat()
-            }
-        )
+        source_id = result.source_id
+        source_type = result.source_type
 
-        self.topic_stats['edges_created'] += 1
-
-        logger.debug(f"Created HAS_TOPIC edge: {source_id} -> {topic_id} (relevance={relevance:.2f})")
-
-        return edge_id
-
-    def build_topics_for_source(
-        self,
-        source_node_id: str,
-        topics: List[Topic],
-        relevance_scores: Optional[List[float]] = None
-    ) -> List[str]:
-        """
-        Build topics and relationships for a source node.
-
-        Args:
-            source_node_id: Source node ID (Page or Section)
-            topics: List of Topic objects
-            relevance_scores: Optional list of relevance scores (defaults to topic.importance)
-
-        Returns:
-            List of created topic node IDs
-        """
-        if not topics:
-            return []
-
-        topic_node_ids = []
-
-        for i, topic in enumerate(topics):
-            # Create/update topic node
-            topic_node_id = self.create_topic_node(topic)
-            topic_node_ids.append(topic_node_id)
-
-            # Get relevance score
-            relevance = relevance_scores[i] if relevance_scores else topic.importance
+        for topic_data in result.topics:
+            topic_id = topic_data['id']
 
             # Create HAS_TOPIC edge
-            self.create_has_topic_edge(
-                source_id=source_node_id,
-                topic_id=topic_node_id,
-                relevance=relevance
+            edge_props = {
+                'relationship_type': 'HAS_TOPIC',
+                'relevance': topic_data['relevance'],
+                'confidence': topic_data['confidence'],
+                'extracted_by': topic_data['model'],
+                'created_at': datetime.now().isoformat(),
+                'source': topic_data['source']
+            }
+
+            # Add edge to graph
+            self.graph.add_edge(
+                source_id=source_id,
+                target_id=topic_id,
+                edge_type="HAS_TOPIC",
+                data=edge_props
             )
 
-        logger.info(f"Built {len(topics)} topics for source: {source_node_id}")
+            self.edges_created += 1
 
-        return topic_node_ids
+    def _clear_existing_topics(self) -> None:
+        """Remove existing Topic nodes and HAS_TOPIC edges"""
+        print("⚠️  Clearing existing topics and edges...")
 
-    def build_topic_graph(
-        self,
-        extractions: List[Dict]
-    ) -> MGraph:
+        # Get all topic nodes
+        topics = self.graph.search_nodes(node_type="Topic")
+
+        for topic in topics:
+            self.graph.remove_node(topic['id'])
+
+        print(f"   Removed {len(topics)} existing topics")
+
+    def update_topic_statistics(self) -> Dict:
         """
-        Build complete topic graph from extraction results.
+        Update topic frequency and importance statistics.
 
-        Args:
-            extractions: List of dicts with:
-                - source_node_id: Source node ID
-                - topics: List of Topic objects
+        Counts how many times each topic appears and updates importance.
 
         Returns:
-            Updated MGraph instance
+            Statistics dictionary
         """
-        logger.info(f"Building topic graph from {len(extractions)} extractions")
+        print("\n📊 Updating topic statistics...")
 
-        for extraction in extractions:
-            source_id = extraction['source_node_id']
-            topics = extraction['topics']
-
-            self.build_topics_for_source(source_id, topics)
-
-        logger.info(f"Topic graph complete: {self.topic_stats}")
-
-        return self.graph
-
-    def build_topic_hierarchy(self, topics: List[Topic]) -> None:
-        """
-        Build CHILD_OF relationships between topics.
-
-        Args:
-            topics: List of Topic objects with parent_topic_id set
-        """
-        hierarchy_count = 0
+        topics = self.graph.search_nodes(node_type="Topic")
 
         for topic in topics:
-            if topic.parent_topic_id:
-                # Find parent topic node
-                parent_node_id = None
-                for name, node_id in self.topic_nodes.items():
-                    parent_topic = next(
-                        (t for t in topics if t.id == topic.parent_topic_id),
-                        None
-                    )
-                    if parent_topic and name == parent_topic.name:
-                        parent_node_id = node_id
-                        break
+            topic_id = topic['id']
 
-                if parent_node_id:
-                    topic_node_id = self.topic_nodes[topic.name]
+            # Count HAS_TOPIC edges
+            edges = self.graph.get_edges(target_id=topic_id, edge_type="HAS_TOPIC")
+            frequency = len(edges)
 
-                    # Create CHILD_OF edge
-                    self.graph.add_edge(
-                        from_node=topic_node_id,
-                        to_node=parent_node_id,
-                        edge_type='CHILD_OF',
-                        properties={}
-                    )
+            # Calculate average relevance
+            if edges:
+                avg_relevance = sum(e.get('relevance', 0.5) for e in edges) / len(edges)
+            else:
+                avg_relevance = 0.5
 
-                    hierarchy_count += 1
+            # Update topic node
+            topic['frequency'] = frequency
+            topic['importance'] = avg_relevance
 
-        logger.info(f"Built {hierarchy_count} topic hierarchy relationships")
+            self.graph.update_node(
+                node_id=topic_id,
+                data={'frequency': frequency, 'importance': avg_relevance}
+            )
 
-    def link_related_topics(self, topics: List[Topic]) -> None:
-        """
-        Build RELATED_TO relationships between topics.
-
-        Args:
-            topics: List of Topic objects with related_topics set
-        """
-        relation_count = 0
-
-        for topic in topics:
-            if not topic.related_topics:
-                continue
-
-            topic_node_id = self.topic_nodes.get(topic.name)
-            if not topic_node_id:
-                continue
-
-            for related_topic_id in topic.related_topics:
-                # Find related topic node
-                related_node_id = None
-                for name, node_id in self.topic_nodes.items():
-                    related_topic = next(
-                        (t for t in topics if t.id == related_topic_id),
-                        None
-                    )
-                    if related_topic and name == related_topic.name:
-                        related_node_id = node_id
-                        break
-
-                if related_node_id:
-                    # Create RELATED_TO edge (bidirectional)
-                    self.graph.add_edge(
-                        from_node=topic_node_id,
-                        to_node=related_node_id,
-                        edge_type='RELATED_TO',
-                        properties={}
-                    )
-
-                    relation_count += 1
-
-        logger.info(f"Built {relation_count} topic relation relationships")
-
-    def get_stats(self) -> Dict:
-        """Get builder statistics"""
-        return {
-            **self.topic_stats,
-            'total_topics': len(self.topic_nodes)
+        stats = {
+            'topics_updated': len(topics),
+            'total_edges': sum(topic['frequency'] for topic in topics)
         }
 
-    def export_topics(self) -> List[Dict]:
-        """Export all topics as dictionaries"""
-        topics = []
+        print(f"   ✅ Updated statistics for {len(topics)} topics")
 
-        for name, node_id in self.topic_nodes.items():
-            node_data = self.graph.get_node(node_id)
-            topics.append({
-                'node_id': node_id,
-                'name': name,
-                **node_data.get('properties', {})
-            })
+        return stats
 
-        return topics
+    def get_topic_distribution(self) -> Dict:
+        """
+        Get distribution of topics by category.
+
+        Returns:
+            Dictionary of category -> count
+        """
+        topics = self.graph.search_nodes(node_type="Topic")
+
+        distribution: Dict[str, int] = {}
+
+        for topic in topics:
+            category = topic.get('category', 'general')
+            distribution[category] = distribution.get(category, 0) + 1
+
+        return distribution
+
+    def get_top_topics(self, limit: int = 20) -> List[Dict]:
+        """
+        Get top topics by frequency.
+
+        Args:
+            limit: Maximum topics to return
+
+        Returns:
+            List of topic dictionaries sorted by frequency
+        """
+        topics = self.graph.search_nodes(node_type="Topic")
+
+        # Sort by frequency
+        sorted_topics = sorted(
+            topics,
+            key=lambda t: t.get('frequency', 0),
+            reverse=True
+        )
+
+        return sorted_topics[:limit]

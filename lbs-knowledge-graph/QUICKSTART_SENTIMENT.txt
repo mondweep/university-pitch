@@ -1,0 +1,113 @@
+===============================================================================
+  SENTIMENT ANALYSIS - QUICK START
+===============================================================================
+
+STATUS: ✅ READY TO EXECUTE
+COST:   $0.42 USD
+TIME:   ~15 minutes
+
+===============================================================================
+  STEP 1: SET API KEY
+===============================================================================
+
+cd /workspaces/university-pitch/lbs-knowledge-graph
+export OPENAI_API_KEY='your-openai-api-key-here'
+
+===============================================================================
+  STEP 2: RUN ENRICHMENT
+===============================================================================
+
+python scripts/enrich_sentiment.py
+
+(Interactive prompt will confirm cost and show progress)
+
+===============================================================================
+  WHAT IT DOES
+===============================================================================
+
+Analyzes sentiment for:
+  - 3,743 ContentItems
+  - 83 Sections (aggregated)
+  - 42 Pages (aggregated)
+
+Adds to each node:
+  - sentiment_polarity: positive/negative/neutral/mixed
+  - sentiment_score: -1.0 to 1.0
+  - sentiment_confidence: 0.0 to 1.0
+
+===============================================================================
+  OUTPUTS
+===============================================================================
+
+1. data/graph/graph_with_sentiment.json  (enriched graph)
+2. data/graph/sentiment_report.json      (statistics)
+
+===============================================================================
+  VERIFY SUCCESS
+===============================================================================
+
+python3 -c "import json; g=json.load(open('data/graph/graph_with_sentiment.json')); \
+ci=[n for n in g['nodes'] if n.get('node_type')=='ContentItem']; \
+has_sent=[n for n in ci if 'sentiment' in n.get('data',{})]; \
+print(f'✅ {len(has_sent)}/{len(ci)} ContentItems enriched')"
+
+===============================================================================
+  OPTIONAL: VALIDATE ACCURACY
+===============================================================================
+
+python scripts/validate_sentiment.py \
+  --graph data/graph/graph_with_sentiment.json \
+  --ground-truth tests/fixtures/ground_truth/sentiment.json
+
+Target: ≥80% accuracy
+
+===============================================================================
+  EXPECTED RESULTS
+===============================================================================
+
+Sentiment Distribution:
+  Positive: ~70% (~2,620 items)
+  Neutral:  ~25% (~936 items)
+  Negative: ~3%  (~112 items)
+  Mixed:    ~2%  (~75 items)
+
+Cost: $0.42 USD (actual may vary slightly)
+
+===============================================================================
+  DOCUMENTATION
+===============================================================================
+
+Full guides in /docs/:
+  - SENTIMENT_ANALYSIS_GUIDE.md
+  - SENTIMENT_EXECUTION_STATUS.md
+  - SENTIMENT_READY_TO_EXECUTE.md
+
+Complete summary:
+  - SENTIMENT_ANALYSIS_COMPLETE.md
+
+===============================================================================
+  TROUBLESHOOTING
+===============================================================================
+
+Error: "OPENAI_API_KEY not found"
+  → Set: export OPENAI_API_KEY='your-key-here'
+
+Error: "Rate limit exceeded"
+  → Script auto-retries with backoff. Wait a few seconds.
+
+Error: "Insufficient quota"
+  → Add credits to OpenAI account
+
+===============================================================================
+  AGENT INFO
+===============================================================================
+
+Agent: Sentiment Analysis Specialist
+Session: swarm-phase3-sentiment
+Task: phase3-sentiment-implementation
+Date: 2025-11-06
+Status: READY FOR EXECUTION ✅
+
+===============================================================================
+  🚀 READY TO RUN: python scripts/enrich_sentiment.py
+===============================================================================

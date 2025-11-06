@@ -65,6 +65,7 @@ class EmbeddingGenerator:
             self.cache_file = self.config.cache_dir / "embeddings_cache.json"
             self.cache = self._load_cache()
         else:
+            self.cache_file = None
             self.cache = {}
 
         self.stats = {

@@ -1,0 +1,177 @@
+{
+  "metadata": {
+    "created_at": "2025-11-06T21:51:35.657494",
+    "n_clusters": 3,
+    "n_relationships": 7
+  },
+  "clusters": [
+    {
+      "id": "cluster_0",
+      "name": "MBA Programs & Related",
+      "topics": [
+        "topic_mba",
+        "topic_leadership",
+        "topic_finance",
+        "topic_strategy",
+        "topic_marketing"
+      ],
+      "topic_names": [
+        "MBA Programs",
+        "Leadership Development",
+        "Finance",
+        "Business Strategy",
+        "Marketing"
+      ],
+      "coherence_score": 0.7,
+      "centroid_topic": "topic_mba",
+      "size": 5
+    },
+    {
+      "id": "cluster_1",
+      "name": "Executive Education & Related",
+      "topics": [
+        "topic_exec_ed",
+        "topic_innovation"
+      ],
+      "topic_names": [
+        "Executive Education",
+        "Innovation"
+      ],
+      "coherence_score": 0.5,
+      "centroid_topic": "topic_exec_ed",
+      "size": 2
+    },
+    {
+      "id": "cluster_2",
+      "name": "Research & Related",
+      "topics": [
+        "topic_research",
+        "topic_faculty",
+        "topic_entrepreneurship"
+      ],
+      "topic_names": [
+        "Research",
+        "Faculty",
+        "Entrepreneurship"
+      ],
+      "coherence_score": 1.0,
+      "centroid_topic": "topic_research",
+      "size": 3
+    }
+  ],
+  "hierarchy": {
+    "metadata": {
+      "created_at": "2025-11-06T21:51:35.657511",
+      "n_relationships": 7,
+      "n_topics": 10,
+      "max_depth": 1
+    },
+    "relationships": [
+      {
+        "parent_id": "topic_mba",
+        "parent_name": "MBA Programs",
+        "child_id": "topic_leadership",
+        "child_name": "Leadership Development",
+        "confidence": 0.9099999999999999,
+        "type": "cluster_based"
+      },
+      {
+        "parent_id": "topic_mba",
+        "parent_name": "MBA Programs",
+        "child_id": "topic_finance",
+        "child_name": "Finance",
+        "confidence": 0.9099999999999999,
+        "type": "cluster_based"
+      },
+      {
+        "parent_id": "topic_mba",
+        "parent_name": "MBA Programs",
+        "child_id": "topic_strategy",
+        "child_name": "Business Strategy",
+        "confidence": 0.9099999999999999,
+        "type": "cluster_based"
+      },
+      {
+        "parent_id": "topic_mba",
+        "parent_name": "MBA Programs",
+        "child_id": "topic_marketing",
+        "child_name": "Marketing",
+        "confidence": 0.9099999999999999,
+        "type": "cluster_based"
+      },
+      {
+        "parent_id": "topic_exec_ed",
+        "parent_name": "Executive Education",
+        "child_id": "topic_innovation",
+        "child_name": "Innovation",
+        "confidence": 0.85,
+        "type": "cluster_based"
+      },
+      {
+        "parent_id": "topic_research",
+        "parent_name": "Research",
+        "child_id": "topic_faculty",
+        "child_name": "Faculty",
+        "confidence": 1.0,
+        "type": "cluster_based"
+      },
+      {
+        "parent_id": "topic_research",
+        "parent_name": "Research",
+        "child_id": "topic_entrepreneurship",
+        "child_name": "Entrepreneurship",
+        "confidence": 1.0,
+        "type": "cluster_based"
+      }
+    ],
+    "depths": {
+      "topic_mba": {
+        "depth": 0,
+        "name": "MBA Programs"
+      },
+      "topic_exec_ed": {
+        "depth": 0,
+        "name": "Executive Education"
+      },
+      "topic_research": {
+        "depth": 0,
+        "name": "Research"
+      },
+      "topic_leadership": {
+        "depth": 1,
+        "name": "Leadership Development"
+      },
+      "topic_finance": {
+        "depth": 1,
+        "name": "Finance"
+      },
+      "topic_strategy": {
+        "depth": 1,
+        "name": "Business Strategy"
+      },
+      "topic_marketing": {
+        "depth": 1,
+        "name": "Marketing"
+      },
+      "topic_innovation": {
+        "depth": 1,
+        "name": "Innovation"
+      },
+      "topic_faculty": {
+        "depth": 1,
+        "name": "Faculty"
+      },
+      "topic_entrepreneurship": {
+        "depth": 1,
+        "name": "Entrepreneurship"
+      }
+    },
+    "statistics": {
+      "avg_confidence": 0.927142857142857,
+      "cluster_based": 7,
+      "similarity_based": 0,
+      "root_topics": 3
+    }
+  },
+  "statistics": {}
+}

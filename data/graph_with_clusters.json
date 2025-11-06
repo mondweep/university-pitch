@@ -1,0 +1,314 @@
+{
+  "nodes": [
+    {
+      "id": "page_1",
+      "node_type": "Page",
+      "data": {
+        "title": "MBA Programs",
+        "url": "https://example.com/mba"
+      }
+    },
+    {
+      "id": "page_2",
+      "node_type": "Page",
+      "data": {
+        "title": "Executive Education",
+        "url": "https://example.com/exec-ed"
+      }
+    },
+    {
+      "id": "page_3",
+      "node_type": "Page",
+      "data": {
+        "title": "Research & Faculty",
+        "url": "https://example.com/research"
+      }
+    },
+    {
+      "id": "topic_mba",
+      "node_type": "Topic",
+      "data": {
+        "name": "MBA Programs",
+        "frequency": 15,
+        "importance": 0.9
+      }
+    },
+    {
+      "id": "topic_exec_ed",
+      "node_type": "Topic",
+      "data": {
+        "name": "Executive Education",
+        "frequency": 12,
+        "importance": 0.85
+      }
+    },
+    {
+      "id": "topic_leadership",
+      "node_type": "Topic",
+      "data": {
+        "name": "Leadership Development",
+        "frequency": 10,
+        "importance": 0.8
+      }
+    },
+    {
+      "id": "topic_finance",
+      "node_type": "Topic",
+      "data": {
+        "name": "Finance",
+        "frequency": 8,
+        "importance": 0.75
+      }
+    },
+    {
+      "id": "topic_strategy",
+      "node_type": "Topic",
+      "data": {
+        "name": "Business Strategy",
+        "frequency": 8,
+        "importance": 0.75
+      }
+    },
+    {
+      "id": "topic_research",
+      "node_type": "Topic",
+      "data": {
+        "name": "Research",
+        "frequency": 20,
+        "importance": 0.95
+      }
+    },
+    {
+      "id": "topic_faculty",
+      "node_type": "Topic",
+      "data": {
+        "name": "Faculty",
+        "frequency": 18,
+        "importance": 0.9
+      }
+    },
+    {
+      "id": "topic_innovation",
+      "node_type": "Topic",
+      "data": {
+        "name": "Innovation",
+        "frequency": 7,
+        "importance": 0.7
+      }
+    },
+    {
+      "id": "topic_entrepreneurship",
+      "node_type": "Topic",
+      "data": {
+        "name": "Entrepreneurship",
+        "frequency": 6,
+        "importance": 0.68
+      }
+    },
+    {
+      "id": "topic_marketing",
+      "node_type": "Topic",
+      "data": {
+        "name": "Marketing",
+        "frequency": 9,
+        "importance": 0.77
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "from": "page_1",
+      "to": "topic_mba",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.95
+      }
+    },
+    {
+      "id": "e2",
+      "from": "page_1",
+      "to": "topic_leadership",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.85
+      }
+    },
+    {
+      "id": "e3",
+      "from": "page_1",
+      "to": "topic_finance",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.8
+      }
+    },
+    {
+      "id": "e4",
+      "from": "page_1",
+      "to": "topic_strategy",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.82
+      }
+    },
+    {
+      "id": "e5",
+      "from": "page_2",
+      "to": "topic_exec_ed",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.95
+      }
+    },
+    {
+      "id": "e6",
+      "from": "page_2",
+      "to": "topic_leadership",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.9
+      }
+    },
+    {
+      "id": "e7",
+      "from": "page_2",
+      "to": "topic_strategy",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.85
+      }
+    },
+    {
+      "id": "e8",
+      "from": "page_3",
+      "to": "topic_research",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.95
+      }
+    },
+    {
+      "id": "e9",
+      "from": "page_3",
+      "to": "topic_faculty",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.9
+      }
+    },
+    {
+      "id": "e10",
+      "from": "page_3",
+      "to": "topic_innovation",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.8
+      }
+    },
+    {
+      "id": "e11",
+      "from": "page_3",
+      "to": "topic_entrepreneurship",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.75
+      }
+    },
+    {
+      "id": "e12",
+      "from": "page_1",
+      "to": "topic_marketing",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.78
+      }
+    },
+    {
+      "id": "e13",
+      "from": "page_2",
+      "to": "topic_innovation",
+      "edge_type": "HAS_TOPIC",
+      "data": {
+        "relevance": 0.7
+      }
+    },
+    {
+      "id": "child_of_topic_mba_topic_leadership",
+      "from": "topic_leadership",
+      "to": "topic_mba",
+      "edge_type": "CHILD_OF",
+      "data": {
+        "confidence": 0.9099999999999999,
+        "relationship_type": "cluster_based",
+        "created_at": "2025-11-06T21:51:35.644943"
+      }
+    },
+    {
+      "id": "child_of_topic_mba_topic_finance",
+      "from": "topic_finance",
+      "to": "topic_mba",
+      "edge_type": "CHILD_OF",
+      "data": {
+        "confidence": 0.9099999999999999,
+        "relationship_type": "cluster_based",
+        "created_at": "2025-11-06T21:51:35.644968"
+      }
+    },
+    {
+      "id": "child_of_topic_mba_topic_strategy",
+      "from": "topic_strategy",
+      "to": "topic_mba",
+      "edge_type": "CHILD_OF",
+      "data": {
+        "confidence": 0.9099999999999999,
+        "relationship_type": "cluster_based",
+        "created_at": "2025-11-06T21:51:35.644974"
+      }
+    },
+    {
+      "id": "child_of_topic_mba_topic_marketing",
+      "from": "topic_marketing",
+      "to": "topic_mba",
+      "edge_type": "CHILD_OF",
+      "data": {
+        "confidence": 0.9099999999999999,
+        "relationship_type": "cluster_based",
+        "created_at": "2025-11-06T21:51:35.644978"
+      }
+    },
+    {
+      "id": "child_of_topic_exec_ed_topic_innovation",
+      "from": "topic_innovation",
+      "to": "topic_exec_ed",
+      "edge_type": "CHILD_OF",
+      "data": {
+        "confidence": 0.85,
+        "relationship_type": "cluster_based",
+        "created_at": "2025-11-06T21:51:35.644982"
+      }
+    },
+    {
+      "id": "child_of_topic_research_topic_faculty",
+      "from": "topic_faculty",
+      "to": "topic_research",
+      "edge_type": "CHILD_OF",
+      "data": {
+        "confidence": 1.0,
+        "relationship_type": "cluster_based",
+        "created_at": "2025-11-06T21:51:35.644986"
+      }
+    },
+    {
+      "id": "child_of_topic_research_topic_entrepreneurship",
+      "from": "topic_entrepreneurship",
+      "to": "topic_research",
+      "edge_type": "CHILD_OF",
+      "data": {
+        "confidence": 1.0,
+        "relationship_type": "cluster_based",
+        "created_at": "2025-11-06T21:51:35.644990"
+      }
+    }
+  ]
+}

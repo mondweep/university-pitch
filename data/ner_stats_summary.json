@@ -1,0 +1,42 @@
+{
+  "phase": "Phase 3C - NER Extraction",
+  "status": "ready",
+  "components_created": {
+    "entity_node_builder": "src/enrichment/entity_node_builder.py",
+    "mentions_builder": "src/enrichment/mentions_builder.py",
+    "ner_enricher": "src/enrichment/ner_enricher.py",
+    "cli_script": "scripts/enrich_ner.py",
+    "test_suite": "tests/test_ner_pipeline.py",
+    "documentation": "docs/ner_enrichment.md"
+  },
+  "features": {
+    "entity_extraction": "GPT-4-turbo with high accuracy",
+    "entity_types": ["PERSON", "ORGANIZATION", "LOCATION", "EVENT"],
+    "deduplication": "Canonical name resolution with alias aggregation",
+    "batch_processing": "Configurable batch size (default: 10)",
+    "cost_tracking": "Real-time token and cost monitoring",
+    "validation": "Automated edge and node validation"
+  },
+  "expected_metrics": {
+    "sample_size": "10 pages",
+    "entities_extracted": "50-150",
+    "unique_entities": "20-40",
+    "mentions_edges": "80-200",
+    "estimated_cost": "$0.18-$0.25",
+    "precision_target": "≥85%"
+  },
+  "usage": {
+    "basic": "python scripts/enrich_ner.py --graph data/graph.json",
+    "test": "python scripts/enrich_ner.py --graph data/graph.json --max-items 10",
+    "production": "python scripts/enrich_ner.py --graph data/graph.json --model gpt-4o --batch-size 20"
+  },
+  "integration": {
+    "pre_task_hook": "npx claude-flow@alpha hooks pre-task --description 'NER extraction'",
+    "session_restore": "npx claude-flow@alpha hooks session-restore --session-id 'swarm-phase3-ner'",
+    "post_task_hook": "npx claude-flow@alpha hooks post-task --task-id 'phase3-ner'",
+    "memory_storage": "npx claude-flow@alpha hooks memory-set --key 'swarm/ner/stats' --value '$(cat data/ner_stats.json)'"
+  },
+  "timestamp": "2025-11-06T21:05:00Z",
+  "agent": "NER Specialist",
+  "ready_for_execution": true
+}

@@ -1,0 +1,56 @@
+2025-11-06 21:51:35,564 - INFO - ======================================================================
+2025-11-06 21:51:35,577 - INFO - TOPIC CLUSTERING & HIERARCHY ENRICHMENT
+2025-11-06 21:51:35,577 - INFO - ======================================================================
+2025-11-06 21:51:35,577 - INFO - Input graph: data/test_graph_with_topics.json
+2025-11-06 21:51:35,578 - INFO - Output directory: docs
+2025-11-06 21:51:35,578 - INFO - Output graph: data/graph_with_clusters.json
+2025-11-06 21:51:35,578 - INFO - Target clusters: 3
+2025-11-06 21:51:35,578 - INFO - Confidence threshold: 0.6
+2025-11-06 21:51:35,578 - INFO - Similarity threshold: 0.3
+2025-11-06 21:51:35,578 - INFO - ======================================================================
+2025-11-06 21:51:35,578 - INFO - Input graph validated: 10 Topic nodes found
+2025-11-06 21:51:35,581 - INFO - ============================================================
+2025-11-06 21:51:35,581 - INFO - TOPIC CLUSTERING & HIERARCHY ENRICHMENT PIPELINE
+2025-11-06 21:51:35,583 - INFO - ============================================================
+2025-11-06 21:51:35,592 - INFO - Loading graph from data/test_graph_with_topics.json...
+2025-11-06 21:51:35,592 - INFO - Loaded graph: 13 nodes, 13 edges
+2025-11-06 21:51:35,592 - INFO - Found 10 Topic nodes in graph
+2025-11-06 21:51:35,592 - INFO - Starting topic clustering...
+2025-11-06 21:51:35,592 - INFO - Loading topics from graph...
+2025-11-06 21:51:35,592 - INFO - Found 10 topics
+2025-11-06 21:51:35,592 - INFO - Built page-topic mappings for 10 topics
+2025-11-06 21:51:35,593 - INFO - Calculating topic co-occurrence...
+2025-11-06 21:51:35,593 - INFO - Found 42 co-occurrence pairs
+2025-11-06 21:51:35,593 - INFO - Clustering topics...
+2025-11-06 21:51:35,593 - INFO - Building similarity matrix...
+2025-11-06 21:51:35,593 - INFO - Built 10x10 similarity matrix
+2025-11-06 21:51:35,620 - INFO - Created 3 clusters
+2025-11-06 21:51:35,621 - INFO - Clustering complete: 3 clusters created
+2025-11-06 21:51:35,626 - INFO - Building topic hierarchy...
+2025-11-06 21:51:35,627 - INFO - Loading topics and clusters for hierarchy building...
+2025-11-06 21:51:35,629 - INFO - Loaded 10 topics and 3 clusters
+2025-11-06 21:51:35,632 - INFO - Building topic hierarchy...
+2025-11-06 21:51:35,636 - INFO - Building cluster-based hierarchy...
+2025-11-06 21:51:35,637 - INFO - Created 7 cluster-based relationships
+2025-11-06 21:51:35,637 - INFO - Building frequency-based hierarchy...
+2025-11-06 21:51:35,637 - INFO - Total relationships: 7
+2025-11-06 21:51:35,637 - INFO - Checking for cycles...
+2025-11-06 21:51:35,637 - INFO - Cycle removal complete
+2025-11-06 21:51:35,640 - INFO - Built hierarchy with 7 CHILD_OF edges
+2025-11-06 21:51:35,641 - INFO - Hierarchy complete: 7 CHILD_OF edges
+2025-11-06 21:51:35,643 - INFO - Enriching graph with CHILD_OF edges...
+2025-11-06 21:51:35,645 - INFO - Added 7 CHILD_OF edges to graph
+2025-11-06 21:51:35,648 - INFO - Generating visualizations...
+2025-11-06 21:51:35,657 - INFO - Generated Mermaid diagram: docs/topic_hierarchy.mmd
+2025-11-06 21:51:35,662 - INFO - Generated statistics: docs/cluster_stats.json
+2025-11-06 21:51:35,664 - INFO - Exporting enriched graph to data/graph_with_clusters.json...
+2025-11-06 21:51:35,676 - INFO - Graph exported: data/graph_with_clusters.json
+2025-11-06 21:51:35,676 - INFO - ============================================================
+2025-11-06 21:51:35,677 - INFO - PIPELINE COMPLETE ✅
+2025-11-06 21:51:35,678 - INFO - Duration: 0.08 seconds
+2025-11-06 21:51:35,679 - INFO - Clusters: 3
+2025-11-06 21:51:35,686 - INFO - Hierarchy edges: 7
+2025-11-06 21:51:35,686 - INFO - Max depth: 1
+2025-11-06 21:51:35,686 - INFO - ============================================================
+2025-11-06 21:51:35,687 - INFO - Generated summary report: docs/TOPIC_HIERARCHY.md
+2025-11-06 21:51:35,689 - INFO - ✅ Topic clustering enrichment complete!

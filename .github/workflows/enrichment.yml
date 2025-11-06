@@ -1,0 +1,461 @@
+name: Semantic Enrichment Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      graph_file:
+        description: 'Input graph JSON file (relative to repo root)'
+        required: true
+        default: 'lbs-knowledge-graph/data/graph/graph.json'
+      skip_steps:
+        description: 'Comma-separated steps to skip (sentiment,topics,ner,personas,similarity,clustering)'
+        required: false
+        default: ''
+      batch_size:
+        description: 'Batch size for processing'
+        required: false
+        default: '50'
+      max_cost:
+        description: 'Maximum LLM cost allowed ($)'
+        required: false
+        default: '50.00'
+  schedule:
+    - cron: '0 2 * * 0'  # Weekly on Sunday at 2 AM
+
+env:
+  PYTHONUNBUFFERED: 1
+  BATCH_SIZE: ${{ github.event.inputs.batch_size || '50' }}
+  MAX_CONCURRENT_REQUESTS: 5
+  MAX_LLM_COST: ${{ github.event.inputs.max_cost || '50.00' }}
+
+jobs:
+  validate-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate graph file exists
+        run: |
+          if [ ! -f "${{ github.event.inputs.graph_file }}" ]; then
+            echo "Error: Graph file not found: ${{ github.event.inputs.graph_file }}"
+            exit 1
+          fi
+          echo "Graph file found: ${{ github.event.inputs.graph_file }}"
+
+  check-budget:
+    runs-on: ubuntu-latest
+    needs: validate-inputs
+    outputs:
+      can_proceed: ${{ steps.budget_check.outputs.can_proceed }}
+      estimated_cost: ${{ steps.budget_check.outputs.estimated_cost }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: lbs-knowledge-graph
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check budget
+        id: budget_check
+        working-directory: lbs-knowledge-graph
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python scripts/check_budget.py \
+            --graph "${{ github.event.inputs.graph_file }}" \
+            --max-cost "${{ env.MAX_LLM_COST }}" \
+            --output budget_report.json
+
+          # Parse results
+          CAN_PROCEED=$(jq -r '.can_proceed' budget_report.json)
+          ESTIMATED_COST=$(jq -r '.estimated_cost' budget_report.json)
+
+          echo "can_proceed=$CAN_PROCEED" >> $GITHUB_OUTPUT
+          echo "estimated_cost=$ESTIMATED_COST" >> $GITHUB_OUTPUT
+
+          echo "### Budget Check Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Can proceed: $CAN_PROCEED" >> $GITHUB_STEP_SUMMARY
+          echo "- Estimated cost: \$$ESTIMATED_COST" >> $GITHUB_STEP_SUMMARY
+          echo "- Max allowed: \$${{ env.MAX_LLM_COST }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload budget report
+        uses: actions/upload-artifact@v4
+        with:
+          name: budget-report
+          path: lbs-knowledge-graph/budget_report.json
+          retention-days: 30
+
+  enrich-sentiment:
+    runs-on: ubuntu-latest
+    needs: check-budget
+    if: needs.check-budget.outputs.can_proceed == 'true' && !contains(github.event.inputs.skip_steps, 'sentiment')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: lbs-knowledge-graph
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run sentiment analysis
+        working-directory: lbs-knowledge-graph
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python scripts/enrich_sentiment.py \
+            --graph "${{ github.event.inputs.graph_file }}" \
+            --output data/checkpoints/graph_with_sentiment.json \
+            --batch-size ${{ env.BATCH_SIZE }} \
+            --max-cost ${{ env.MAX_LLM_COST }}
+
+      - name: Upload checkpoint
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph-with-sentiment
+          path: lbs-knowledge-graph/data/checkpoints/graph_with_sentiment.json
+          retention-days: 7
+
+  enrich-topics:
+    runs-on: ubuntu-latest
+    needs: enrich-sentiment
+    if: success() && !contains(github.event.inputs.skip_steps, 'topics')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: lbs-knowledge-graph
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download sentiment checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: graph-with-sentiment
+          path: lbs-knowledge-graph/data/checkpoints/
+
+      - name: Run topic extraction
+        working-directory: lbs-knowledge-graph
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python scripts/enrich_topics.py \
+            --graph data/checkpoints/graph_with_sentiment.json \
+            --output data/checkpoints/graph_with_topics.json \
+            --batch-size ${{ env.BATCH_SIZE }}
+
+      - name: Upload checkpoint
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph-with-topics
+          path: lbs-knowledge-graph/data/checkpoints/graph_with_topics.json
+          retention-days: 7
+
+  enrich-ner:
+    runs-on: ubuntu-latest
+    needs: enrich-topics
+    if: success() && !contains(github.event.inputs.skip_steps, 'ner')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: lbs-knowledge-graph
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download topics checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: graph-with-topics
+          path: lbs-knowledge-graph/data/checkpoints/
+
+      - name: Run NER extraction
+        working-directory: lbs-knowledge-graph
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python scripts/enrich_ner.py \
+            --graph data/checkpoints/graph_with_topics.json \
+            --output data/checkpoints/graph_with_ner.json \
+            --batch-size ${{ env.BATCH_SIZE }}
+
+      - name: Upload checkpoint
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph-with-ner
+          path: lbs-knowledge-graph/data/checkpoints/graph_with_ner.json
+          retention-days: 7
+
+  enrich-personas:
+    runs-on: ubuntu-latest
+    needs: enrich-ner
+    if: success() && !contains(github.event.inputs.skip_steps, 'personas')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: lbs-knowledge-graph
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download NER checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: graph-with-ner
+          path: lbs-knowledge-graph/data/checkpoints/
+
+      - name: Run persona classification
+        working-directory: lbs-knowledge-graph
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python scripts/enrich_personas.py \
+            --graph data/checkpoints/graph_with_ner.json \
+            --output data/checkpoints/graph_with_personas.json \
+            --batch-size ${{ env.BATCH_SIZE }}
+
+      - name: Upload checkpoint
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph-with-personas
+          path: lbs-knowledge-graph/data/checkpoints/graph_with_personas.json
+          retention-days: 7
+
+  enrich-similarity:
+    runs-on: ubuntu-latest
+    needs: enrich-personas
+    if: success() && !contains(github.event.inputs.skip_steps, 'similarity')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: lbs-knowledge-graph
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download personas checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: graph-with-personas
+          path: lbs-knowledge-graph/data/checkpoints/
+
+      - name: Run similarity calculation
+        working-directory: lbs-knowledge-graph
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python scripts/enrich_similarity.py \
+            --graph data/checkpoints/graph_with_personas.json \
+            --output data/checkpoints/graph_with_similarity.json \
+            --threshold 0.7
+
+      - name: Upload checkpoint
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph-with-similarity
+          path: lbs-knowledge-graph/data/checkpoints/graph_with_similarity.json
+          retention-days: 7
+
+  enrich-clustering:
+    runs-on: ubuntu-latest
+    needs: enrich-similarity
+    if: success() && !contains(github.event.inputs.skip_steps, 'clustering')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: lbs-knowledge-graph
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download similarity checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: graph-with-similarity
+          path: lbs-knowledge-graph/data/checkpoints/
+
+      - name: Run topic clustering
+        working-directory: lbs-knowledge-graph
+        run: |
+          python scripts/enrich_topic_clusters.py \
+            --graph data/checkpoints/graph_with_similarity.json \
+            --output data/checkpoints/graph_fully_enriched.json \
+            --min-cluster-size 3
+
+      - name: Upload final enriched graph
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph-fully-enriched
+          path: lbs-knowledge-graph/data/checkpoints/graph_fully_enriched.json
+          retention-days: 30
+
+  validate-enrichments:
+    runs-on: ubuntu-latest
+    needs: enrich-clustering
+    if: success()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: lbs-knowledge-graph
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download enriched graph
+        uses: actions/download-artifact@v4
+        with:
+          name: graph-fully-enriched
+          path: lbs-knowledge-graph/data/checkpoints/
+
+      - name: Run Phase 3 validation
+        working-directory: lbs-knowledge-graph
+        run: |
+          python src/validation/run_phase3_validation.py \
+            --graph data/checkpoints/graph_fully_enriched.json \
+            --output validation_report.json
+
+      - name: Generate validation summary
+        working-directory: lbs-knowledge-graph
+        run: |
+          python -c "
+          import json
+          with open('validation_report.json') as f:
+              report = json.load(f)
+
+          print('### Validation Results', file=open('$GITHUB_STEP_SUMMARY', 'a'))
+          print(f\"- Overall Status: {report['status']}\", file=open('$GITHUB_STEP_SUMMARY', 'a'))
+          print(f\"- Completeness: {report['completeness']['percentage']:.1f}%\", file=open('$GITHUB_STEP_SUMMARY', 'a'))
+          print(f\"- Quality Score: {report['quality']['overall_score']:.2f}/1.0\", file=open('$GITHUB_STEP_SUMMARY', 'a'))
+          print(f\"- Total Cost: \${report['cost']['total_cost']:.2f}\", file=open('$GITHUB_STEP_SUMMARY', 'a'))
+          "
+
+      - name: Upload validation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: lbs-knowledge-graph/validation_report.json
+          retention-days: 30
+
+      - name: Fail if validation failed
+        working-directory: lbs-knowledge-graph
+        run: |
+          STATUS=$(jq -r '.status' validation_report.json)
+          if [ "$STATUS" != "PASSED" ]; then
+            echo "Validation failed: $STATUS"
+            exit 1
+          fi
+
+  upload-to-s3:
+    runs-on: ubuntu-latest
+    needs: validate-enrichments
+    if: success() && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Download enriched graph
+        uses: actions/download-artifact@v4
+        with:
+          name: graph-fully-enriched
+          path: lbs-knowledge-graph/data/checkpoints/
+
+      - name: Upload to S3
+        run: |
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+          # Upload latest version
+          aws s3 cp lbs-knowledge-graph/data/checkpoints/graph_fully_enriched.json \
+            s3://lbs-kg-content/graph/latest.json
+
+          # Upload versioned backup
+          aws s3 cp lbs-knowledge-graph/data/checkpoints/graph_fully_enriched.json \
+            s3://lbs-kg-content/graph/versions/${TIMESTAMP}.json
+
+      - name: Invalidate CloudFront cache
+        if: env.CF_DISTRIBUTION_ID != ''
+        env:
+          CF_DISTRIBUTION_ID: ${{ secrets.CF_DISTRIBUTION_ID }}
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id $CF_DISTRIBUTION_ID \
+            --paths "/api/*"
+
+  notify-completion:
+    runs-on: ubuntu-latest
+    needs: [validate-enrichments, upload-to-s3]
+    if: always()
+    steps:
+      - name: Notify on success
+        if: success()
+        run: |
+          echo "### ✅ Enrichment Pipeline Complete" >> $GITHUB_STEP_SUMMARY
+          echo "All enrichment steps completed successfully" >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "### ❌ Enrichment Pipeline Failed" >> $GITHUB_STEP_SUMMARY
+          echo "Check logs for details" >> $GITHUB_STEP_SUMMARY

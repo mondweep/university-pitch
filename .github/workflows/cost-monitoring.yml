@@ -1,0 +1,241 @@
+name: Cost Monitoring
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+    inputs:
+      alert_threshold:
+        description: 'Alert threshold percentage (0-100)'
+        required: false
+        default: '80'
+
+env:
+  COST_ALERT_THRESHOLD: ${{ github.event.inputs.alert_threshold || '80' }}
+  MAX_LLM_COST: 50.00
+
+jobs:
+  monitor-costs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: lbs-knowledge-graph
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate cost report
+        id: cost_report
+        working-directory: lbs-knowledge-graph
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Create cost report script if doesn't exist
+          if [ ! -f scripts/cost_report.py ]; then
+            cat > scripts/cost_report.py << 'EOF'
+          import json
+          import os
+          from pathlib import Path
+
+          def generate_cost_report():
+              """Generate cost report from tracking data"""
+              cost_data_dir = Path("data/costs")
+              cost_data_dir.mkdir(parents=True, exist_ok=True)
+
+              total_cost = 0.0
+              breakdown = {}
+
+              # Check for cost tracking files
+              if cost_data_dir.exists():
+                  for cost_file in cost_data_dir.glob("*.json"):
+                      with open(cost_file) as f:
+                          data = json.load(f)
+                          task = cost_file.stem
+                          breakdown[task] = data.get("total_cost", 0.0)
+                          total_cost += breakdown[task]
+
+              max_cost = float(os.getenv("MAX_LLM_COST", "50.00"))
+              percentage_used = (total_cost / max_cost) * 100 if max_cost > 0 else 0
+
+              report = {
+                  "total_cost": round(total_cost, 2),
+                  "max_cost": max_cost,
+                  "percentage_used": round(percentage_used, 1),
+                  "breakdown": breakdown,
+                  "status": "OK" if percentage_used < 80 else "WARNING" if percentage_used < 95 else "CRITICAL"
+              }
+
+              with open("cost_report.json", "w") as f:
+                  json.dump(report, f, indent=2)
+
+              return report
+
+          if __name__ == "__main__":
+              report = generate_cost_report()
+              print(f"Total cost: ${report['total_cost']}")
+              print(f"Budget usage: {report['percentage_used']}%")
+              print(f"Status: {report['status']}")
+          EOF
+          fi
+
+          python scripts/cost_report.py
+
+          # Parse results
+          TOTAL_COST=$(jq -r '.total_cost' cost_report.json)
+          PERCENTAGE=$(jq -r '.percentage_used' cost_report.json)
+          STATUS=$(jq -r '.status' cost_report.json)
+
+          echo "total_cost=$TOTAL_COST" >> $GITHUB_OUTPUT
+          echo "percentage=$PERCENTAGE" >> $GITHUB_OUTPUT
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+
+      - name: Generate summary
+        run: |
+          echo "### 💰 LLM Cost Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Cost**: \$${{ steps.cost_report.outputs.total_cost }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Budget Usage**: ${{ steps.cost_report.outputs.percentage }}%" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ steps.cost_report.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Max Budget**: \$${{ env.MAX_LLM_COST }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload cost report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cost-report-${{ github.run_number }}
+          path: lbs-knowledge-graph/cost_report.json
+          retention-days: 90
+
+      - name: Check threshold
+        id: check_threshold
+        run: |
+          PERCENTAGE=${{ steps.cost_report.outputs.percentage }}
+          THRESHOLD=${{ env.COST_ALERT_THRESHOLD }}
+
+          if (( $(echo "$PERCENTAGE >= $THRESHOLD" | bc -l) )); then
+            echo "alert_needed=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Cost threshold exceeded!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "alert_needed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub issue if threshold exceeded
+        if: steps.check_threshold.outputs.alert_needed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const totalCost = '${{ steps.cost_report.outputs.total_cost }}';
+            const percentage = '${{ steps.cost_report.outputs.percentage }}';
+            const maxCost = '${{ env.MAX_LLM_COST }}';
+
+            const title = `🚨 LLM Cost Alert: ${percentage}% of budget used`;
+            const body = `
+            ## Cost Monitoring Alert
+
+            The LLM API costs have exceeded the alert threshold.
+
+            ### Current Status
+            - **Total Cost**: $${totalCost}
+            - **Budget Usage**: ${percentage}%
+            - **Max Budget**: $${maxCost}
+            - **Alert Threshold**: ${{ env.COST_ALERT_THRESHOLD }}%
+
+            ### Actions Required
+            1. Review recent enrichment runs
+            2. Consider optimizing batch sizes
+            3. Review model selection (use cheaper models where possible)
+            4. Consider increasing budget if justified
+
+            ### Cost Breakdown
+            Check the [cost report artifact](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for detailed breakdown.
+            `;
+
+            // Check if issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'cost-alert'
+            });
+
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['cost-alert', 'monitoring']
+              });
+            } else {
+              // Update existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                body: `**Update**: Cost now at ${percentage}% ($${totalCost})`
+              });
+            }
+
+      - name: Fail workflow if critical
+        if: steps.cost_report.outputs.status == 'CRITICAL'
+        run: |
+          echo "❌ CRITICAL: Cost limit exceeded!"
+          echo "Budget usage: ${{ steps.cost_report.outputs.percentage }}%"
+          exit 1
+
+  analyze-trends:
+    runs-on: ubuntu-latest
+    needs: monitor-costs
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download historical cost reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cost-report-*
+          path: cost-history/
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Analyze cost trends
+        run: |
+          if [ -d "cost-history" ] && [ "$(ls -A cost-history)" ]; then
+            echo "### 📊 Cost Trends" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            # Simple trend analysis
+            python3 << 'EOF'
+          import json
+          import os
+          from pathlib import Path
+
+          cost_dir = Path("cost-history")
+          costs = []
+
+          for f in sorted(cost_dir.glob("cost_report.json*")):
+              try:
+                  with open(f) as file:
+                      data = json.load(file)
+                      costs.append(data.get("total_cost", 0))
+              except:
+                  pass
+
+          if len(costs) >= 2:
+              avg = sum(costs) / len(costs)
+              trend = "📈 Increasing" if costs[-1] > avg else "📉 Decreasing"
+              print(f"Average cost: ${avg:.2f}")
+              print(f"Trend: {trend}")
+              print(f"Recent: ${costs[-1]:.2f}")
+          EOF
+          else
+            echo "No historical data available yet" >> $GITHUB_STEP_SUMMARY
+          fi

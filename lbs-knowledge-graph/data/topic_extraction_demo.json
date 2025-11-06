@@ -1,0 +1,520 @@
+[
+  {
+    "page_id": "give-to-lbs_98c8f2905162",
+    "page_title": "Give to LBS | London Business School",
+    "page_type": "landing",
+    "topics": [
+      {
+        "id": "topic-business-education",
+        "name": "Business Education",
+        "relevance": 0.92,
+        "category": "academic",
+        "confidence": 0.85
+      },
+      {
+        "id": "topic-research-excellence",
+        "name": "Research Excellence",
+        "relevance": 0.89,
+        "category": "research",
+        "confidence": 0.85
+      },
+      {
+        "id": "topic-global-network",
+        "name": "Global Network",
+        "relevance": 0.86,
+        "category": "alumni",
+        "confidence": 0.85
+      },
+      {
+        "id": "topic-innovation",
+        "name": "Innovation",
+        "relevance": 0.84,
+        "category": "research",
+        "confidence": 0.85
+      },
+      {
+        "id": "topic-leadership",
+        "name": "Leadership",
+        "relevance": 0.82,
+        "category": "academic",
+        "confidence": 0.85
+      },
+      {
+        "id": "topic-sustainability",
+        "name": "Sustainability",
+        "relevance": 0.76,
+        "category": "business",
+        "confidence": 0.85
+      }
+    ]
+  },
+  {
+    "page_id": "faculty-and-research_c4fd78231318",
+    "page_title": "Faculty and Research | London Business School",
+    "page_type": "landing",
+    "topics": [
+      {
+        "id": "topic-business-education",
+        "name": "Business Education",
+        "relevance": 0.92,
+        "category": "academic",
+        "confidence": 0.86
+      },
+      {
+        "id": "topic-research-excellence",
+        "name": "Research Excellence",
+        "relevance": 0.89,
+        "category": "research",
+        "confidence": 0.86
+      },
+      {
+        "id": "topic-global-network",
+        "name": "Global Network",
+        "relevance": 0.86,
+        "category": "alumni",
+        "confidence": 0.86
+      },
+      {
+        "id": "topic-innovation",
+        "name": "Innovation",
+        "relevance": 0.84,
+        "category": "research",
+        "confidence": 0.86
+      },
+      {
+        "id": "topic-leadership",
+        "name": "Leadership",
+        "relevance": 0.82,
+        "category": "academic",
+        "confidence": 0.86
+      },
+      {
+        "id": "topic-digital-transformation",
+        "name": "Digital Transformation",
+        "relevance": 0.8,
+        "category": "business",
+        "confidence": 0.86
+      }
+    ]
+  },
+  {
+    "page_id": "about_c5f70d891e17",
+    "page_title": "About us | London Business School",
+    "page_type": "landing",
+    "topics": [
+      {
+        "id": "topic-business-education",
+        "name": "Business Education",
+        "relevance": 0.92,
+        "category": "academic",
+        "confidence": 0.87
+      },
+      {
+        "id": "topic-research-excellence",
+        "name": "Research Excellence",
+        "relevance": 0.89,
+        "category": "research",
+        "confidence": 0.87
+      },
+      {
+        "id": "topic-global-network",
+        "name": "Global Network",
+        "relevance": 0.86,
+        "category": "alumni",
+        "confidence": 0.87
+      },
+      {
+        "id": "topic-innovation",
+        "name": "Innovation",
+        "relevance": 0.84,
+        "category": "research",
+        "confidence": 0.87
+      },
+      {
+        "id": "topic-leadership",
+        "name": "Leadership",
+        "relevance": 0.82,
+        "category": "academic",
+        "confidence": 0.87
+      },
+      {
+        "id": "topic-digital-transformation",
+        "name": "Digital Transformation",
+        "relevance": 0.8,
+        "category": "business",
+        "confidence": 0.87
+      },
+      {
+        "id": "topic-student-experience",
+        "name": "Student Experience",
+        "relevance": 0.78,
+        "category": "student_life",
+        "confidence": 0.87
+      },
+      {
+        "id": "topic-technology",
+        "name": "Technology",
+        "relevance": 0.72,
+        "category": "business",
+        "confidence": 0.87
+      }
+    ]
+  },
+  {
+    "page_id": "homepage_5002b6553ab6",
+    "page_title": "Home | London Business School",
+    "page_type": "landing",
+    "topics": [
+      {
+        "id": "topic-business-education",
+        "name": "Business Education",
+        "relevance": 0.92,
+        "category": "academic",
+        "confidence": 0.88
+      },
+      {
+        "id": "topic-research-excellence",
+        "name": "Research Excellence",
+        "relevance": 0.89,
+        "category": "research",
+        "confidence": 0.88
+      },
+      {
+        "id": "topic-global-network",
+        "name": "Global Network",
+        "relevance": 0.86,
+        "category": "alumni",
+        "confidence": 0.88
+      },
+      {
+        "id": "topic-innovation",
+        "name": "Innovation",
+        "relevance": 0.84,
+        "category": "research",
+        "confidence": 0.88
+      },
+      {
+        "id": "topic-leadership",
+        "name": "Leadership",
+        "relevance": 0.82,
+        "category": "academic",
+        "confidence": 0.88
+      },
+      {
+        "id": "topic-digital-transformation",
+        "name": "Digital Transformation",
+        "relevance": 0.8,
+        "category": "business",
+        "confidence": 0.88
+      },
+      {
+        "id": "topic-student-experience",
+        "name": "Student Experience",
+        "relevance": 0.78,
+        "category": "student_life",
+        "confidence": 0.88
+      }
+    ]
+  },
+  {
+    "page_id": "programmes_e941af89c7be",
+    "page_title": "Programmes | London Business School",
+    "page_type": "program",
+    "topics": [
+      {
+        "id": "topic-mba-programme",
+        "name": "MBA Programme",
+        "relevance": 0.95,
+        "category": "academic",
+        "confidence": 0.89
+      },
+      {
+        "id": "topic-executive-education",
+        "name": "Executive Education",
+        "relevance": 0.9,
+        "category": "academic",
+        "confidence": 0.89
+      },
+      {
+        "id": "topic-masters-degrees",
+        "name": "Masters Degrees",
+        "relevance": 0.88,
+        "category": "academic",
+        "confidence": 0.89
+      },
+      {
+        "id": "topic-leadership-development",
+        "name": "Leadership Development",
+        "relevance": 0.85,
+        "category": "academic",
+        "confidence": 0.89
+      },
+      {
+        "id": "topic-business-strategy",
+        "name": "Business Strategy",
+        "relevance": 0.82,
+        "category": "research",
+        "confidence": 0.89
+      },
+      {
+        "id": "topic-sustainability",
+        "name": "Sustainability",
+        "relevance": 0.76,
+        "category": "business",
+        "confidence": 0.89
+      }
+    ]
+  },
+  {
+    "page_id": "alumni_a812cbeb0b88",
+    "page_title": "Alumni | London Business School",
+    "page_type": "landing",
+    "topics": [
+      {
+        "id": "topic-business-education",
+        "name": "Business Education",
+        "relevance": 0.92,
+        "category": "academic",
+        "confidence": 0.9
+      },
+      {
+        "id": "topic-research-excellence",
+        "name": "Research Excellence",
+        "relevance": 0.89,
+        "category": "research",
+        "confidence": 0.9
+      },
+      {
+        "id": "topic-global-network",
+        "name": "Global Network",
+        "relevance": 0.86,
+        "category": "alumni",
+        "confidence": 0.9
+      },
+      {
+        "id": "topic-innovation",
+        "name": "Innovation",
+        "relevance": 0.84,
+        "category": "research",
+        "confidence": 0.9
+      },
+      {
+        "id": "topic-leadership",
+        "name": "Leadership",
+        "relevance": 0.82,
+        "category": "academic",
+        "confidence": 0.9
+      },
+      {
+        "id": "topic-digital-transformation",
+        "name": "Digital Transformation",
+        "relevance": 0.8,
+        "category": "business",
+        "confidence": 0.9
+      }
+    ]
+  },
+  {
+    "page_id": "newsroom_608504dc2ebe",
+    "page_title": "Newsroom | London Business School",
+    "page_type": "news",
+    "topics": [
+      {
+        "id": "topic-business-news",
+        "name": "Business News",
+        "relevance": 0.94,
+        "category": "general",
+        "confidence": 0.9099999999999999
+      },
+      {
+        "id": "topic-research-insights",
+        "name": "Research Insights",
+        "relevance": 0.9,
+        "category": "research",
+        "confidence": 0.9099999999999999
+      },
+      {
+        "id": "topic-faculty-research",
+        "name": "Faculty Research",
+        "relevance": 0.87,
+        "category": "faculty",
+        "confidence": 0.9099999999999999
+      },
+      {
+        "id": "topic-industry-trends",
+        "name": "Industry Trends",
+        "relevance": 0.85,
+        "category": "business",
+        "confidence": 0.9099999999999999
+      },
+      {
+        "id": "topic-thought-leadership",
+        "name": "Thought Leadership",
+        "relevance": 0.83,
+        "category": "research",
+        "confidence": 0.9099999999999999
+      },
+      {
+        "id": "topic-business-innovation",
+        "name": "Business Innovation",
+        "relevance": 0.81,
+        "category": "business",
+        "confidence": 0.9099999999999999
+      },
+      {
+        "id": "topic-technology",
+        "name": "Technology",
+        "relevance": 0.72,
+        "category": "business",
+        "confidence": 0.9099999999999999
+      }
+    ]
+  },
+  {
+    "page_id": "contact_61c0097e4724",
+    "page_title": "Contact us | London Business School",
+    "page_type": "about",
+    "topics": [
+      {
+        "id": "topic-about-lbs",
+        "name": "About LBS",
+        "relevance": 0.93,
+        "category": "general",
+        "confidence": 0.9199999999999999
+      },
+      {
+        "id": "topic-institutional-mission",
+        "name": "Institutional Mission",
+        "relevance": 0.89,
+        "category": "general",
+        "confidence": 0.9199999999999999
+      },
+      {
+        "id": "topic-campus-life",
+        "name": "Campus Life",
+        "relevance": 0.86,
+        "category": "student_life",
+        "confidence": 0.9199999999999999
+      },
+      {
+        "id": "topic-london-location",
+        "name": "London Location",
+        "relevance": 0.84,
+        "category": "general",
+        "confidence": 0.9199999999999999
+      },
+      {
+        "id": "topic-international-community",
+        "name": "International Community",
+        "relevance": 0.82,
+        "category": "general",
+        "confidence": 0.9199999999999999
+      },
+      {
+        "id": "topic-contact-information",
+        "name": "Contact Information",
+        "relevance": 0.79,
+        "category": "general",
+        "confidence": 0.9199999999999999
+      }
+    ]
+  },
+  {
+    "page_id": "news_7ce7f712571d",
+    "page_title": "News | London Business School",
+    "page_type": "news",
+    "topics": [
+      {
+        "id": "topic-business-news",
+        "name": "Business News",
+        "relevance": 0.94,
+        "category": "general",
+        "confidence": 0.9299999999999999
+      },
+      {
+        "id": "topic-research-insights",
+        "name": "Research Insights",
+        "relevance": 0.9,
+        "category": "research",
+        "confidence": 0.9299999999999999
+      },
+      {
+        "id": "topic-faculty-research",
+        "name": "Faculty Research",
+        "relevance": 0.87,
+        "category": "faculty",
+        "confidence": 0.9299999999999999
+      },
+      {
+        "id": "topic-industry-trends",
+        "name": "Industry Trends",
+        "relevance": 0.85,
+        "category": "business",
+        "confidence": 0.9299999999999999
+      },
+      {
+        "id": "topic-thought-leadership",
+        "name": "Thought Leadership",
+        "relevance": 0.83,
+        "category": "research",
+        "confidence": 0.9299999999999999
+      },
+      {
+        "id": "topic-sustainability",
+        "name": "Sustainability",
+        "relevance": 0.76,
+        "category": "business",
+        "confidence": 0.9299999999999999
+      }
+    ]
+  },
+  {
+    "page_id": "events_86531ad8271f",
+    "page_title": "Events | London Business School",
+    "page_type": "landing",
+    "topics": [
+      {
+        "id": "topic-business-education",
+        "name": "Business Education",
+        "relevance": 0.92,
+        "category": "academic",
+        "confidence": 0.94
+      },
+      {
+        "id": "topic-research-excellence",
+        "name": "Research Excellence",
+        "relevance": 0.89,
+        "category": "research",
+        "confidence": 0.94
+      },
+      {
+        "id": "topic-global-network",
+        "name": "Global Network",
+        "relevance": 0.86,
+        "category": "alumni",
+        "confidence": 0.94
+      },
+      {
+        "id": "topic-innovation",
+        "name": "Innovation",
+        "relevance": 0.84,
+        "category": "research",
+        "confidence": 0.94
+      },
+      {
+        "id": "topic-leadership",
+        "name": "Leadership",
+        "relevance": 0.82,
+        "category": "academic",
+        "confidence": 0.94
+      },
+      {
+        "id": "topic-digital-transformation",
+        "name": "Digital Transformation",
+        "relevance": 0.8,
+        "category": "business",
+        "confidence": 0.94
+      }
+    ]
+  }
+]

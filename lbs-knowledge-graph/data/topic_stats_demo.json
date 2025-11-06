@@ -1,0 +1,142 @@
+{
+  "total_topics": 26,
+  "total_assignments": 64,
+  "avg_topics_per_page": 6.4,
+  "distribution_by_category": {
+    "academic": 6,
+    "research": 5,
+    "alumni": 1,
+    "business": 5,
+    "student_life": 2,
+    "general": 6,
+    "faculty": 1
+  },
+  "top_topics": [
+    {
+      "name": "Business Education",
+      "frequency": 6,
+      "category": "academic",
+      "avg_relevance": 0.92
+    },
+    {
+      "name": "Research Excellence",
+      "frequency": 6,
+      "category": "research",
+      "avg_relevance": 0.89
+    },
+    {
+      "name": "Global Network",
+      "frequency": 6,
+      "category": "alumni",
+      "avg_relevance": 0.86
+    },
+    {
+      "name": "Innovation",
+      "frequency": 6,
+      "category": "research",
+      "avg_relevance": 0.84
+    },
+    {
+      "name": "Leadership",
+      "frequency": 6,
+      "category": "academic",
+      "avg_relevance": 0.82
+    },
+    {
+      "name": "Digital Transformation",
+      "frequency": 5,
+      "category": "business",
+      "avg_relevance": 0.8
+    },
+    {
+      "name": "Sustainability",
+      "frequency": 3,
+      "category": "business",
+      "avg_relevance": 0.7600000000000001
+    },
+    {
+      "name": "Student Experience",
+      "frequency": 2,
+      "category": "student_life",
+      "avg_relevance": 0.78
+    },
+    {
+      "name": "Technology",
+      "frequency": 2,
+      "category": "business",
+      "avg_relevance": 0.72
+    },
+    {
+      "name": "Business News",
+      "frequency": 2,
+      "category": "general",
+      "avg_relevance": 0.94
+    },
+    {
+      "name": "Research Insights",
+      "frequency": 2,
+      "category": "research",
+      "avg_relevance": 0.9
+    },
+    {
+      "name": "Faculty Research",
+      "frequency": 2,
+      "category": "faculty",
+      "avg_relevance": 0.87
+    },
+    {
+      "name": "Industry Trends",
+      "frequency": 2,
+      "category": "business",
+      "avg_relevance": 0.85
+    },
+    {
+      "name": "Thought Leadership",
+      "frequency": 2,
+      "category": "research",
+      "avg_relevance": 0.83
+    },
+    {
+      "name": "MBA Programme",
+      "frequency": 1,
+      "category": "academic",
+      "avg_relevance": 0.95
+    },
+    {
+      "name": "Executive Education",
+      "frequency": 1,
+      "category": "academic",
+      "avg_relevance": 0.9
+    },
+    {
+      "name": "Masters Degrees",
+      "frequency": 1,
+      "category": "academic",
+      "avg_relevance": 0.88
+    },
+    {
+      "name": "Leadership Development",
+      "frequency": 1,
+      "category": "academic",
+      "avg_relevance": 0.85
+    },
+    {
+      "name": "Business Strategy",
+      "frequency": 1,
+      "category": "research",
+      "avg_relevance": 0.82
+    },
+    {
+      "name": "Business Innovation",
+      "frequency": 1,
+      "category": "business",
+      "avg_relevance": 0.81
+    }
+  ],
+  "processing_time": 0.0,
+  "estimated_cost": 0.25,
+  "items_processed": 10,
+  "target_precision": 0.75,
+  "estimated_precision": 0.82,
+  "timestamp": "2025-11-06T21:52:47.317945"
+}

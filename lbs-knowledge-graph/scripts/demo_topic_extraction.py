@@ -230,6 +230,11 @@ def generate_statistics(graph: MGraph, build_stats: Dict) -> Dict:
     total_edges = build_stats['edges_created']
     avg_topics_per_page = total_edges / 10 if total_edges > 0 else 0
 
+    # Calculate average relevance for top topics
+    for topic in top_topics:
+        if isinstance(topic['avg_relevance'], list):
+            topic['avg_relevance'] = sum(topic['avg_relevance']) / len(topic['avg_relevance'])
+
     stats = {
         'total_topics': total_topics,
         'total_assignments': total_edges,

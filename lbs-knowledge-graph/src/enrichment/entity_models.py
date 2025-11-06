@@ -1,248 +1,167 @@
 """
-Entity Models for Named Entity Recognition
-Defines entity types, structures, and relationship models.
+Entity Data Models
+
+Defines entity types and structures for Named Entity Recognition.
 """
 
-from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Any
+from dataclasses import dataclass, field
+from typing import List, Dict, Optional
 from datetime import datetime
 
 
-class EntityType(Enum):
-    """Named entity types for LBS content."""
+class EntityType(str, Enum):
+    """Entity type classification"""
     PERSON = "PERSON"
     ORGANIZATION = "ORGANIZATION"
     LOCATION = "LOCATION"
-    PROGRAMME = "PROGRAMME"
     EVENT = "EVENT"
-    DEGREE = "DEGREE"
-    UNKNOWN = "UNKNOWN"
-
-    @classmethod
-    def from_string(cls, type_str: str) -> 'EntityType':
-        """Convert string to EntityType."""
-        try:
-            return cls[type_str.upper()]
-        except KeyError:
-            return cls.UNKNOWN
-
-
-class EntityRelationType(Enum):
-    """Relationship types between entities and content."""
-    MENTIONS = "MENTIONS"
-    AFFILIATED_WITH = "AFFILIATED_WITH"
-    LOCATED_IN = "LOCATED_IN"
-    TEACHES = "TEACHES"
-    STUDIES = "STUDIES"
-    LEADS = "LEADS"
-    PARTICIPATES_IN = "PARTICIPATES_IN"
 
 
 @dataclass
 class Entity:
-    """Named entity with metadata."""
+    """
+    Represents a named entity extracted from content.
 
+    Attributes:
+        id: Unique entity identifier (UUID)
+        name: Entity name as it appears in text
+        entity_type: Classification (PERSON, ORGANIZATION, LOCATION, EVENT)
+        canonical_name: Normalized form of the name
+        aliases: Alternative names/mentions
+        metadata: Additional entity information (role, title, affiliation, etc.)
+        mention_count: Number of times entity appears
+        first_mentioned: Timestamp of first mention
+        prominence: Importance score based on frequency and context (0.0-1.0)
+        confidence: Extraction confidence score (0.0-1.0)
+    """
+    id: str
     name: str
-    type: EntityType
-    confidence: float  # 0-1
-    context: str = ""  # Surrounding text
-    normalized_name: Optional[str] = None  # Canonical name
-    aliases: List[str] = field(default_factory=list)  # Alternative names
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    entity_type: EntityType
+    canonical_name: str
+    aliases: List[str] = field(default_factory=list)
+    metadata: Dict[str, str] = field(default_factory=dict)
+    mention_count: int = 1
+    first_mentioned: Optional[datetime] = None
+    prominence: float = 0.0
+    confidence: float = 1.0
 
-    # Graph properties
-    id: Optional[str] = None  # UUID assigned by graph
-    prominence: float = 0.0  # Frequency/importance score
-
-    # Provenance
-    source_ids: List[str] = field(default_factory=list)  # Page/Section IDs
-    extracted_at: Optional[datetime] = None
-
-    def __post_init__(self):
-        """Post-initialization validation and normalization."""
-        if isinstance(self.type, str):
-            self.type = EntityType.from_string(self.type)
-
-        if self.normalized_name is None:
-            self.normalized_name = self._normalize_name(self.name)
-
-        if self.extracted_at is None:
-            self.extracted_at = datetime.utcnow()
-
-    @staticmethod
-    def _normalize_name(name: str) -> str:
-        """
-        Normalize entity name for matching.
-
-        Examples:
-            "Prof. John Smith" -> "john smith"
-            "The University of London" -> "university of london"
-        """
-        # Remove common titles and prefixes
-        prefixes = ["prof.", "dr.", "professor", "the", "mr.", "ms.", "mrs."]
-        normalized = name.lower().strip()
-
-        for prefix in prefixes:
-            if normalized.startswith(prefix + " "):
-                normalized = normalized[len(prefix) + 1:]
-
-        # Remove extra whitespace
-        normalized = " ".join(normalized.split())
-
-        return normalized
-
-    def matches(self, other: 'Entity', threshold: float = 0.9) -> bool:
-        """
-        Check if this entity matches another entity.
-
-        Args:
-            other: Entity to compare
-            threshold: Similarity threshold (0-1)
-
-        Returns:
-            True if entities match
-        """
-        # Same type required
-        if self.type != other.type:
-            return False
-
-        # Exact normalized name match
-        if self.normalized_name == other.normalized_name:
-            return True
-
-        # Check aliases
-        if other.normalized_name in [a.lower() for a in self.aliases]:
-            return True
-        if self.normalized_name in [a.lower() for a in other.aliases]:
-            return True
-
-        # Fuzzy string similarity (simplified)
-        # In production, use proper string similarity (e.g., difflib, fuzzywuzzy)
-        s1 = set(self.normalized_name.split())
-        s2 = set(other.normalized_name.split())
-
-        if not s1 or not s2:
-            return False
-
-        intersection = len(s1 & s2)
-        union = len(s1 | s2)
-        jaccard = intersection / union if union > 0 else 0.0
-
-        return jaccard >= threshold
-
-    def merge(self, other: 'Entity') -> 'Entity':
-        """
-        Merge another entity into this one.
-
-        Args:
-            other: Entity to merge
-
-        Returns:
-            Merged entity
-        """
-        # Take higher confidence
-        if other.confidence > self.confidence:
-            self.confidence = other.confidence
-
-        # Merge aliases
-        if other.name not in self.aliases and other.name != self.name:
-            self.aliases.append(other.name)
-        self.aliases.extend([a for a in other.aliases if a not in self.aliases])
-
-        # Merge source IDs
-        self.source_ids.extend([sid for sid in other.source_ids if sid not in self.source_ids])
-
-        # Combine contexts (keep shorter one)
-        if len(other.context) < len(self.context):
-            self.context = other.context
-
-        # Merge metadata
-        self.metadata.update(other.metadata)
-
-        return self
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for serialization."""
+    def to_dict(self) -> dict:
+        """Convert entity to dictionary"""
         return {
             "id": self.id,
             "name": self.name,
-            "type": self.type.value,
-            "confidence": self.confidence,
-            "context": self.context,
-            "normalized_name": self.normalized_name,
+            "entity_type": self.entity_type.value,
+            "canonical_name": self.canonical_name,
             "aliases": self.aliases,
-            "prominence": self.prominence,
-            "source_ids": self.source_ids,
-            "extracted_at": self.extracted_at.isoformat() if self.extracted_at else None,
-            "metadata": self.metadata
+            "metadata": self.metadata,
+            "mention_count": self.mention_count,
+            "first_mentioned": self.first_mentioned.isoformat() if self.first_mentioned else None,
+            "prominence": round(self.prominence, 3),
+            "confidence": round(self.confidence, 3)
         }
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Entity':
-        """Create entity from dictionary."""
-        extracted_at = None
-        if data.get("extracted_at"):
-            extracted_at = datetime.fromisoformat(data["extracted_at"])
-
-        return cls(
-            name=data["name"],
-            type=EntityType.from_string(data["type"]),
-            confidence=data["confidence"],
-            context=data.get("context", ""),
-            normalized_name=data.get("normalized_name"),
-            aliases=data.get("aliases", []),
-            metadata=data.get("metadata", {}),
-            id=data.get("id"),
-            prominence=data.get("prominence", 0.0),
-            source_ids=data.get("source_ids", []),
-            extracted_at=extracted_at
-        )
 
 
 @dataclass
 class EntityMention:
-    """Represents a mention of an entity in content."""
+    """
+    Represents a single mention of an entity in content.
 
-    entity_id: str  # Entity node ID
-    source_id: str  # Page or Section ID
-    source_type: str  # "Page" or "Section"
-    context: str  # Surrounding text
-    position: int = 0  # Position in text
+    Attributes:
+        entity_id: ID of the entity
+        content_id: ID of the content item containing the mention
+        entity_text: Text as it appears in the content
+        context: Surrounding text for context
+        prominence: Mention prominence (high/medium/low)
+        confidence: Extraction confidence
+        position: Position in content (for prominence calculation)
+        extracted_by: Model used for extraction
+    """
+    entity_id: str
+    content_id: str
+    entity_text: str
+    context: str
+    prominence: str = "medium"  # high, medium, low
     confidence: float = 1.0
+    position: int = 0  # Character position in content
+    extracted_by: str = "gpt-4-turbo"
 
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary."""
+    def to_dict(self) -> dict:
+        """Convert mention to dictionary"""
         return {
             "entity_id": self.entity_id,
-            "source_id": self.source_id,
-            "source_type": self.source_type,
+            "content_id": self.content_id,
+            "entity_text": self.entity_text,
             "context": self.context,
+            "prominence": self.prominence,
+            "confidence": round(self.confidence, 3),
             "position": self.position,
-            "confidence": self.confidence
+            "extracted_by": self.extracted_by
         }
 
 
-class EntityStatistics:
-    """Statistics about extracted entities."""
+@dataclass
+class EntityRelationship:
+    """
+    Represents a relationship between two entities.
 
-    def __init__(self):
-        self.total_entities = 0
-        self.unique_entities = 0
-        self.entities_by_type: Dict[EntityType, int] = {}
-        self.mentions_count = 0
-        self.avg_confidence = 0.0
-        self.top_entities: List[tuple] = []  # (name, count) tuples
+    Attributes:
+        from_entity_id: Source entity ID
+        to_entity_id: Target entity ID
+        relationship_type: Type of relationship (WORKS_WITH, AFFILIATED_WITH, etc.)
+        confidence: Relationship confidence score
+        evidence: Text evidence for the relationship
+        metadata: Additional relationship data
+    """
+    from_entity_id: str
+    to_entity_id: str
+    relationship_type: str
+    confidence: float = 1.0
+    evidence: str = ""
+    metadata: Dict[str, str] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary."""
+    def to_dict(self) -> dict:
+        """Convert relationship to dictionary"""
         return {
-            "total_entities": self.total_entities,
-            "unique_entities": self.unique_entities,
-            "entities_by_type": {
-                k.value: v for k, v in self.entities_by_type.items()
-            },
-            "mentions_count": self.mentions_count,
-            "avg_confidence": self.avg_confidence,
-            "top_entities": self.top_entities
+            "from_entity_id": self.from_entity_id,
+            "to_entity_id": self.to_entity_id,
+            "relationship_type": self.relationship_type,
+            "confidence": round(self.confidence, 3),
+            "evidence": self.evidence,
+            "metadata": self.metadata
+        }
+
+
+@dataclass
+class NERExtractionResult:
+    """
+    Result of NER extraction on content.
+
+    Attributes:
+        content_id: ID of content analyzed
+        entities: List of extracted entities
+        mentions: List of entity mentions
+        relationships: List of entity relationships
+        extraction_time: Time taken for extraction (seconds)
+        cost: API cost for extraction
+        model_used: Model used for extraction
+    """
+    content_id: str
+    entities: List[Entity] = field(default_factory=list)
+    mentions: List[EntityMention] = field(default_factory=list)
+    relationships: List[EntityRelationship] = field(default_factory=list)
+    extraction_time: float = 0.0
+    cost: float = 0.0
+    model_used: str = "gpt-4-turbo"
+
+    def to_dict(self) -> dict:
+        """Convert result to dictionary"""
+        return {
+            "content_id": self.content_id,
+            "entities": [e.to_dict() for e in self.entities],
+            "mentions": [m.to_dict() for m in self.mentions],
+            "relationships": [r.to_dict() for r in self.relationships],
+            "extraction_time": round(self.extraction_time, 3),
+            "cost": round(self.cost, 4),
+            "model_used": self.model_used
         }

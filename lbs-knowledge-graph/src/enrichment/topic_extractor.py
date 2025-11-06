@@ -1,154 +1,433 @@
 """
-Topic Extractor for Knowledge Graph Enrichment
+Topic Extractor for Knowledge Graph
 
-Extracts topics from pages and sections using LLM analysis.
+Extracts 5-10 topics per page using LLM and creates HAS_TOPIC relationships.
 """
 
 import asyncio
-import json
-import logging
 import re
-from typing import Dict, List, Optional, Tuple
+from typing import List, Dict, Optional, Set
 from datetime import datetime
+import uuid
 
 from .llm_client import LLMClient
 from .topic_models import (
-    Topic, TopicRelevance, TopicExtractionResult, TopicCategory,
-    TopicTaxonomy, BusinessDiscipline, CrossCuttingTheme
+    Topic, TopicCategory, TopicTaxonomy, TopicExtractionResult,
+    BusinessDiscipline, CrossCuttingTheme
 )
+from mgraph import MGraph
 
-logger = logging.getLogger(__name__)
 
+# Topic extraction prompt
+TOPIC_EXTRACTION_PROMPT = """Extract 5-10 main topics from this page content. Focus on academic subjects, programme types, research areas, and key themes.
 
-# Topic extraction prompt template
-TOPIC_PROMPT = """Extract 3-5 main topics from the following content. Return JSON:
+Page Title: {title}
+Page Type: {page_type}
 
-{{
-  "topics": [
-    {{
-      "name": "topic name",
-      "relevance": 0.0-1.0,
-      "category": "academic|research|student_life|business|alumni|events|admissions|career|faculty|general",
-      "description": "brief description"
-    }}
-  ]
-}}
+Page Content:
+{content}
 
-Context: This is a {page_type} page from London Business School.
+Return ONLY valid JSON with no additional text:
+[
+  {{"topic": "MBA Programme", "relevance": 0.95, "category": "academic"}},
+  {{"topic": "Leadership Development", "relevance": 0.85, "category": "academic"}},
+  {{"topic": "Career Services", "relevance": 0.80, "category": "student_life"}},
+  ...
+]
 
-Common LBS Topics (use these when relevant):
-Academic: {academic_topics}
-Programs: {program_topics}
-Research: {research_topics}
-Student Life: {student_life_topics}
+Focus on:
+- Academic programmes and disciplines (MBA, Masters, Executive Education, PhD)
+- Research areas and themes (Finance, Marketing, Strategy, Economics)
+- Skills and competencies (Leadership, Analytics, Communication)
+- Business sectors and industries (Technology, Finance, Healthcare)
+- Career paths and roles (Executive, Consultant, Entrepreneur)
+- Cross-cutting themes (Sustainability, Digital Transformation, Diversity)
 
-Content (first 2000 chars): "{text}"
+Categories: academic, research, student_life, business, alumni, events, admissions, career, faculty, general
 
-Extract topics that are:
-1. Specific and meaningful (not generic like "information" or "content")
-2. Relevant to business education
-3. Present in the actual content
-4. Appropriate for the page type
-
-Return ONLY the JSON object, no markdown, no explanations.
-
-JSON:"""
+Return ONLY the JSON array, no markdown, no explanations."""
 
 
 class TopicExtractor:
     """
-    Extract topics from content using LLM analysis.
+    Extract topics from pages using LLM analysis.
 
-    Features:
-    - Batch processing with rate limiting
-    - Topic normalization and deduplication
-    - Semantic similarity checking
-    - Relevance score filtering
+    Extracts 5-10 topics per page, normalizes topic names,
+    and filters low-relevance topics.
     """
 
     def __init__(
         self,
         llm_client: LLMClient,
-        min_relevance: float = 0.7,
-        max_topics_per_item: int = 5
+        graph: MGraph,
+        relevance_threshold: float = 0.7,
+        max_topics_per_page: int = 10,
+        min_topics_per_page: int = 5
     ):
         """
         Initialize topic extractor.
 
         Args:
-            llm_client: LLM client for API calls
-            min_relevance: Minimum relevance score to keep topics
-            max_topics_per_item: Maximum topics to extract per item
+            llm_client: LLM client for topic extraction
+            graph: MGraph instance
+            relevance_threshold: Minimum relevance score to keep topic (0-1)
+            max_topics_per_page: Maximum topics per page
+            min_topics_per_page: Minimum topics per page
         """
         self.llm_client = llm_client
-        self.min_relevance = min_relevance
-        self.max_topics_per_item = max_topics_per_item
+        self.graph = graph
+        self.relevance_threshold = relevance_threshold
+        self.max_topics_per_page = max_topics_per_page
+        self.min_topics_per_page = min_topics_per_page
 
-        # Track extracted topics for deduplication
+        # Topic cache for deduplication
         self.topic_cache: Dict[str, Topic] = {}
+        self.topic_id_map: Dict[str, str] = {}  # normalized_name -> topic_id
 
-        logger.info(f"Initialized TopicExtractor (min_relevance={min_relevance})")
-
-    def normalize_topic(self, topic_name: str) -> str:
+    async def extract_topics_from_pages(self, limit: int = 10) -> List[TopicExtractionResult]:
         """
-        Normalize topic name.
+        Extract topics from pages in the graph.
 
         Args:
-            topic_name: Raw topic name
+            limit: Maximum number of pages to process
+
+        Returns:
+            List of TopicExtractionResult objects
+        """
+        # Get pages from graph
+        pages = self.graph.search_nodes(node_type="Page", limit=limit)
+
+        if not pages:
+            print("⚠️  No pages found in graph")
+            return []
+
+        print(f"📄 Found {len(pages)} pages to process")
+
+        results = []
+        for i, page in enumerate(pages):
+            print(f"\n[{i+1}/{len(pages)}] Processing page: {page.get('title', 'Untitled')[:50]}...")
+
+            try:
+                result = await self.extract_topics_from_page(page)
+                results.append(result)
+
+                # Show extracted topics
+                print(f"  ✅ Extracted {len(result.topics)} topics")
+                for topic_data in result.topics[:3]:  # Show first 3
+                    print(f"     • {topic_data['name']} (relevance: {topic_data['relevance']:.2f})")
+
+            except Exception as e:
+                print(f"  ❌ Error extracting topics: {e}")
+                continue
+
+        return results
+
+    async def extract_topics_from_page(self, page: Dict) -> TopicExtractionResult:
+        """
+        Extract topics from a single page.
+
+        Args:
+            page: Page node dictionary
+
+        Returns:
+            TopicExtractionResult
+        """
+        start_time = datetime.now()
+
+        # Prepare page content
+        content = self.prepare_page_content(page)
+
+        # Create prompt
+        prompt = TOPIC_EXTRACTION_PROMPT.format(
+            title=page.get('title', 'Untitled'),
+            page_type=page.get('type', 'other'),
+            content=content
+        )
+
+        # Call LLM (reuse sentiment analysis client with custom prompt)
+        import json
+        from openai import AsyncOpenAI
+
+        api_key = self.llm_client.api_key
+        client = AsyncOpenAI(api_key=api_key, timeout=30)
+
+        try:
+            response = await client.chat.completions.create(
+                model="gpt-4-turbo",  # Use GPT-4-turbo for better accuracy
+                messages=[
+                    {"role": "system", "content": "You are a topic extraction expert. Return ONLY valid JSON arrays."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.1,
+                max_tokens=500,
+                response_format={"type": "json_object"}
+            )
+
+            # Track usage
+            self.llm_client.api_calls += 1
+            usage = response.usage
+            self.llm_client.total_tokens += usage.total_tokens
+
+            # Calculate cost (GPT-4-turbo: $10/1M input, $30/1M output)
+            input_cost = (usage.prompt_tokens / 1_000_000) * 10.00
+            output_cost = (usage.completion_tokens / 1_000_000) * 30.00
+            self.llm_client.total_cost += input_cost + output_cost
+
+            # Parse response
+            content_text = response.choices[0].message.content
+
+            # Extract JSON array from response
+            data = json.loads(content_text)
+
+            # Handle both array and object with topics key
+            if isinstance(data, dict) and 'topics' in data:
+                topic_list = data['topics']
+            elif isinstance(data, list):
+                topic_list = data
+            else:
+                topic_list = []
+
+            # Parse topics
+            topics = self.parse_topic_results(topic_list, page)
+
+            # Filter by relevance
+            topics = [t for t in topics if t['relevance'] >= self.relevance_threshold]
+
+            # Limit to max topics
+            topics = sorted(topics, key=lambda x: x['relevance'], reverse=True)[:self.max_topics_per_page]
+
+            extraction_time = (datetime.now() - start_time).total_seconds()
+
+            return TopicExtractionResult(
+                topics=topics,
+                source_id=page['id'],
+                source_type='Page',
+                content_preview=content[:200],
+                total_tokens=usage.total_tokens,
+                extraction_time=extraction_time
+            )
+
+        except json.JSONDecodeError as e:
+            print(f"  ⚠️  JSON parse error: {e}")
+            # Return empty result
+            return TopicExtractionResult(
+                topics=[],
+                source_id=page['id'],
+                source_type='Page',
+                content_preview=content[:200]
+            )
+
+        except Exception as e:
+            print(f"  ⚠️  Extraction error: {e}")
+            raise
+
+    def prepare_page_content(self, page: Dict) -> str:
+        """
+        Prepare page content for topic extraction.
+
+        Extracts title, description, and key content sections.
+
+        Args:
+            page: Page node dictionary
+
+        Returns:
+            Prepared content string (max 1000 chars)
+        """
+        parts = []
+
+        # Title
+        if page.get('title'):
+            parts.append(page['title'])
+
+        # Description
+        if page.get('description'):
+            parts.append(page['description'])
+
+        # OG Description
+        if page.get('og_description'):
+            parts.append(page['og_description'])
+
+        # Keywords
+        if page.get('keywords'):
+            keywords = page['keywords']
+            if isinstance(keywords, list):
+                parts.append(' '.join(keywords))
+            else:
+                parts.append(str(keywords))
+
+        # Type and category provide context
+        if page.get('type'):
+            parts.append(f"Page type: {page['type']}")
+
+        if page.get('category'):
+            parts.append(f"Category: {page['category']}")
+
+        # Combine and truncate
+        content = '\n'.join(parts)
+
+        # Truncate to 1000 chars for efficiency
+        if len(content) > 1000:
+            content = content[:1000]
+
+        return content
+
+    def parse_topic_results(self, results: List[Dict], page: Dict) -> List[Dict]:
+        """
+        Parse LLM results into Topic entities.
+
+        Args:
+            results: Raw LLM results
+            page: Source page
+
+        Returns:
+            List of topic dictionaries with normalized names
+        """
+        topics = []
+        seen_names: Set[str] = set()
+
+        for item in results:
+            if not isinstance(item, dict):
+                continue
+
+            # Extract topic name
+            topic_name = item.get('topic', '').strip()
+            if not topic_name:
+                continue
+
+            # Normalize name
+            normalized_name = self.normalize_topic_name(topic_name)
+
+            # Skip duplicates
+            if normalized_name in seen_names:
+                continue
+            seen_names.add(normalized_name)
+
+            # Get or create topic ID
+            if normalized_name not in self.topic_id_map:
+                self.topic_id_map[normalized_name] = str(uuid.uuid4())
+
+            topic_id = self.topic_id_map[normalized_name]
+
+            # Infer category
+            category_str = item.get('category', 'general')
+            category = self.infer_category(normalized_name, category_str)
+
+            # Get relevance score
+            relevance = float(item.get('relevance', 0.8))
+
+            # Create topic dictionary
+            topic_dict = {
+                'id': topic_id,
+                'name': normalized_name,
+                'original_name': topic_name,
+                'category': category.value,
+                'relevance': relevance,
+                'confidence': 0.85,  # Default confidence
+                'source': 'llm',
+                'model': 'gpt-4-turbo',
+                'page_id': page['id']
+            }
+
+            # Add discipline/theme if applicable
+            discipline = TopicTaxonomy.get_discipline(normalized_name)
+            if discipline:
+                topic_dict['discipline'] = discipline.value
+
+            theme = TopicTaxonomy.get_theme(normalized_name)
+            if theme:
+                topic_dict['theme'] = theme.value
+
+            topics.append(topic_dict)
+
+        return topics
+
+    def normalize_topic_name(self, topic: str) -> str:
+        """
+        Normalize topic names for consistency.
+
+        Rules:
+        - Convert to title case
+        - Remove extra whitespace
+        - Standardize common terms
+        - Use singular form where appropriate
+
+        Args:
+            topic: Raw topic name
 
         Returns:
             Normalized topic name
         """
-        # Lowercase
-        normalized = topic_name.lower()
-
-        # Remove special characters except spaces and hyphens
-        normalized = re.sub(r'[^a-z0-9\s-]', '', normalized)
-
-        # Collapse multiple spaces
-        normalized = re.sub(r'\s+', ' ', normalized)
-
-        # Trim
-        normalized = normalized.strip()
+        # Basic cleanup
+        topic = topic.strip()
+        topic = re.sub(r'\s+', ' ', topic)  # Collapse whitespace
 
         # Title case
-        normalized = ' '.join(word.capitalize() for word in normalized.split())
+        topic = topic.title()
 
-        return normalized
+        # Standardize common abbreviations
+        replacements = {
+            'Mba': 'MBA',
+            'Emba': 'EMBA',
+            'Phd': 'PhD',
+            'Esg': 'ESG',
+            'Ai': 'AI',
+            'It': 'IT',
+            'Hr': 'HR',
+            'Ceo': 'CEO',
+            'Cfo': 'CFO',
+            'Cto': 'CTO'
+        }
 
-    def is_similar_topic(self, topic1: str, topic2: str) -> bool:
+        for old, new in replacements.items():
+            topic = topic.replace(old, new)
+
+        # Remove common suffixes for singular form
+        # But keep for specific terms
+        if not any(keep in topic for keep in ['Services', 'Studies', 'Analytics', 'Economics']):
+            if topic.endswith('ies'):
+                topic = topic[:-3] + 'y'
+            elif topic.endswith('s') and not topic.endswith('ss'):
+                topic = topic[:-1]
+
+        return topic
+
+    def infer_category(self, topic_name: str, category_hint: str) -> TopicCategory:
         """
-        Check if two topics are similar (basic string matching).
+        Infer topic category from name and hint.
 
         Args:
-            topic1: First topic name
-            topic2: Second topic name
+            topic_name: Normalized topic name
+            category_hint: Category hint from LLM
 
         Returns:
-            True if topics are similar
+            TopicCategory enum
         """
-        # Exact match
-        if topic1 == topic2:
-            return True
+        # First try taxonomy-based classification
+        category = TopicTaxonomy.get_category_for_topic(topic_name)
+        if category != TopicCategory.GENERAL:
+            return category
 
-        # One is substring of other
-        if topic1 in topic2 or topic2 in topic1:
-            return True
+        # Use LLM hint
+        category_map = {
+            'academic': TopicCategory.ACADEMIC,
+            'research': TopicCategory.RESEARCH,
+            'student_life': TopicCategory.STUDENT_LIFE,
+            'business': TopicCategory.BUSINESS,
+            'alumni': TopicCategory.ALUMNI,
+            'events': TopicCategory.EVENTS,
+            'admissions': TopicCategory.ADMISSIONS,
+            'career': TopicCategory.CAREER,
+            'faculty': TopicCategory.FACULTY
+        }
 
-        # Very similar words
-        words1 = set(topic1.lower().split())
-        words2 = set(topic2.lower().split())
-
-        if len(words1) > 0 and len(words2) > 0:
-            overlap = len(words1 & words2) / max(len(words1), len(words2))
-            if overlap >= 0.7:  # 70% word overlap
-                return True
-
-        return False
+        return category_map.get(category_hint.lower(), TopicCategory.GENERAL)
 
     def deduplicate_topics(self, topics: List[Dict]) -> List[Dict]:
         """
-        Remove duplicate/similar topics.
+        Remove duplicate or very similar topics.
+
+        Uses normalized names for exact duplicates.
+        Could be extended with similarity matching.
 
         Args:
             topics: List of topic dictionaries
@@ -156,226 +435,24 @@ class TopicExtractor:
         Returns:
             Deduplicated list
         """
-        if not topics:
-            return []
-
-        # Sort by relevance (highest first)
-        sorted_topics = sorted(topics, key=lambda t: t.get('relevance', 0), reverse=True)
-
+        seen: Set[str] = set()
         unique_topics = []
-        seen_names = []
+
+        # Sort by relevance (keep highest relevance for duplicates)
+        sorted_topics = sorted(topics, key=lambda x: x['relevance'], reverse=True)
 
         for topic in sorted_topics:
-            name = self.normalize_topic(topic['name'])
-
-            # Check against existing topics
-            is_duplicate = False
-            for seen_name in seen_names:
-                if self.is_similar_topic(name, seen_name):
-                    is_duplicate = True
-                    logger.debug(f"Duplicate topic: {name} (similar to {seen_name})")
-                    break
-
-            if not is_duplicate:
-                topic['name'] = name  # Use normalized name
+            name = topic['name']
+            if name not in seen:
+                seen.add(name)
                 unique_topics.append(topic)
-                seen_names.append(name)
 
         return unique_topics
-
-    async def extract_topics(
-        self,
-        text: str,
-        context: Dict
-    ) -> List[Topic]:
-        """
-        Extract topics from text with context.
-
-        Args:
-            text: Content text
-            context: Context dict with source_id, source_type, page_type
-
-        Returns:
-            List of Topic objects
-        """
-        if not text or len(text.strip()) < 50:
-            logger.debug("Text too short, skipping topic extraction")
-            return []
-
-        # Truncate text for prompt (keep first 2000 chars)
-        text_preview = text[:2000] if len(text) > 2000 else text
-
-        # Build prompt
-        prompt = TOPIC_PROMPT.format(
-            page_type=context.get('page_type', 'unknown'),
-            text=text_preview.replace('"', '\\"'),
-            academic_topics=', '.join(list(TopicTaxonomy.ACADEMIC_TOPICS.keys())[:10]),
-            program_topics=', '.join(TopicTaxonomy.PROGRAM_TOPICS),
-            research_topics=', '.join(TopicTaxonomy.RESEARCH_TOPICS[:5]),
-            student_life_topics=', '.join(TopicTaxonomy.STUDENT_LIFE_TOPICS[:5])
-        )
-
-        try:
-            # Call LLM
-            start_time = datetime.now()
-
-            response = await self.llm_client.client.chat.completions.create(
-                model=self.llm_client.model,
-                messages=[
-                    {"role": "system", "content": "You are a topic extraction expert for business school content. Return ONLY valid JSON."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.2,  # Low temperature for consistency
-                max_tokens=500,
-                response_format={"type": "json_object"}
-            )
-
-            extraction_time = (datetime.now() - start_time).total_seconds()
-
-            # Parse response
-            content = response.choices[0].message.content
-            data = json.loads(content)
-
-            # Extract topics
-            raw_topics = data.get('topics', [])
-
-            # Deduplicate
-            unique_topics = self.deduplicate_topics(raw_topics)
-
-            # Filter by relevance and limit
-            filtered_topics = [
-                t for t in unique_topics
-                if t.get('relevance', 0) >= self.min_relevance
-            ][:self.max_topics_per_item]
-
-            # Create Topic objects
-            topics = []
-            for topic_data in filtered_topics:
-                topic_name = topic_data['name']
-
-                # Generate or retrieve topic ID
-                if topic_name in self.topic_cache:
-                    topic = self.topic_cache[topic_name]
-                    topic.frequency += 1
-                else:
-                    # Infer category
-                    category_str = topic_data.get('category', 'general')
-                    try:
-                        category = TopicCategory(category_str)
-                    except ValueError:
-                        category = TopicCategory.GENERAL
-
-                    # Create new topic
-                    topic = Topic(
-                        id=f"topic-{len(self.topic_cache) + 1}",
-                        name=topic_name,
-                        description=topic_data.get('description'),
-                        category=category,
-                        discipline=TopicTaxonomy.get_discipline(topic_name),
-                        theme=TopicTaxonomy.get_theme(topic_name),
-                        frequency=1,
-                        importance=topic_data.get('relevance', 0.8),
-                        source="llm",
-                        extracted_at=datetime.now().isoformat()
-                    )
-
-                    self.topic_cache[topic_name] = topic
-
-                topics.append(topic)
-
-            logger.info(f"Extracted {len(topics)} topics from {context.get('source_type')} (filtered from {len(raw_topics)} raw)")
-
-            return topics
-
-        except json.JSONDecodeError as e:
-            logger.error(f"JSON parse error: {e}")
-            return []
-
-        except Exception as e:
-            logger.error(f"Topic extraction error: {e}")
-            return []
-
-    async def extract_batch(
-        self,
-        items: List[Dict],
-        batch_size: int = 50
-    ) -> List[TopicExtractionResult]:
-        """
-        Extract topics from multiple items in batches.
-
-        Args:
-            items: List of items with 'text' and 'context' fields
-            batch_size: Number of items to process concurrently
-
-        Returns:
-            List of TopicExtractionResult objects
-        """
-        results = []
-
-        for i in range(0, len(items), batch_size):
-            batch = items[i:i + batch_size]
-
-            logger.info(f"Processing batch {i // batch_size + 1}/{(len(items) + batch_size - 1) // batch_size} ({len(batch)} items)")
-
-            # Process batch concurrently
-            batch_tasks = [
-                self.extract_topics(item['text'], item['context'])
-                for item in batch
-            ]
-
-            batch_results = await asyncio.gather(*batch_tasks, return_exceptions=True)
-
-            # Create results
-            for item, topics in zip(batch, batch_results):
-                if isinstance(topics, Exception):
-                    logger.error(f"Batch item error: {topics}")
-                    topics = []
-
-                result = TopicExtractionResult(
-                    topics=[{
-                        'name': t.name,
-                        'relevance': t.importance,
-                        'category': t.category.value,
-                        'description': t.description
-                    } for t in topics],
-                    source_id=item['context']['source_id'],
-                    source_type=item['context']['source_type'],
-                    content_preview=item['text'][:200],
-                    extraction_time=0.5  # Placeholder
-                )
-
-                results.append(result)
-
-            # Rate limiting delay between batches
-            if i + batch_size < len(items):
-                await asyncio.sleep(1)
-
-        logger.info(f"Batch extraction complete: {len(results)} items, {len(self.topic_cache)} unique topics")
-
-        return results
-
-    def get_all_topics(self) -> List[Topic]:
-        """Get all extracted topics"""
-        return list(self.topic_cache.values())
-
-    def get_topic_by_name(self, name: str) -> Optional[Topic]:
-        """Get topic by name"""
-        normalized = self.normalize_topic(name)
-        return self.topic_cache.get(normalized)
 
     def get_stats(self) -> Dict:
         """Get extraction statistics"""
         return {
-            'unique_topics': len(self.topic_cache),
-            'total_extractions': sum(t.frequency for t in self.topic_cache.values()),
-            'topics_by_category': self._count_by_category(),
-            'avg_frequency': sum(t.frequency for t in self.topic_cache.values()) / len(self.topic_cache) if self.topic_cache else 0
+            'unique_topics': len(self.topic_id_map),
+            'topics_in_cache': len(self.topic_cache),
+            'llm_stats': self.llm_client.get_stats()
         }
-
-    def _count_by_category(self) -> Dict[str, int]:
-        """Count topics by category"""
-        counts = {}
-        for topic in self.topic_cache.values():
-            category = topic.category.value
-            counts[category] = counts.get(category, 0) + 1
-        return counts

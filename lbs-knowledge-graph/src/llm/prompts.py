@@ -1,376 +1,280 @@
 """
-Prompt Templates for LLM Enrichment.
+Prompt templates for knowledge graph enrichment tasks.
 
-Provides optimized prompts for sentiment analysis, topic extraction,
-named entity recognition, and other enrichment tasks.
+All prompts are designed for batch processing with structured JSON output.
 """
 
-from typing import List, Optional
+# Sentiment Analysis - Batch format
+SENTIMENT_BATCH_PROMPT = """
+Analyze the sentiment of the following content items from a university website. Return a JSON array with sentiment scores.
 
+Items to analyze:
+{items_json}
 
-class PromptTemplates:
-    """
-    Collection of prompt templates for knowledge graph enrichment.
+For each item, analyze the overall tone and sentiment, considering:
+- Word choice and emotional language
+- Context and subject matter
+- Target audience (prospective students, current students, faculty, etc.)
 
-    All prompts are optimized for:
-    - Token efficiency (concise but effective)
-    - Consistent JSON output format
-    - Batch processing compatibility
-    - Cost optimization
-    """
+Return JSON array in this exact format:
+[
+  {{
+    "id": "content_item_id",
+    "sentiment": "positive|neutral|negative",
+    "confidence": 0.0-1.0,
+    "reasoning": "brief explanation of sentiment classification"
+  }}
+]
 
-    @staticmethod
-    def sentiment_analysis(content: str, include_reasoning: bool = False) -> str:
-        """
-        Generate sentiment analysis prompt.
+Guidelines:
+- "positive": Encouraging, enthusiastic, optimistic language
+- "neutral": Informational, factual, balanced tone
+- "negative": Critical, concerning, or challenging content
+- confidence: 0.8+ for clear sentiment, 0.5-0.8 for mixed, <0.5 for unclear
 
-        Args:
-            content: Text content to analyze
-            include_reasoning: Whether to include reasoning in output
-
-        Returns:
-            Formatted prompt for sentiment analysis
-        """
-        base_prompt = f"""Analyze the sentiment of the following content.
-
-Content: {content}
-
-Respond with ONLY valid JSON in this format:
-{{
-  "sentiment": "positive" | "negative" | "neutral",
-  "confidence": 0.0-1.0,
-  "score": -1.0 to 1.0 (negative to positive)"""
-
-        if include_reasoning:
-            base_prompt += """,
-  "reasoning": "brief explanation"
-}}"""
-        else:
-            base_prompt += """
-}"""
-
-        return base_prompt
-
-    @staticmethod
-    def topic_extraction(
-        content: str,
-        num_topics: int = 5,
-        domain: Optional[str] = None
-    ) -> str:
-        """
-        Generate topic extraction prompt.
-
-        Args:
-            content: Text content to analyze
-            num_topics: Number of topics to extract (3-5 recommended)
-            domain: Optional domain context (e.g., 'education', 'technology')
-
-        Returns:
-            Formatted prompt for topic extraction
-        """
-        domain_context = f" in the {domain} domain" if domain else ""
-
-        return f"""Extract the {num_topics} most relevant topics{domain_context} from this content.
-
-Content: {content}
-
-Respond with ONLY valid JSON in this format:
-{{
-  "topics": [
-    {{
-      "name": "topic name",
-      "confidence": 0.0-1.0,
-      "keywords": ["key1", "key2", "key3"]
-    }}
-  ]
-}}
-
-Focus on:
-- Main themes and subjects
-- Key concepts and ideas
-- Relevant keywords
+Return ONLY the JSON array, no additional text.
 """
 
-    @staticmethod
-    def named_entity_recognition(content: str) -> str:
-        """
-        Generate named entity recognition prompt.
+# Topic Extraction - Batch format
+TOPIC_BATCH_PROMPT = """
+Extract 5-10 relevant topics from each content page. Topics should be specific, actionable themes that categorize the content.
 
-        Args:
-            content: Text content to analyze
+Pages to analyze:
+{items_json}
 
-        Returns:
-            Formatted prompt for NER
-        """
-        return f"""Extract all named entities from this content.
+For each page, identify:
+- Main subject areas (e.g., "admissions", "research", "campus life")
+- Specific programs or departments mentioned
+- Key themes or concepts
+- Target audience indicators
 
-Content: {content}
+Return JSON array in this exact format:
+[
+  {{
+    "page_id": "page_identifier",
+    "topics": [
+      {{
+        "name": "topic_name",
+        "confidence": 0.0-1.0,
+        "category": "academic|administrative|student_life|research|other"
+      }}
+    ]
+  }}
+]
 
-Respond with ONLY valid JSON in this format:
-{{
-  "entities": [
-    {{
-      "text": "entity text",
-      "type": "PERSON" | "ORGANIZATION" | "LOCATION" | "DATE" | "EVENT" | "PRODUCT",
-      "confidence": 0.0-1.0
-    }}
-  ]
-}}
+Topic naming guidelines:
+- Use lowercase, underscore-separated (e.g., "undergraduate_admissions")
+- Be specific (prefer "masters_computer_science" over "graduate_programs")
+- Limit to 2-3 words per topic
+- Confidence >0.7 for explicitly mentioned topics, 0.5-0.7 for implied
 
-Entity types:
-- PERSON: People, characters
-- ORGANIZATION: Companies, institutions, universities
-- LOCATION: Cities, countries, places
-- DATE: Dates, times, periods
-- EVENT: Named events, conferences
-- PRODUCT: Products, services, programs
+Return ONLY the JSON array, no additional text.
 """
 
-    @staticmethod
-    def persona_classification(content: str, available_personas: List[str]) -> str:
-        """
-        Generate persona/audience classification prompt.
+# Persona Classification - Batch format
+PERSONA_BATCH_PROMPT = """
+Classify each content page by its target audience persona(s). Multiple personas may apply to a single page.
 
-        Args:
-            content: Text content to analyze
-            available_personas: List of possible persona types
+Target personas:
+1. Prospective Undergraduate Student - High school students exploring college options
+2. Prospective Graduate Student - Those considering advanced degrees
+3. Current Student - Enrolled students seeking resources/information
+4. Alumni - Graduates maintaining connection with institution
+5. Faculty/Staff - Current employees and job seekers
+6. Parents/Families - Family members of prospective or current students
 
-        Returns:
-            Formatted prompt for persona classification
-        """
-        persona_list = ", ".join([f'"{p}"' for p in available_personas])
+Pages to classify:
+{items_json}
 
-        return f"""Classify the target audience/persona for this content.
+For each page, determine:
+- Primary persona(s) based on content, language, and calls-to-action
+- Confidence level for each persona assignment
 
-Content: {content}
+Return JSON array in this exact format:
+[
+  {{
+    "page_id": "page_identifier",
+    "personas": [
+      {{
+        "persona": "prospective_undergrad|prospective_grad|current_student|alumni|faculty_staff|parent_family",
+        "confidence": 0.0-1.0,
+        "indicators": ["brief", "list", "of", "reasons"]
+      }}
+    ]
+  }}
+]
 
-Available personas: {persona_list}
+Classification guidelines:
+- A page may have multiple personas (e.g., admissions page for both undergrad and grad)
+- confidence >0.8 for pages clearly targeted at persona
+- confidence 0.5-0.8 for secondary audiences
+- Include at least 2-3 indicators per persona
 
-Respond with ONLY valid JSON in this format:
-{{
-  "primary_persona": "most relevant persona from list",
-  "secondary_personas": ["other relevant personas"],
-  "confidence": 0.0-1.0,
-  "characteristics": ["key audience characteristic 1", "characteristic 2"]
-}}
+Return ONLY the JSON array, no additional text.
+"""
+
+# Named Entity Recognition - Batch format
+NER_BATCH_PROMPT = """
+Extract named entities from each content page. Focus on entities relevant to university context.
+
+Entity types to extract:
+- PERSON: Names of people (faculty, students, administrators)
+- ORGANIZATION: Departments, schools, research centers, external organizations
+- LOCATION: Campus buildings, cities, countries
+- PROGRAM: Degree programs, majors, specializations
+- EVENT: Conferences, lectures, campus events
+
+Pages to analyze:
+{items_json}
+
+For each page, extract all relevant entities with context.
+
+Return JSON array in this exact format:
+[
+  {{
+    "page_id": "page_identifier",
+    "entities": [
+      {{
+        "text": "exact_entity_text",
+        "type": "PERSON|ORGANIZATION|LOCATION|PROGRAM|EVENT",
+        "context": "brief surrounding context",
+        "confidence": 0.0-1.0
+      }}
+    ]
+  }}
+]
+
+Extraction guidelines:
+- Include full names/titles (e.g., "Department of Computer Science" not "CS")
+- confidence >0.9 for clearly identified entities
+- confidence 0.7-0.9 for probable entities
+- Deduplicate identical entities within a page
+
+Return ONLY the JSON array, no additional text.
+"""
+
+# Journey Stage Classification - Batch format
+JOURNEY_BATCH_PROMPT = """
+Classify each content page by where it fits in the student journey stages.
+
+Journey stages:
+1. Awareness - Discovering the university, exploring options
+2. Consideration - Comparing programs, researching fit
+3. Decision - Making enrollment/application decision
+4. Application - Actively applying or enrolling
+5. Enrollment - Newly enrolled, onboarding
+6. Retention - Current student experience and success
+7. Completion - Graduation, alumni transition
+
+Pages to classify:
+{items_json}
+
+For each page, determine:
+- Primary journey stage(s) the content supports
+- Confidence level for each stage
+- Key indicators
+
+Return JSON array in this exact format:
+[
+  {{
+    "page_id": "page_identifier",
+    "stages": [
+      {{
+        "stage": "awareness|consideration|decision|application|enrollment|retention|completion",
+        "confidence": 0.0-1.0,
+        "indicators": ["key", "supporting", "evidence"]
+      }}
+    ]
+  }}
+]
+
+Classification guidelines:
+- A page may serve multiple stages
+- confidence >0.8 for primary stage
+- confidence 0.5-0.8 for secondary stages
+- Consider calls-to-action, content depth, and prerequisites
+
+Return ONLY the JSON array, no additional text.
+"""
+
+# Similarity prompt for comparing content
+SIMILARITY_PROMPT = """
+Calculate semantic similarity between the following two content items:
+
+Item 1:
+{item1_json}
+
+Item 2:
+{item2_json}
 
 Consider:
-- Who would benefit most from this content
-- Language level and complexity
-- Interests and needs addressed
-"""
+- Topical overlap
+- Shared entities or concepts
+- Target audience similarity
+- Content structure and purpose
 
-    @staticmethod
-    def semantic_similarity(content1: str, content2: str) -> str:
-        """
-        Generate semantic similarity comparison prompt.
-
-        Args:
-            content1: First piece of content
-            content2: Second piece of content
-
-        Returns:
-            Formatted prompt for similarity analysis
-        """
-        return f"""Compare the semantic similarity between these two pieces of content.
-
-Content 1: {content1}
-
-Content 2: {content2}
-
-Respond with ONLY valid JSON in this format:
+Return JSON in this exact format:
 {{
   "similarity_score": 0.0-1.0,
-  "semantic_overlap": ["shared concept 1", "shared concept 2"],
-  "key_differences": ["difference 1", "difference 2"],
-  "relationship": "identical" | "related" | "tangentially_related" | "unrelated"
-}}
-
-Consider:
-- Shared topics and themes
-- Common keywords and concepts
-- Contextual meaning
-- Overall subject matter
-"""
-
-    @staticmethod
-    def content_categorization(
-        content: str,
-        categories: List[str],
-        allow_multiple: bool = True
-    ) -> str:
-        """
-        Generate content categorization prompt.
-
-        Args:
-            content: Text content to categorize
-            categories: List of available categories
-            allow_multiple: Whether content can belong to multiple categories
-
-        Returns:
-            Formatted prompt for categorization
-        """
-        category_list = ", ".join([f'"{c}"' for c in categories])
-        multi_note = "Can assign multiple categories." if allow_multiple else "Select only ONE category."
-
-        return f"""Categorize this content into the most appropriate category/categories.
-
-Content: {content}
-
-Available categories: {category_list}
-
-{multi_note}
-
-Respond with ONLY valid JSON in this format:
-{{
-  "categories": [
-    {{
-      "name": "category name",
-      "confidence": 0.0-1.0,
-      "reasoning": "brief explanation"
-    }}
-  ],
-  "primary_category": "most relevant category"
-}}
-"""
-
-    @staticmethod
-    def key_insights_extraction(content: str, max_insights: int = 5) -> str:
-        """
-        Generate key insights extraction prompt.
-
-        Args:
-            content: Text content to analyze
-            max_insights: Maximum number of insights to extract
-
-        Returns:
-            Formatted prompt for insight extraction
-        """
-        return f"""Extract up to {max_insights} key insights from this content.
-
-Content: {content}
-
-Respond with ONLY valid JSON in this format:
-{{
-  "insights": [
-    {{
-      "insight": "concise insight statement",
-      "importance": 0.0-1.0,
-      "category": "fact" | "opinion" | "recommendation" | "finding" | "trend",
-      "evidence": "supporting text from content"
-    }}
-  ],
-  "summary": "one-sentence overall takeaway"
-}}
-
-Focus on:
-- Novel or important information
-- Actionable findings
-- Key facts and statistics
-- Notable recommendations
-- Emerging trends or patterns
-"""
-
-    @staticmethod
-    def quality_assessment(content: str) -> str:
-        """
-        Generate content quality assessment prompt.
-
-        Args:
-            content: Text content to assess
-
-        Returns:
-            Formatted prompt for quality assessment
-        """
-        return f"""Assess the quality and credibility of this content.
-
-Content: {content}
-
-Respond with ONLY valid JSON in this format:
-{{
-  "overall_quality": 0.0-1.0,
-  "dimensions": {{
-    "clarity": 0.0-1.0,
-    "accuracy": 0.0-1.0,
-    "depth": 0.0-1.0,
-    "credibility": 0.0-1.0,
-    "relevance": 0.0-1.0
-  }},
-  "strengths": ["strength 1", "strength 2"],
-  "weaknesses": ["weakness 1", "weakness 2"],
-  "recommendations": ["improvement 1", "improvement 2"]
-}}
-
-Evaluate:
-- Clarity and readability
-- Factual accuracy indicators
-- Depth of information
-- Source credibility signals
-- Relevance to stated topic
-"""
-
-    @staticmethod
-    def relationship_inference(
-        source_content: str,
-        target_content: str,
-        relationship_types: List[str]
-    ) -> str:
-        """
-        Generate relationship inference prompt for graph edges.
-
-        Args:
-            source_content: Source node content
-            target_content: Target node content
-            relationship_types: Possible relationship types
-
-        Returns:
-            Formatted prompt for relationship inference
-        """
-        rel_types = ", ".join([f'"{r}"' for r in relationship_types])
-
-        return f"""Infer the relationship between these two pieces of content.
-
-Source content: {source_content}
-
-Target content: {target_content}
-
-Possible relationship types: {rel_types}
-
-Respond with ONLY valid JSON in this format:
-{{
-  "relationship_exists": true | false,
-  "relationship_type": "type from list or 'other'",
-  "confidence": 0.0-1.0,
-  "direction": "source_to_target" | "target_to_source" | "bidirectional",
-  "strength": 0.0-1.0,
+  "shared_topics": ["list", "of", "topics"],
+  "shared_entities": ["list", "of", "entities"],
+  "relationship_type": "duplicate|complementary|related|unrelated",
   "reasoning": "brief explanation"
 }}
 
-Consider:
-- Logical connections
-- Temporal relationships
-- Hierarchical structures
-- Causal links
-- Reference patterns
+Scoring guidelines:
+- >0.9: Near duplicates or very similar content
+- 0.7-0.9: Closely related, significant overlap
+- 0.5-0.7: Moderately related, some overlap
+- 0.3-0.5: Loosely related, minimal overlap
+- <0.3: Unrelated content
+
+Return ONLY the JSON object, no additional text.
 """
 
-    @staticmethod
-    def batch_wrapper(individual_prompts: List[str]) -> str:
-        """
-        Wrap multiple individual prompts for batch processing.
 
-        Args:
-            individual_prompts: List of individual prompt strings
+def format_batch_prompt(template: str, items: list, max_items: int = 50) -> str:
+    """
+    Format batch prompt with items.
 
-        Returns:
-            Combined batch prompt
-        """
-        batch_items = []
-        for idx, prompt in enumerate(individual_prompts, 1):
-            batch_items.append(f"Item {idx}:\n{prompt}")
+    Args:
+        template: Prompt template with {items_json} placeholder
+        items: List of items to process
+        max_items: Maximum items per batch
 
-        return "\n\n".join(batch_items) + """
+    Returns:
+        Formatted prompt string
+    """
+    import json
 
-Process all items above and respond with results in the same order.
-Ensure each item gets a separate, complete JSON response.
-"""
+    # Limit batch size
+    batch = items[:max_items]
+
+    # Convert items to JSON string
+    items_json = json.dumps(batch, indent=2, ensure_ascii=False)
+
+    return template.format(items_json=items_json)
+
+
+def format_single_item_prompt(template: str, item: dict) -> str:
+    """
+    Format prompt for single item.
+
+    Args:
+        template: Prompt template with placeholders
+        item: Item data dictionary
+
+    Returns:
+        Formatted prompt string
+    """
+    import json
+
+    # Handle different placeholder patterns
+    if "{item_json}" in template:
+        item_json = json.dumps(item, indent=2, ensure_ascii=False)
+        return template.format(item_json=item_json)
+    elif "{item1_json}" in template and "{item2_json}" in template:
+        # For similarity comparisons
+        return template  # Caller should format both items
+    else:
+        return template.format(**item)

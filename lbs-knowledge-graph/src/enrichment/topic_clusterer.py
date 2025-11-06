@@ -1,385 +1,418 @@
 """
-Topic Clusterer for Knowledge Graph
+Topic Clusterer for Knowledge Graph Enrichment
 
-Clusters similar topics using hierarchical clustering and identifies
-topic parent-child relationships.
+Clusters topics into hierarchical groups using embeddings and hierarchical clustering.
+No LLM calls - pure embedding-based clustering for $0 cost.
 """
 
 import logging
 import numpy as np
-from typing import List, Dict, Set, Tuple, Optional
+from typing import Dict, List, Optional, Set
 from dataclasses import dataclass
-from scipy.cluster.hierarchy import linkage, fcluster
-from scipy.spatial.distance import pdist, squareform
-from sklearn.metrics.pairwise import cosine_similarity
+from collections import Counter
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics import silhouette_score
+
+from .topic_models import Topic
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-class Topic:
-    """Topic node representation"""
+class TopicCluster:
+    """A cluster of related topics."""
     id: str
     name: str
-    frequency: int
-    embedding: Optional[List[float]] = None
-    category: Optional[str] = None
-    level: int = 0  # Hierarchy level: 0 = root, 1+ = subtopic
-
-
-@dataclass
-class TopicCluster:
-    """Topic cluster representation"""
-    cluster_id: int
     topics: List[Topic]
-    centroid_topic: Topic  # Most central topic in cluster
-    avg_similarity: float  # Average intra-cluster similarity
-    size: int
+    centroid: Optional[List[float]] = None
+    size: int = 0
+    representative_topics: List[str] = None
+    keywords: List[str] = None
 
 
 class TopicClusterer:
     """
-    Cluster similar topics using hierarchical clustering.
+    Cluster topics into hierarchical groups using embeddings.
 
-    Uses topic embeddings to measure semantic similarity and creates
-    topic hierarchies with parent-child relationships.
+    Features:
+    - Hierarchical clustering with Ward linkage
+    - Automatic optimal cluster count selection
+    - Cluster naming from representative topics
+    - No LLM calls = $0 cost
     """
 
     def __init__(
         self,
-        similarity_threshold: float = 0.7,
-        min_cluster_size: int = 2,
-        max_cluster_size: int = 20
+        topics: List[Topic],
+        embedding_generator,
+        min_clusters: int = 5,
+        max_clusters: int = 10
     ):
         """
         Initialize topic clusterer.
 
         Args:
-            similarity_threshold: Minimum similarity for clustering (0-1)
-            min_cluster_size: Minimum topics per cluster
-            max_cluster_size: Maximum topics per cluster
+            topics: List of Topic objects to cluster
+            embedding_generator: Function to generate embeddings
+            min_clusters: Minimum number of clusters
+            max_clusters: Maximum number of clusters
         """
-        self.similarity_threshold = similarity_threshold
-        self.min_cluster_size = min_cluster_size
-        self.max_cluster_size = max_cluster_size
+        self.topics = topics
+        self.embedding_generator = embedding_generator
+        self.min_clusters = min_clusters
+        self.max_clusters = max_clusters
+
+        self.embeddings: Dict[str, List[float]] = {}
+        self.clusters: Dict[str, TopicCluster] = {}
 
         logger.info(
-            f"Initialized TopicClusterer with similarity_threshold={similarity_threshold}"
+            f"Initialized TopicClusterer with {len(topics)} topics "
+            f"(target: {min_clusters}-{max_clusters} clusters)"
         )
 
-    def _compute_similarity_matrix(self, topics: List[Topic]) -> np.ndarray:
-        """
-        Compute pairwise cosine similarity matrix for topics.
+    def generate_embeddings(self) -> None:
+        """Generate embeddings for all topic names."""
+        logger.info(f"Generating embeddings for {len(self.topics)} topics...")
 
-        Args:
-            topics: List of topics with embeddings
+        for topic in self.topics:
+            # Use topic name for embedding
+            text = topic.name
 
-        Returns:
-            NxN similarity matrix
-        """
-        embeddings = np.array([t.embedding for t in topics])
-        similarity = cosine_similarity(embeddings)
+            # Add description for better context if available
+            if topic.description:
+                text = f"{topic.name}: {topic.description}"
 
-        logger.debug(f"Computed {similarity.shape[0]}x{similarity.shape[1]} similarity matrix")
+            # Generate embedding
+            embedding = self.embedding_generator(text)
+            self.embeddings[topic.id] = embedding
 
-        return similarity
+        logger.info(f"Generated {len(self.embeddings)} embeddings")
 
-    def _hierarchical_clustering(
+    def find_optimal_clusters(
         self,
-        topics: List[Topic],
-        similarity_matrix: np.ndarray
-    ) -> np.ndarray:
+        embeddings_matrix: np.ndarray
+    ) -> int:
         """
-        Perform hierarchical clustering on topics.
+        Find optimal number of clusters using silhouette score.
 
         Args:
-            topics: List of topics
-            similarity_matrix: Pairwise similarity matrix
+            embeddings_matrix: Matrix of embeddings (n_topics x embedding_dim)
 
         Returns:
-            Cluster labels for each topic
+            Optimal number of clusters
         """
-        # Convert similarity to distance
-        distance_matrix = 1 - similarity_matrix
+        logger.info("Finding optimal cluster count...")
 
-        # Ensure distance matrix is valid
-        np.fill_diagonal(distance_matrix, 0)
-        distance_matrix = np.clip(distance_matrix, 0, 1)
+        best_score = -1
+        best_n_clusters = self.min_clusters
 
-        # Convert to condensed distance matrix for linkage
-        condensed_distances = squareform(distance_matrix, checks=False)
+        for n_clusters in range(self.min_clusters, self.max_clusters + 1):
+            # Skip if we have fewer topics than clusters
+            if n_clusters > len(self.topics):
+                break
 
-        # Perform hierarchical clustering (average linkage)
-        linkage_matrix = linkage(condensed_distances, method='average')
+            # Perform clustering
+            clustering = AgglomerativeClustering(
+                n_clusters=n_clusters,
+                linkage='ward'
+            )
+            labels = clustering.fit_predict(embeddings_matrix)
 
-        # Cut tree at similarity threshold
-        threshold = 1 - self.similarity_threshold
-        cluster_labels = fcluster(linkage_matrix, threshold, criterion='distance')
+            # Calculate silhouette score
+            score = silhouette_score(embeddings_matrix, labels)
 
-        logger.info(f"Created {len(set(cluster_labels))} clusters")
+            logger.debug(f"n_clusters={n_clusters}, silhouette={score:.3f}")
 
-        return cluster_labels
+            if score > best_score:
+                best_score = score
+                best_n_clusters = n_clusters
 
-    def _create_clusters(
+        logger.info(
+            f"Optimal cluster count: {best_n_clusters} "
+            f"(silhouette score: {best_score:.3f})"
+        )
+
+        return best_n_clusters
+
+    def cluster_topics(
         self,
-        topics: List[Topic],
-        cluster_labels: np.ndarray,
-        similarity_matrix: np.ndarray
-    ) -> List[TopicCluster]:
+        n_clusters: Optional[int] = None
+    ) -> Dict[str, TopicCluster]:
         """
-        Create TopicCluster objects from clustering results.
+        Cluster topics using hierarchical clustering.
 
         Args:
-            topics: List of topics
-            cluster_labels: Cluster assignment for each topic
-            similarity_matrix: Pairwise similarity matrix
+            n_clusters: Number of clusters (auto-detect if None)
 
         Returns:
-            List of TopicCluster objects
+            Dictionary of cluster_id -> TopicCluster
         """
-        clusters = []
-        unique_labels = set(cluster_labels)
+        if not self.embeddings:
+            self.generate_embeddings()
 
-        for label in unique_labels:
-            # Get topics in this cluster
-            cluster_indices = np.where(cluster_labels == label)[0]
-            cluster_topics = [topics[i] for i in cluster_indices]
+        # Convert embeddings to matrix
+        topic_ids = list(self.embeddings.keys())
+        embeddings_matrix = np.array([
+            self.embeddings[topic_id]
+            for topic_id in topic_ids
+        ])
 
-            # Skip if cluster is too small
-            if len(cluster_topics) < self.min_cluster_size:
-                logger.debug(f"Skipping cluster {label} (size {len(cluster_topics)} < {self.min_cluster_size})")
-                continue
+        logger.info(f"Embeddings matrix shape: {embeddings_matrix.shape}")
 
-            # Split if cluster is too large
-            if len(cluster_topics) > self.max_cluster_size:
-                logger.warning(f"Cluster {label} size {len(cluster_topics)} exceeds max {self.max_cluster_size}, splitting...")
-                # Recursively cluster large clusters
-                sub_similarity = similarity_matrix[np.ix_(cluster_indices, cluster_indices)]
-                sub_labels = self._hierarchical_clustering(cluster_topics, sub_similarity)
-                sub_clusters = self._create_clusters(cluster_topics, sub_labels, sub_similarity)
-                clusters.extend(sub_clusters)
-                continue
-
-            # Calculate average intra-cluster similarity
-            cluster_sim_matrix = similarity_matrix[np.ix_(cluster_indices, cluster_indices)]
-            avg_similarity = np.mean(cluster_sim_matrix[np.triu_indices_from(cluster_sim_matrix, k=1)])
-
-            # Find centroid topic (most similar to all others)
-            mean_similarities = cluster_sim_matrix.mean(axis=1)
-            centroid_idx = mean_similarities.argmax()
-            centroid_topic = cluster_topics[centroid_idx]
-
-            cluster = TopicCluster(
-                cluster_id=len(clusters) + 1,
-                topics=cluster_topics,
-                centroid_topic=centroid_topic,
-                avg_similarity=float(avg_similarity),
-                size=len(cluster_topics)
-            )
-
-            clusters.append(cluster)
-
-            logger.info(
-                f"Cluster {cluster.cluster_id}: {cluster.size} topics, "
-                f"centroid='{centroid_topic.name}', "
-                f"similarity={avg_similarity:.3f}"
-            )
-
-        return clusters
-
-    def cluster_topics(self, topics: List[Topic]) -> List[TopicCluster]:
-        """
-        Cluster similar topics using hierarchical clustering.
-
-        Args:
-            topics: List of topics with embeddings
-
-        Returns:
-            List of topic clusters
-        """
-        if len(topics) < 2:
-            logger.warning("Less than 2 topics, skipping clustering")
-            return []
-
-        # Filter topics with embeddings
-        valid_topics = [t for t in topics if t.embedding is not None]
-        if len(valid_topics) < 2:
-            logger.error("Less than 2 topics with embeddings")
-            return []
-
-        logger.info(f"Clustering {len(valid_topics)} topics...")
-
-        # Compute similarity matrix
-        similarity_matrix = self._compute_similarity_matrix(valid_topics)
+        # Find optimal cluster count if not specified
+        if n_clusters is None:
+            n_clusters = self.find_optimal_clusters(embeddings_matrix)
 
         # Perform hierarchical clustering
-        cluster_labels = self._hierarchical_clustering(valid_topics, similarity_matrix)
+        logger.info(f"Clustering {len(self.topics)} topics into {n_clusters} clusters...")
 
-        # Create cluster objects
-        clusters = self._create_clusters(valid_topics, cluster_labels, similarity_matrix)
+        clustering = AgglomerativeClustering(
+            n_clusters=n_clusters,
+            linkage='ward'
+        )
+        labels = clustering.fit_predict(embeddings_matrix)
 
-        logger.info(f"Created {len(clusters)} topic clusters")
+        # Organize topics by cluster
+        clusters_dict: Dict[int, List[Topic]] = {}
+        for topic_id, label in zip(topic_ids, labels):
+            if label not in clusters_dict:
+                clusters_dict[label] = []
 
-        return clusters
+            # Find topic object
+            topic = next(t for t in self.topics if t.id == topic_id)
+            clusters_dict[label].append(topic)
 
-    def build_hierarchy(self, topics: List[Topic]) -> Dict[str, List[str]]:
+        # Create TopicCluster objects
+        self.clusters = {}
+        for cluster_id, cluster_topics in clusters_dict.items():
+            # Calculate cluster centroid
+            cluster_embeddings = [
+                self.embeddings[t.id] for t in cluster_topics
+            ]
+            centroid = np.mean(cluster_embeddings, axis=0).tolist()
+
+            # Generate cluster name
+            cluster_name = self.name_cluster(cluster_topics)
+
+            # Get representative topics (most frequent)
+            representative = self._get_representative_topics(cluster_topics)
+
+            # Extract keywords from topic names
+            keywords = self._extract_keywords(cluster_topics)
+
+            cluster = TopicCluster(
+                id=f"cluster-{cluster_id}",
+                name=cluster_name,
+                topics=cluster_topics,
+                centroid=centroid,
+                size=len(cluster_topics),
+                representative_topics=representative,
+                keywords=keywords
+            )
+
+            self.clusters[cluster.id] = cluster
+
+            logger.info(
+                f"Cluster {cluster_id}: '{cluster_name}' "
+                f"({len(cluster_topics)} topics)"
+            )
+
+        return self.clusters
+
+    def name_cluster(self, topics: List[Topic]) -> str:
         """
-        Build parent-child topic hierarchy.
+        Generate cluster name from topics.
 
-        Uses frequency to determine hierarchy level:
-        - High frequency = more general (parent)
-        - Low frequency = more specific (child)
+        Uses most frequent category and common words in topic names.
 
         Args:
-            topics: List of topics with embeddings
+            topics: List of topics in cluster
 
         Returns:
-            Dictionary mapping parent topic IDs to list of child topic IDs
+            Cluster name
         """
-        hierarchy = {}
+        # Get most common category
+        categories = [t.category.value for t in topics]
+        category_counts = Counter(categories)
+        most_common_category = category_counts.most_common(1)[0][0]
 
-        # Sort topics by frequency (descending)
-        sorted_topics = sorted(topics, key=lambda t: t.frequency, reverse=True)
+        # Get most common words in topic names (excluding common words)
+        stopwords = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for'}
 
-        # Top 20% are root topics
-        root_count = max(1, len(sorted_topics) // 5)
-        root_topics = sorted_topics[:root_count]
+        all_words = []
+        for topic in topics:
+            words = topic.name.lower().split()
+            all_words.extend([w for w in words if w not in stopwords])
 
-        # Compute similarity matrix
-        if len(topics) < 2:
-            return hierarchy
+        word_counts = Counter(all_words)
 
-        similarity_matrix = self._compute_similarity_matrix(topics)
-        topic_index = {t.id: i for i, t in enumerate(topics)}
+        # Get top 2-3 most common words
+        if word_counts:
+            top_words = [word for word, _ in word_counts.most_common(3)]
+            cluster_name = ' '.join(top_words).title()
+        else:
+            cluster_name = most_common_category.replace('_', ' ').title()
 
-        # Assign root topics (level 0)
-        for topic in root_topics:
-            topic.level = 0
-            hierarchy[topic.id] = []
+        return cluster_name
 
-        # Assign children to most similar root topic
-        for topic in sorted_topics[root_count:]:
-            topic_idx = topic_index[topic.id]
+    def _get_representative_topics(
+        self,
+        topics: List[Topic],
+        top_n: int = 5
+    ) -> List[str]:
+        """
+        Get most representative topics from cluster.
 
-            # Find most similar root topic
-            max_sim = -1
-            best_parent = None
+        Args:
+            topics: Topics in cluster
+            top_n: Number of representative topics
 
-            for root_topic in root_topics:
-                root_idx = topic_index[root_topic.id]
-                sim = similarity_matrix[topic_idx, root_idx]
+        Returns:
+            List of topic names
+        """
+        # Sort by importance/frequency
+        sorted_topics = sorted(
+            topics,
+            key=lambda t: (t.importance, t.frequency),
+            reverse=True
+        )
 
-                if sim > max_sim and sim >= self.similarity_threshold:
-                    max_sim = sim
-                    best_parent = root_topic
+        return [t.name for t in sorted_topics[:top_n]]
 
-            # Assign parent-child relationship
-            if best_parent:
-                topic.level = 1
-                hierarchy[best_parent.id].append(topic.id)
-                logger.debug(f"'{topic.name}' -> '{best_parent.name}' (sim={max_sim:.3f})")
-            else:
-                # No parent found, make it a root topic
-                topic.level = 0
-                hierarchy[topic.id] = []
-                logger.debug(f"'{topic.name}' promoted to root (no parent found)")
+    def _extract_keywords(
+        self,
+        topics: List[Topic],
+        top_n: int = 10
+    ) -> List[str]:
+        """
+        Extract keywords from topic names.
 
-        # Report hierarchy stats
-        total_children = sum(len(children) for children in hierarchy.values())
+        Args:
+            topics: Topics in cluster
+            top_n: Number of keywords
+
+        Returns:
+            List of keywords
+        """
+        stopwords = {
+            'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at',
+            'to', 'for', 'of', 'with', 'by', 'from', 'as', 'is'
+        }
+
+        all_words = []
+        for topic in topics:
+            # Split topic name into words
+            words = topic.name.lower().split()
+            all_words.extend([w for w in words if w not in stopwords])
+
+        # Count word frequencies
+        word_counts = Counter(all_words)
+
+        # Return top N
+        return [word for word, _ in word_counts.most_common(top_n)]
+
+    def build_topic_hierarchy(
+        self,
+        clusters: Optional[Dict[str, TopicCluster]] = None
+    ) -> Dict:
+        """
+        Build 3-level topic hierarchy from clusters.
+
+        Hierarchy:
+        - Level 0: Root categories (from clusters)
+        - Level 1: Primary topics (most important in cluster)
+        - Level 2: Specific topics (remaining topics)
+
+        Args:
+            clusters: Topic clusters (uses self.clusters if None)
+
+        Returns:
+            Hierarchy dictionary
+        """
+        if clusters is None:
+            clusters = self.clusters
+
+        hierarchy = {
+            'root': [],
+            'primary': [],
+            'specific': []
+        }
+
+        logger.info("Building 3-level topic hierarchy...")
+
+        for cluster in clusters.values():
+            # Level 0: Root (cluster itself)
+            root_topic = {
+                'id': cluster.id,
+                'name': cluster.name,
+                'level': 0,
+                'topic_count': cluster.size,
+                'keywords': cluster.keywords,
+                'children': []
+            }
+
+            # Sort topics by importance
+            sorted_topics = sorted(
+                cluster.topics,
+                key=lambda t: (t.importance, t.frequency),
+                reverse=True
+            )
+
+            # Determine primary topic threshold (top 30% or at least 2)
+            primary_count = max(2, int(len(sorted_topics) * 0.3))
+
+            # Level 1: Primary topics
+            primary_topics = sorted_topics[:primary_count]
+            for topic in primary_topics:
+                primary = {
+                    'id': topic.id,
+                    'name': topic.name,
+                    'level': 1,
+                    'parent_id': cluster.id,
+                    'category': topic.category.value,
+                    'importance': topic.importance,
+                    'frequency': topic.frequency
+                }
+                hierarchy['primary'].append(primary)
+                root_topic['children'].append(topic.id)
+
+            # Level 2: Specific topics
+            specific_topics = sorted_topics[primary_count:]
+            for topic in specific_topics:
+                specific = {
+                    'id': topic.id,
+                    'name': topic.name,
+                    'level': 2,
+                    'parent_id': cluster.id,
+                    'category': topic.category.value,
+                    'importance': topic.importance,
+                    'frequency': topic.frequency
+                }
+                hierarchy['specific'].append(specific)
+                root_topic['children'].append(topic.id)
+
+            hierarchy['root'].append(root_topic)
+
         logger.info(
-            f"Built topic hierarchy: {len(hierarchy)} root topics, "
-            f"{total_children} child topics"
+            f"Hierarchy built: {len(hierarchy['root'])} root, "
+            f"{len(hierarchy['primary'])} primary, "
+            f"{len(hierarchy['specific'])} specific topics"
         )
 
         return hierarchy
 
-    def identify_root_topics(
-        self,
-        topics: List[Topic],
-        top_n: int = 20
-    ) -> List[Topic]:
-        """
-        Identify top-level (most general) topics.
-
-        Root topics are identified by:
-        1. High frequency (appear in many pages)
-        2. High centrality (similar to many other topics)
-
-        Args:
-            topics: List of topics
-            top_n: Number of root topics to return
-
-        Returns:
-            List of root topics
-        """
-        if len(topics) <= top_n:
-            return topics
-
-        # Compute frequency score (normalized)
-        max_freq = max(t.frequency for t in topics)
-        freq_scores = {t.id: t.frequency / max_freq for t in topics}
-
-        # Compute centrality score (average similarity to all topics)
-        similarity_matrix = self._compute_similarity_matrix(topics)
-        centrality_scores = {
-            topics[i].id: similarity_matrix[i].mean()
-            for i in range(len(topics))
-        }
-
-        # Combined score (frequency + centrality)
-        combined_scores = {
-            t.id: 0.6 * freq_scores[t.id] + 0.4 * centrality_scores[t.id]
-            for t in topics
-        }
-
-        # Sort by combined score
-        sorted_topics = sorted(
-            topics,
-            key=lambda t: combined_scores[t.id],
-            reverse=True
-        )
-
-        root_topics = sorted_topics[:top_n]
-
-        logger.info(
-            f"Identified {len(root_topics)} root topics from {len(topics)} total topics"
-        )
-
-        for i, topic in enumerate(root_topics[:5], 1):
-            logger.info(
-                f"  {i}. {topic.name} (freq={topic.frequency}, "
-                f"score={combined_scores[topic.id]:.3f})"
-            )
-
-        return root_topics
-
-    def get_clustering_statistics(self, clusters: List[TopicCluster]) -> Dict:
-        """
-        Calculate clustering quality statistics.
-
-        Args:
-            clusters: List of topic clusters
-
-        Returns:
-            Dictionary with clustering statistics
-        """
-        if not clusters:
+    def get_cluster_stats(self) -> Dict:
+        """Get clustering statistics."""
+        if not self.clusters:
             return {}
 
-        cluster_sizes = [c.size for c in clusters]
-        similarities = [c.avg_similarity for c in clusters]
+        cluster_sizes = [c.size for c in self.clusters.values()]
 
-        stats = {
-            'num_clusters': len(clusters),
-            'total_topics': sum(cluster_sizes),
+        return {
+            'n_clusters': len(self.clusters),
+            'total_topics': len(self.topics),
             'avg_cluster_size': np.mean(cluster_sizes),
             'min_cluster_size': min(cluster_sizes),
             'max_cluster_size': max(cluster_sizes),
-            'avg_similarity': np.mean(similarities),
-            'min_similarity': min(similarities),
-            'max_similarity': max(similarities),
+            'cluster_names': [c.name for c in self.clusters.values()]
         }
-
-        logger.info(f"Clustering statistics: {stats}")
-
-        return stats

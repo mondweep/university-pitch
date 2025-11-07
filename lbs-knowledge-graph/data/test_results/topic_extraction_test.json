@@ -1,0 +1,323 @@
+{
+  "config": {
+    "num_pages": 10,
+    "model": "anthropic/claude-3.5-sonnet"
+  },
+  "results": {
+    "total_pages": 10,
+    "successful": 10,
+    "failed": 0,
+    "total_topics": 36,
+    "total_cost": 0.034638,
+    "total_time": 43.24798107147217,
+    "page_results": [
+      {
+        "page_id": "alumni_a812cbeb0b88",
+        "title": "Alumni | London Business School",
+        "topics": [
+          {
+            "name": "Alumni Network",
+            "confidence": 0.9,
+            "category": "business"
+          },
+          {
+            "name": "Career Development",
+            "confidence": 0.8,
+            "category": "business"
+          },
+          {
+            "name": "Charitable Giving",
+            "confidence": 0.8,
+            "category": "general"
+          }
+        ],
+        "summary": "A page focused on LBS alumni services, highlighting the global network of 57,000+ alumni, career resources, and various ways to give back to the school through donations and shares.",
+        "cost": 0.0028799999999999997,
+        "time": 4.447572469711304
+      },
+      {
+        "page_id": "news_7ce7f712571d",
+        "title": "News | London Business School",
+        "topics": [
+          {
+            "name": "Executive Education",
+            "confidence": 0.9,
+            "category": "academic"
+          },
+          {
+            "name": "Faculty Research",
+            "confidence": 0.9,
+            "category": "research"
+          },
+          {
+            "name": "Leadership Strategy",
+            "confidence": 0.8,
+            "category": "business"
+          },
+          {
+            "name": "Sustainability",
+            "confidence": 0.7,
+            "category": "academic"
+          }
+        ],
+        "summary": "A news page highlighting London Business School's key areas including executive education programs, faculty research initiatives, leadership strategy insights, and sustainability efforts, with options for alumni engagement and newsletter subscriptions.",
+        "cost": 0.0034470000000000004,
+        "time": 3.91363525390625
+      },
+      {
+        "page_id": "contact_61c0097e4724",
+        "title": "Contact us | London Business School",
+        "topics": [
+          {
+            "name": "Alumni Services",
+            "confidence": 0.9,
+            "category": "general"
+          },
+          {
+            "name": "Academic Programs",
+            "confidence": 0.8,
+            "category": "academic"
+          },
+          {
+            "name": "Career Development",
+            "confidence": 0.8,
+            "category": "business"
+          },
+          {
+            "name": "Research & Faculty",
+            "confidence": 0.7,
+            "category": "research"
+          }
+        ],
+        "summary": "A contact page for London Business School that provides access points for various stakeholders including alumni, students, faculty and those interested in executive education. The page covers academic programs, career services, research initiatives and alumni engagement opportunities.",
+        "cost": 0.003699,
+        "time": 4.6584460735321045
+      },
+      {
+        "page_id": "events_86531ad8271f",
+        "title": "Events | London Business School",
+        "topics": [
+          {
+            "name": "Executive Education & Corporate Programs",
+            "confidence": 0.9,
+            "category": "business"
+          },
+          {
+            "name": "Academic Research & Doctoral Studies",
+            "confidence": 0.8,
+            "category": "research"
+          },
+          {
+            "name": "Career Development & Recruitment",
+            "confidence": 0.85,
+            "category": "business"
+          },
+          {
+            "name": "Degree Programs & Student Events",
+            "confidence": 0.9,
+            "category": "academic"
+          }
+        ],
+        "summary": "This page appears to be an events and resources hub for London Business School, covering various aspects from academic programs and research to corporate partnerships and career development opportunities. It serves multiple stakeholders including students, faculty, corporate partners, and alumni.",
+        "cost": 0.0039120000000000005,
+        "time": 5.623421907424927
+      },
+      {
+        "page_id": "newsroom_608504dc2ebe",
+        "title": "Newsroom | London Business School",
+        "topics": [
+          {
+            "name": "Alumni Services",
+            "confidence": 0.9,
+            "category": "student_life"
+          },
+          {
+            "name": "Analytics and Big Data",
+            "confidence": 0.8,
+            "category": "academic"
+          },
+          {
+            "name": "Faculty Research",
+            "confidence": 0.8,
+            "category": "research"
+          }
+        ],
+        "summary": "A newsroom page highlighting London Business School's key areas including alumni services, academic programs in analytics, and faculty research initiatives, with focus on career development and academic resources.",
+        "cost": 0.002982,
+        "time": 3.938974618911743
+      },
+      {
+        "page_id": "programmes_e941af89c7be",
+        "title": "Programmes | London Business School",
+        "topics": [
+          {
+            "name": "Operations & Analytics",
+            "confidence": 0.9,
+            "category": "academic"
+          },
+          {
+            "name": "Research & PhD Programs",
+            "confidence": 0.8,
+            "category": "research"
+          },
+          {
+            "name": "Alumni Services",
+            "confidence": 0.85,
+            "category": "business"
+          },
+          {
+            "name": "Corporate Partnerships",
+            "confidence": 0.7,
+            "category": "business"
+          }
+        ],
+        "summary": "This page appears to be an overview of London Business School's key offerings, including academic programs in operations and analytics, research opportunities through PhD programs, alumni services, and corporate partnerships. The content suggests a mix of educational and professional development resources.",
+        "cost": 0.003876,
+        "time": 4.253315448760986
+      },
+      {
+        "page_id": "give-to-lbs_98c8f2905162",
+        "title": "Give to LBS | London Business School",
+        "topics": [
+          {
+            "name": "Charitable Giving",
+            "confidence": 0.9,
+            "category": "business"
+          },
+          {
+            "name": "Donor Advised Funds (DAF)",
+            "confidence": 0.9,
+            "category": "business"
+          },
+          {
+            "name": "Sustainability",
+            "confidence": 0.7,
+            "category": "academic"
+          }
+        ],
+        "summary": "A donation information page for London Business School that provides details about making contributions through Donor Advised Funds (DAF), bank transfer details, and mentions sustainability initiatives. The page includes specific banking information for donations and guidance on Gift Aid eligibility.",
+        "cost": 0.0033150000000000002,
+        "time": 4.279234409332275
+      },
+      {
+        "page_id": "about_c5f70d891e17",
+        "title": "About us | London Business School",
+        "topics": [
+          {
+            "name": "Community & Diversity",
+            "confidence": 0.9,
+            "category": "student_life"
+          },
+          {
+            "name": "Corporate Partnerships",
+            "confidence": 0.8,
+            "category": "business"
+          },
+          {
+            "name": "Faculty Research",
+            "confidence": 0.8,
+            "category": "research"
+          }
+        ],
+        "summary": "Overview page highlighting LBS's key aspects including its diverse community, corporate relationships, faculty research, and alumni network, with emphasis on inclusion and professional development.",
+        "cost": 0.0029760000000000003,
+        "time": 3.719381093978882
+      },
+      {
+        "page_id": "homepage_5002b6553ab6",
+        "title": "Home | London Business School",
+        "topics": [
+          {
+            "name": "Digital Marketing and AI",
+            "confidence": 0.9,
+            "category": "business"
+          },
+          {
+            "name": "Financial Education",
+            "confidence": 0.8,
+            "category": "academic"
+          },
+          {
+            "name": "Leadership Development",
+            "confidence": 0.8,
+            "category": "academic"
+          },
+          {
+            "name": "Diversity and Inclusion",
+            "confidence": 0.7,
+            "category": "general"
+          }
+        ],
+        "summary": "London Business School's homepage highlights their educational offerings including MBA programs, specialized masters degrees, and online courses focusing on digital marketing, leadership, and diversity. The page also promotes their Forever Forward fundraising campaign supporting scholarships, research, and innovation.",
+        "cost": 0.003864,
+        "time": 4.118674278259277
+      },
+      {
+        "page_id": "faculty-and-research_c4fd78231318",
+        "title": "Faculty and Research | London Business School",
+        "topics": [
+          {
+            "name": "Organisational Behaviour",
+            "confidence": 0.9,
+            "category": "academic"
+          },
+          {
+            "name": "Management Science and Operations",
+            "confidence": 0.8,
+            "category": "academic"
+          },
+          {
+            "name": "Corporate Partnerships",
+            "confidence": 0.7,
+            "category": "business"
+          },
+          {
+            "name": "Employee Engagement Research",
+            "confidence": 0.8,
+            "category": "research"
+          }
+        ],
+        "summary": "A faculty and research page highlighting LBS's academic focus areas in organizational behavior and management operations, along with their research initiatives in employee-employer relationships and corporate partnerships.",
+        "cost": 0.0036869999999999997,
+        "time": 4.295325517654419
+      }
+    ],
+    "topic_distribution": {
+      "Alumni Network": 1,
+      "Career Development": 2,
+      "Charitable Giving": 2,
+      "Executive Education": 1,
+      "Faculty Research": 3,
+      "Leadership Strategy": 1,
+      "Sustainability": 2,
+      "Alumni Services": 3,
+      "Academic Programs": 1,
+      "Research & Faculty": 1,
+      "Executive Education & Corporate Programs": 1,
+      "Academic Research & Doctoral Studies": 1,
+      "Career Development & Recruitment": 1,
+      "Degree Programs & Student Events": 1,
+      "Analytics and Big Data": 1,
+      "Operations & Analytics": 1,
+      "Research & PhD Programs": 1,
+      "Corporate Partnerships": 3,
+      "Donor Advised Funds (DAF)": 1,
+      "Community & Diversity": 1,
+      "Digital Marketing and AI": 1,
+      "Financial Education": 1,
+      "Leadership Development": 1,
+      "Diversity and Inclusion": 1,
+      "Organisational Behaviour": 1,
+      "Management Science and Operations": 1,
+      "Employee Engagement Research": 1
+    },
+    "category_distribution": {
+      "business": 13,
+      "general": 3,
+      "academic": 11,
+      "research": 7,
+      "student_life": 2
+    }
+  },
+  "timestamp": "2025-11-07 22:25:19"
+}

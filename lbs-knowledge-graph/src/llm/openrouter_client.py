@@ -122,6 +122,10 @@ class OpenRouterClient:
             }
         )
 
+        # Track last request for cost calculation
+        self.last_request_tokens = {'input': 0, 'output': 0}
+        self.last_request_cost = 0.0
+
     def complete(
         self,
         prompt: str,
@@ -149,7 +153,32 @@ class OpenRouterClient:
             **kwargs
         )
 
+        # Track usage and cost
+        if hasattr(response, 'usage') and response.usage:
+            self.last_request_tokens = {
+                'input': response.usage.prompt_tokens,
+                'output': response.usage.completion_tokens
+            }
+            self.last_request_cost = self.estimate_cost(
+                response.usage.prompt_tokens,
+                response.usage.completion_tokens
+            )
+        else:
+            # Fallback estimation if usage not provided
+            self.last_request_tokens = {
+                'input': self.count_tokens(prompt),
+                'output': max_tokens // 2  # Rough estimate
+            }
+            self.last_request_cost = self.estimate_cost(
+                self.last_request_tokens['input'],
+                self.last_request_tokens['output']
+            )
+
         return response.choices[0].message.content
+
+    def get_last_request_cost(self) -> float:
+        """Get cost of last API request."""
+        return self.last_request_cost
 
     def batch_complete(
         self,

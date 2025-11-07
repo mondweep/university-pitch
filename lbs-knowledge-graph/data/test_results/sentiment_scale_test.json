@@ -1,0 +1,35 @@
+{
+  "config": {
+    "num_items": 100,
+    "batch_size": 10,
+    "model": "openai/gpt-3.5-turbo"
+  },
+  "results": {
+    "total_processed": 17,
+    "sentiments": {
+      "POSITIVE": 9,
+      "NEGATIVE": 0,
+      "NEUTRAL": 8
+    },
+    "total_cost": 0.0006464999999999999,
+    "total_time": 7.402711629867554,
+    "batch_results": [
+      {
+        "batch_num": 1,
+        "items": 10,
+        "cost": 0.0003765,
+        "time": 4.6029064655303955,
+        "items_per_second": 2.1725403448639695
+      },
+      {
+        "batch_num": 2,
+        "items": 7,
+        "cost": 0.00027,
+        "time": 2.799805164337158,
+        "items_per_second": 2.500173972518984
+      }
+    ],
+    "errors": []
+  },
+  "timestamp": "2025-11-07 22:21:19"
+}

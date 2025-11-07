@@ -100,6 +100,52 @@ python scripts/build_graph.py --input content-repo/parsed --output graph/
 python scripts/export_graph.py --format json,graphml,cypher
 ```
 
+## Visualizing the Graph
+
+The knowledge graph contains 3,963 nodes and 3,953 edges. We provide multiple visualization tools optimized for different use cases.
+
+**Note**: Commands work from either the repository root or the `lbs-knowledge-graph/` directory (auto-detects location).
+
+### Quick Statistics (Terminal-Based)
+
+```bash
+# View graph statistics (no dependencies)
+python lbs-knowledge-graph/scripts/visualize_graph_stats.py
+
+# Detailed view with samples
+python lbs-knowledge-graph/scripts/visualize_graph_stats.py --verbose
+```
+
+**Output**: Node/edge counts, type distributions, most connected nodes
+
+### Interactive HTML Visualization
+
+```bash
+# Install visualization library (one-time)
+pip install pyvis
+
+# Filtered view (RECOMMENDED - fast and clear)
+python lbs-knowledge-graph/scripts/visualize_graph_interactive.py --node-types Page,Section --max-nodes 50
+
+# Focus on specific page
+python lbs-knowledge-graph/scripts/visualize_graph_interactive.py --focus-node "alumni_a812cbeb0b88"
+
+# Open in browser
+open lbs-knowledge-graph/visualizations/graph_interactive.html  # Mac
+xdg-open lbs-knowledge-graph/visualizations/graph_interactive.html  # Linux
+```
+
+**Features**:
+- Interactive drag-and-drop nodes
+- Color-coded by type (Page=red, Section=blue, ContentItem=green)
+- Hover for details
+- Zoom and pan navigation
+- Filter by node type and connection count
+
+**Performance Note**: The full graph (3,963 nodes) is too large to visualize all at once. Use filtered views for best performance.
+
+**Complete Guide**: See [Graph Visualization Guide](lbs-knowledge-graph/docs/GRAPH_VISUALIZATION_GUIDE.md) for detailed instructions, use cases, and troubleshooting.
+
 ## Development Phases
 
 This project follows a 10-phase, 25-week implementation plan:
@@ -167,6 +213,13 @@ This project follows a 10-phase, 25-week implementation plan:
 - 📋 [Testing Guide (20,000+ words)](lbs-knowledge-graph/docs/TESTING_GUIDE.md) - Comprehensive 4-level testing strategy
 - ⚡ [Quick Start Testing](lbs-knowledge-graph/docs/QUICK_START_TESTING.md) - Get started in 5 minutes
 - ✅ [Test Execution Checklist](lbs-knowledge-graph/docs/TEST_EXECUTION_CHECKLIST.md) - Step-by-step testing tracker
+
+**Visualization & Exploration:**
+- 🎨 [Graph Visualization Guide](lbs-knowledge-graph/docs/GRAPH_VISUALIZATION_GUIDE.md) - **Complete guide to visualizing the 3,963-node graph**
+  - Terminal statistics viewer (no dependencies)
+  - Interactive HTML visualization (pyvis)
+  - Filtering and performance optimization
+  - Use cases and troubleshooting
 
 ### 📁 Planning Documents
 

@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 900px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#3498db", "font": {"color": "white"}, "id": "alumni_a812cbeb0b88_section_15", "label": "alumni_a812cbeb0b88_section_15", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: alumni_a812cbeb0b88_section_15\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "give-to-lbs_98c8f2905162_section_15", "label": "give-to-lbs_98c8f2905162_secti...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: give-to-lbs_98c8f2905162_section_15\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "news_7ce7f712571d_section_1", "label": "news_7ce7f712571d_section_1", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: news_7ce7f712571d_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "about_c5f70d891e17_section_1", "label": "about_c5f70d891e17_section_1", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: about_c5f70d891e17_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "newsroom_608504dc2ebe_section_1", "label": "newsroom_608504dc2ebe_section_...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: newsroom_608504dc2ebe_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "faculty-and-research_c4fd78231318_section_1", "label": "faculty-and-research_c4fd78231...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: faculty-and-research_c4fd78231318_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "events_86531ad8271f_section_1", "label": "events_86531ad8271f_section_1", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: events_86531ad8271f_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "give-to-lbs_98c8f2905162_section_1", "label": "give-to-lbs_98c8f2905162_secti...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: give-to-lbs_98c8f2905162_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "alumni_a812cbeb0b88_section_1", "label": "alumni_a812cbeb0b88_section_1", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: alumni_a812cbeb0b88_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "contact_61c0097e4724_section_1", "label": "contact_61c0097e4724_section_1", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: contact_61c0097e4724_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "programmes_e941af89c7be_section_1", "label": "programmes_e941af89c7be_sectio...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: programmes_e941af89c7be_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "homepage_5002b6553ab6_section_1", "label": "homepage_5002b6553ab6_section_...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: homepage_5002b6553ab6_section_1\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "about_c5f70d891e17_section_15", "label": "about_c5f70d891e17_section_15", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: about_c5f70d891e17_section_15\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "homepage_5002b6553ab6_section_15", "label": "homepage_5002b6553ab6_section_...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: homepage_5002b6553ab6_section_15\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "faculty-and-research_c4fd78231318_section_15", "label": "faculty-and-research_c4fd78231...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: faculty-and-research_c4fd78231318_section_15\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "newsroom_608504dc2ebe_section_15", "label": "newsroom_608504dc2ebe_section_...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: newsroom_608504dc2ebe_section_15\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "programmes_e941af89c7be_section_15", "label": "programmes_e941af89c7be_sectio...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: programmes_e941af89c7be_section_15\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "contact_61c0097e4724_section_15", "label": "contact_61c0097e4724_section_1...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: contact_61c0097e4724_section_15\u003cbr\u003e"}, {"color": "#e74c3c", "font": {"color": "white"}, "id": "alumni_a812cbeb0b88", "label": "Alumni | London Business Schoo...", "shape": "dot", "size": 20, "title": "\u003cb\u003ePage\u003c/b\u003e\u003cbr\u003eID: alumni_a812cbeb0b88\u003cbr\u003eTitle: Alumni | London Business School\u003cbr\u003eURL: https://www.london.edu/alumni\u003cbr\u003e"}, {"color": "#e74c3c", "font": {"color": "white"}, "id": "give-to-lbs_98c8f2905162", "label": "Give to LBS | London Business ...", "shape": "dot", "size": 20, "title": "\u003cb\u003ePage\u003c/b\u003e\u003cbr\u003eID: give-to-lbs_98c8f2905162\u003cbr\u003eTitle: Give to LBS | London Business School\u003cbr\u003eURL: https://www.london.edu/give-to-lbs\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "about_c5f70d891e17_section_16", "label": "about_c5f70d891e17_section_16", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: about_c5f70d891e17_section_16\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "programmes_e941af89c7be_section_16", "label": "programmes_e941af89c7be_sectio...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: programmes_e941af89c7be_section_16\u003cbr\u003e"}, {"color": "#e74c3c", "font": {"color": "white"}, "id": "homepage_5002b6553ab6", "label": "Home | London Business School", "shape": "dot", "size": 20, "title": "\u003cb\u003ePage\u003c/b\u003e\u003cbr\u003eID: homepage_5002b6553ab6\u003cbr\u003eTitle: Home | London Business School\u003cbr\u003eURL: https://www.london.edu/\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "events_86531ad8271f_section_15", "label": "events_86531ad8271f_section_15", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: events_86531ad8271f_section_15\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "alumni_a812cbeb0b88_section_16", "label": "alumni_a812cbeb0b88_section_16", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: alumni_a812cbeb0b88_section_16\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "news_7ce7f712571d_section_15", "label": "news_7ce7f712571d_section_15", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: news_7ce7f712571d_section_15\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "news_7ce7f712571d_section_13", "label": "news_7ce7f712571d_section_13", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: news_7ce7f712571d_section_13\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "about_c5f70d891e17_section_13", "label": "about_c5f70d891e17_section_13", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: about_c5f70d891e17_section_13\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "newsroom_608504dc2ebe_section_13", "label": "newsroom_608504dc2ebe_section_...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: newsroom_608504dc2ebe_section_13\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "faculty-and-research_c4fd78231318_section_13", "label": "faculty-and-research_c4fd78231...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: faculty-and-research_c4fd78231318_section_13\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "events_86531ad8271f_section_13", "label": "events_86531ad8271f_section_13", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: events_86531ad8271f_section_13\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "give-to-lbs_98c8f2905162_section_13", "label": "give-to-lbs_98c8f2905162_secti...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: give-to-lbs_98c8f2905162_section_13\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "alumni_a812cbeb0b88_section_13", "label": "alumni_a812cbeb0b88_section_13", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: alumni_a812cbeb0b88_section_13\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "contact_61c0097e4724_section_13", "label": "contact_61c0097e4724_section_1...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: contact_61c0097e4724_section_13\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "contact_61c0097e4724_section_16", "label": "contact_61c0097e4724_section_1...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: contact_61c0097e4724_section_16\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "programmes_e941af89c7be_section_13", "label": "programmes_e941af89c7be_sectio...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: programmes_e941af89c7be_section_13\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "homepage_5002b6553ab6_section_13", "label": "homepage_5002b6553ab6_section_...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: homepage_5002b6553ab6_section_13\u003cbr\u003e"}, {"color": "#e74c3c", "font": {"color": "white"}, "id": "about_c5f70d891e17", "label": "About us | London Business Sch...", "shape": "dot", "size": 20, "title": "\u003cb\u003ePage\u003c/b\u003e\u003cbr\u003eID: about_c5f70d891e17\u003cbr\u003eTitle: About us | London Business School\u003cbr\u003eURL: https://www.london.edu/about\u003cbr\u003e"}, {"color": "#e74c3c", "font": {"color": "white"}, "id": "newsroom_608504dc2ebe", "label": "Newsroom | London Business Sch...", "shape": "dot", "size": 20, "title": "\u003cb\u003ePage\u003c/b\u003e\u003cbr\u003eID: newsroom_608504dc2ebe\u003cbr\u003eTitle: Newsroom | London Business School\u003cbr\u003eURL: https://www.london.edu/newsroom\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "news_7ce7f712571d_section_14", "label": "news_7ce7f712571d_section_14", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: news_7ce7f712571d_section_14\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "about_c5f70d891e17_section_14", "label": "about_c5f70d891e17_section_14", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: about_c5f70d891e17_section_14\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "newsroom_608504dc2ebe_section_14", "label": "newsroom_608504dc2ebe_section_...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: newsroom_608504dc2ebe_section_14\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "faculty-and-research_c4fd78231318_section_14", "label": "faculty-and-research_c4fd78231...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: faculty-and-research_c4fd78231318_section_14\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "events_86531ad8271f_section_14", "label": "events_86531ad8271f_section_14", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: events_86531ad8271f_section_14\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "give-to-lbs_98c8f2905162_section_14", "label": "give-to-lbs_98c8f2905162_secti...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: give-to-lbs_98c8f2905162_section_14\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "alumni_a812cbeb0b88_section_14", "label": "alumni_a812cbeb0b88_section_14", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: alumni_a812cbeb0b88_section_14\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "contact_61c0097e4724_section_14", "label": "contact_61c0097e4724_section_1...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: contact_61c0097e4724_section_14\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "programmes_e941af89c7be_section_14", "label": "programmes_e941af89c7be_sectio...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: programmes_e941af89c7be_section_14\u003cbr\u003e"}, {"color": "#3498db", "font": {"color": "white"}, "id": "homepage_5002b6553ab6_section_14", "label": "homepage_5002b6553ab6_section_...", "shape": "dot", "size": 10, "title": "\u003cb\u003eSection\u003c/b\u003e\u003cbr\u003eID: homepage_5002b6553ab6_section_14\u003cbr\u003e"}, {"color": "#e74c3c", "font": {"color": "white"}, "id": "news_7ce7f712571d", "label": "News | London Business School", "shape": "dot", "size": 20, "title": "\u003cb\u003ePage\u003c/b\u003e\u003cbr\u003eID: news_7ce7f712571d\u003cbr\u003eTitle: News | London Business School\u003cbr\u003eURL: https://www.london.edu/news\u003cbr\u003e"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "#95a5a6", "from": "news_7ce7f712571d", "title": "CONTAINS", "to": "news_7ce7f712571d_section_1"}, {"arrows": "to", "color": "#95a5a6", "from": "news_7ce7f712571d", "title": "CONTAINS", "to": "news_7ce7f712571d_section_13"}, {"arrows": "to", "color": "#95a5a6", "from": "news_7ce7f712571d", "title": "CONTAINS", "to": "news_7ce7f712571d_section_14"}, {"arrows": "to", "color": "#95a5a6", "from": "news_7ce7f712571d", "title": "CONTAINS", "to": "news_7ce7f712571d_section_15"}, {"arrows": "to", "color": "#95a5a6", "from": "about_c5f70d891e17", "title": "CONTAINS", "to": "about_c5f70d891e17_section_1"}, {"arrows": "to", "color": "#95a5a6", "from": "about_c5f70d891e17", "title": "CONTAINS", "to": "about_c5f70d891e17_section_13"}, {"arrows": "to", "color": "#95a5a6", "from": "about_c5f70d891e17", "title": "CONTAINS", "to": "about_c5f70d891e17_section_14"}, {"arrows": "to", "color": "#95a5a6", "from": "about_c5f70d891e17", "title": "CONTAINS", "to": "about_c5f70d891e17_section_15"}, {"arrows": "to", "color": "#95a5a6", "from": "about_c5f70d891e17", "title": "CONTAINS", "to": "about_c5f70d891e17_section_16"}, {"arrows": "to", "color": "#95a5a6", "from": "newsroom_608504dc2ebe", "title": "CONTAINS", "to": "newsroom_608504dc2ebe_section_1"}, {"arrows": "to", "color": "#95a5a6", "from": "newsroom_608504dc2ebe", "title": "CONTAINS", "to": "newsroom_608504dc2ebe_section_13"}, {"arrows": "to", "color": "#95a5a6", "from": "newsroom_608504dc2ebe", "title": "CONTAINS", "to": "newsroom_608504dc2ebe_section_14"}, {"arrows": "to", "color": "#95a5a6", "from": "newsroom_608504dc2ebe", "title": "CONTAINS", "to": "newsroom_608504dc2ebe_section_15"}, {"arrows": "to", "color": "#95a5a6", "from": "give-to-lbs_98c8f2905162", "title": "CONTAINS", "to": "give-to-lbs_98c8f2905162_section_1"}, {"arrows": "to", "color": "#95a5a6", "from": "give-to-lbs_98c8f2905162", "title": "CONTAINS", "to": "give-to-lbs_98c8f2905162_section_13"}, {"arrows": "to", "color": "#95a5a6", "from": "give-to-lbs_98c8f2905162", "title": "CONTAINS", "to": "give-to-lbs_98c8f2905162_section_14"}, {"arrows": "to", "color": "#95a5a6", "from": "give-to-lbs_98c8f2905162", "title": "CONTAINS", "to": "give-to-lbs_98c8f2905162_section_15"}, {"arrows": "to", "color": "#95a5a6", "from": "alumni_a812cbeb0b88", "title": "CONTAINS", "to": "alumni_a812cbeb0b88_section_1"}, {"arrows": "to", "color": "#95a5a6", "from": "alumni_a812cbeb0b88", "title": "CONTAINS", "to": "alumni_a812cbeb0b88_section_13"}, {"arrows": "to", "color": "#95a5a6", "from": "alumni_a812cbeb0b88", "title": "CONTAINS", "to": "alumni_a812cbeb0b88_section_14"}, {"arrows": "to", "color": "#95a5a6", "from": "alumni_a812cbeb0b88", "title": "CONTAINS", "to": "alumni_a812cbeb0b88_section_15"}, {"arrows": "to", "color": "#95a5a6", "from": "alumni_a812cbeb0b88", "title": "CONTAINS", "to": "alumni_a812cbeb0b88_section_16"}, {"arrows": "to", "color": "#95a5a6", "from": "homepage_5002b6553ab6", "title": "CONTAINS", "to": "homepage_5002b6553ab6_section_1"}, {"arrows": "to", "color": "#95a5a6", "from": "homepage_5002b6553ab6", "title": "CONTAINS", "to": "homepage_5002b6553ab6_section_13"}, {"arrows": "to", "color": "#95a5a6", "from": "homepage_5002b6553ab6", "title": "CONTAINS", "to": "homepage_5002b6553ab6_section_14"}, {"arrows": "to", "color": "#95a5a6", "from": "homepage_5002b6553ab6", "title": "CONTAINS", "to": "homepage_5002b6553ab6_section_15"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"nodes": {"borderWidth": 2, "borderWidthSelected": 4, "font": {"size": 14, "face": "arial"}}, "edges": {"arrows": {"to": {"enabled": true, "scaleFactor": 0.5}}, "smooth": {"type": "continuous"}}, "physics": {"enabled": true, "stabilization": {"iterations": 100}}, "interaction": {"hover": true, "tooltipDelay": 100, "navigationButtons": true, "keyboard": true}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

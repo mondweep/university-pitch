@@ -165,3 +165,15 @@ class NERExtractionResult:
             "cost": round(self.cost, 4),
             "model_used": self.model_used
         }
+
+
+@dataclass  
+class EntityStatistics:
+    """
+    Statistics for entity extraction.
+    Stub class for test compatibility - to be implemented.
+    """
+    total_entities: int = 0
+    entities_by_type: Dict[str, int] = field(default_factory=dict)
+    unique_entities: int = 0
+    avg_prominence: float = 0.0

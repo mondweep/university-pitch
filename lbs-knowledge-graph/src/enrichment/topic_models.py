@@ -5,6 +5,7 @@ Defines data models for topics and topic-related entities based on taxonomy.
 """
 
 from pydantic import BaseModel, Field
+from dataclasses import dataclass, field
 from typing import Optional, List, Dict
 from enum import Enum
 
@@ -248,3 +249,16 @@ class TopicTaxonomy:
     def get_theme(cls, topic_name: str) -> Optional[CrossCuttingTheme]:
         """Get cross-cutting theme for topic if applicable"""
         return cls.THEME_TOPICS.get(topic_name)
+
+
+@dataclass
+class TopicCluster:
+    """
+    Topic cluster for hierarchical topic organization.
+    Stub class for test compatibility - to be implemented.
+    """
+    id: str
+    name: str
+    topics: List[str] = field(default_factory=list)
+    parent_cluster: Optional[str] = None
+    level: int = 0

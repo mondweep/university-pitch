@@ -18,13 +18,34 @@ This project implements a semantic knowledge graph for London Business School's 
 
 ## Technology Stack
 
-- **Graph Database:** MGraph-DB (Python, in-memory, serverless-optimized)
-- **Backend:** Python 3.11, AWS Lambda, ECS Fargate
-- **LLM:** OpenAI GPT-4 or Anthropic Claude
+### Current Implementation (Phases 1-3) ✅
+
+**What's running now:**
+- **Graph Database:** MGraph-DB (Python, in-memory, JSON persistence)
+- **Backend:** Python 3.11 (local scripts and modules)
+- **LLM:** OpenAI GPT-3.5/GPT-4 via OpenRouter, Anthropic Claude 3.5
+- **Storage:** Local filesystem (JSON files in `lbs-knowledge-graph/data/`)
+- **Embeddings:** Sentence-Transformers (local) + OpenAI API
+- **Development:** Local virtual environment, pytest testing
+
+### Target Architecture (Phases 4-10) 🎯
+
+**Planned for deployment:**
+- **Graph Database:** MGraph-DB (serverless-optimized, S3-backed)
+- **Backend:** AWS Lambda (API endpoints) + ECS Fargate (long-running tasks)
 - **Frontend:** HTML/CSS/JS with D3.js visualization
-- **Infrastructure:** AWS (serverless-first)
-- **Storage:** S3, ElastiCache Serverless
-- **Search:** OpenSearch Serverless
+- **Infrastructure:** AWS serverless-first architecture
+- **Storage:** S3 (graph data, content), ElastiCache Serverless (caching)
+- **Search:** OpenSearch Serverless (full-text search)
+- **CI/CD:** GitHub Actions (automated deployment)
+- **Monitoring:** CloudWatch, Prometheus + Grafana
+
+**Deployment Timeline:**
+- **Phase 4** (Next): CI/CD setup and GitHub Actions workflows
+- **Phase 5-6**: UI prototypes and containerization (Docker, ECS)
+- **Phase 7+**: Full AWS deployment (Lambda, S3, ElastiCache, OpenSearch)
+
+**Note:** Template files exist (`.github/workflows/deploy-lambda.yml`, `Dockerfile`) but AWS infrastructure is not yet deployed. See [Deployment Plan](plans/06_DEPLOYMENT_PLAN.md) for details.
 
 ## Project Structure
 

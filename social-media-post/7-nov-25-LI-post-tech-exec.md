@@ -33,14 +33,14 @@ The direction shaped into a **multi-stage AI enrichment pipeline** that automati
 1. **Understands content semantically** (not just keywords)
 2. **Maps relationships** between topics, programs, and personas
 3. **Predicts relevance** for different audience segments
-4. **Delivers personalized pathways** to conversion
+4. **Delivers personalised pathways** to conversion
 
 Over this week, I went into a build and test phase during my free time.
 
 **📊 Proof-of-Concept Results (1 Week)**
 
 **What Was Tested:**
-• **10 LBS pages** crawled and analyzed
+• **10 LBS pages** crawled and analysed
 • **3,963-node knowledge graph** constructed (pages → sections → content items)
 • **26 semantic topics** extracted with 100% success rate
 • **5 distinct persona profiles** validated with content targeting
@@ -173,7 +173,7 @@ Through my work with **[Agentics Foundation](https://agentics.org)** ([London Ch
 **🔮 What We're Building at Agentics Foundation**
 
 We're not just building tools—we're pioneering **autonomous AI agents** that:
-- Learn from user behavior to improve recommendations
+- Learn from user behaviour to improve recommendations
 - Adapt content strategies based on engagement data
 - Coordinate across systems to deliver seamless experiences
 - Continuously optimise for business outcomes
@@ -235,7 +235,7 @@ A: Measurable improvements in:
 - Time-to-conversion (70% reduction target)
 - Engagement rates (35% lift target)
 - Content team efficiency (60% time savings)
-- Plus: Real-time data for strategy optimization
+- Plus: Real-time data for strategy optimisation
 
 **Q: "How long to implement?"**
 A: Proven rapid development:

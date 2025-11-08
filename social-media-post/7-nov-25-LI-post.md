@@ -3,6 +3,12 @@
 
 ---
 
+**📌 Note:** This is the original educational/technical audience version.
+
+**For technology executives focused on business outcomes and revenue**, see: [7-nov-25-LI-post-tech-exec.md](./7-nov-25-LI-post-tech-exec.md)
+
+---
+
 ## Post Content
 
 🎓 **Transforming Content Discovery at London Business School with AI-Powered Knowledge Graphs**

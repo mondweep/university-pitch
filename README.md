@@ -377,7 +377,7 @@ This is a London Business School project. For internal team contributions:
 
 MIT License
 
-Copyright (c) 2025 London Business School
+Copyright (c) 2025
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

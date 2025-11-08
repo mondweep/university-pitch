@@ -100,6 +100,29 @@ python scripts/build_graph.py --input content-repo/parsed --output graph/
 python scripts/export_graph.py --format json,graphml,cypher
 ```
 
+## Demonstrating Value to Stakeholders
+
+**Want to see the expected value in action?** We've built interactive demos that showcase the three key benefits:
+
+```bash
+cd lbs-knowledge-graph
+
+# Run all demos (20-30 minutes)
+python demos/run_all_demos.py
+
+# Or run individually:
+python demos/demo_1_enhanced_discovery.py    # 🔍 Topic navigation & search
+python demos/demo_2_personalization.py        # 👤 Persona-based content filtering
+python demos/demo_3_content_strategy.py       # 📊 Data-driven insights for content teams
+```
+
+**What's Demonstrated**:
+- ✅ Enhanced content discovery (topic browsing, related content, contextual search)
+- ✅ Personalized experiences (5 user personas, tailored recommendations)
+- ✅ Data-driven content strategy (health metrics, gap analysis, performance insights)
+
+**Complete Guide**: See [Value Demonstration Guide](lbs-knowledge-graph/docs/VALUE_DEMONSTRATION_GUIDE.md) for detailed usage, audience-specific presentation tips, and how to customize demos.
+
 ## Visualizing the Graph
 
 The knowledge graph contains 3,963 nodes and 3,953 edges. We provide multiple visualization tools optimized for different use cases.
@@ -220,6 +243,13 @@ This project follows a 10-phase, 25-week implementation plan:
   - Interactive HTML visualization (pyvis)
   - Filtering and performance optimization
   - Use cases and troubleshooting
+
+**Value Demonstration:**
+- 💎 [Value Demonstration Guide](lbs-knowledge-graph/docs/VALUE_DEMONSTRATION_GUIDE.md) - **How to demonstrate expected value to stakeholders**
+  - 3 interactive demos (enhanced discovery, personalization, content strategy)
+  - Audience-specific presentation strategies
+  - Key metrics and talking points
+  - Customization guide
 
 ### 📁 Planning Documents
 

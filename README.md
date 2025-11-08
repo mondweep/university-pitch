@@ -220,10 +220,11 @@ This project follows a 10-phase, 25-week implementation plan:
 
 ### What We've Built
 
-- **Knowledge Graph**: 3,963 nodes, 3,953 edges representing LBS website structure
-- **Semantic Enrichment**: Sentiment analysis & topic extraction pipelines (production-ready)
+- **Knowledge Graph**: 3,963 nodes, 3,953 edges from 10 london.edu pages
+- **Semantic Enrichment**: Sentiment analysis & topic extraction pipelines (production-ready, 100% success rate)
 - **LLM Integration**: OpenRouter API with GPT-3.5-turbo and Claude 3.5 Sonnet
-- **Cost Efficiency**: Full enrichment pipeline for ~$14 (tested and validated)
+- **Testing**: $0.26 spent validating pipelines on sample data
+- **Cost Projection**: Full-scale enrichment estimated at ~$14 for all 3,963 nodes
 
 ## Documentation
 
@@ -242,8 +243,8 @@ This project follows a 10-phase, 25-week implementation plan:
 
 **Testing & Validation:**
 - 🧪 [Enrichment Test Results](lbs-knowledge-graph/docs/ENRICHMENT_TEST_RESULTS.md) - **Production-ready validation** (100% success rate)
-- 📊 [Sentiment Analysis Tests](lbs-knowledge-graph/docs/SENTIMENT_TEST_SUCCESS.md) - $0.15 for full graph
-- 🏷️ [Topic Extraction Tests](lbs-knowledge-graph/docs/TOPIC_EXTRACTION_RESULTS.md) - $13.73 for full graph
+- 📊 [Sentiment Analysis Tests](lbs-knowledge-graph/docs/SENTIMENT_TEST_SUCCESS.md) - 17 items tested, $0.0006 actual cost
+- 🏷️ [Topic Extraction Tests](lbs-knowledge-graph/docs/TOPIC_EXTRACTION_RESULTS.md) - 10 pages tested, $0.25 actual cost
 - 🔍 [Infrastructure Test Results](lbs-knowledge-graph/docs/INFRASTRUCTURE_TEST_RESULTS.md) - System health check
 - ✅ [Infrastructure Fixes Complete](lbs-knowledge-graph/docs/INFRASTRUCTURE_FIXES_COMPLETE.md) - 100% test collection
 
@@ -323,7 +324,8 @@ The enrichment pipeline consists of 5 stages:
 
 - **Model**: Claude 3.5 Sonnet via OpenRouter
 - **Success Rate**: 100% (10 pages tested)
-- **Cost**: $0.003464 per page → **$13.73 for full graph**
+- **Actual Cost**: $0.25 for 10 pages tested
+- **Projected Cost**: $0.003464 per page → ~$13.73 if scaling to all 3,963 nodes
 - **Results**: 26 unique topics, 64 assignments, 6.4 avg topics/page
 - **Output Files**:
   - `lbs-knowledge-graph/data/topic_extraction_demo.json` - Topic assignments per page
@@ -338,8 +340,9 @@ The enrichment pipeline consists of 5 stages:
 **Purpose**: Analyze emotional tone and sentiment of content
 
 - **Model**: GPT-3.5-turbo via OpenRouter
-- **Success Rate**: 100% (17 items tested)
-- **Cost**: $0.000038 per item → **$0.15 for full graph**
+- **Success Rate**: 100% (17 content items tested)
+- **Actual Cost**: $0.0006 for 17 items tested
+- **Projected Cost**: $0.000038 per item → ~$0.14 if scaling to all 3,743 content items
 - **Performance**: 2.3 items/second
 - **Sentiment Types**: positive, neutral, negative, mixed
 - **Output Files**:
@@ -394,13 +397,21 @@ All enriched data is stored in `lbs-knowledge-graph/data/`:
 - Format: Individual JSON files (hash-based filenames)
 - Structure: `{text, model, embedding: [vector]}`
 
-### Total Cost Estimate
+### Cost Analysis
 
-- **Sentiment Analysis**: $0.15
-- **Topic Extraction**: $13.73
-- **Persona Classification**: ~$0.03
-- **Similarity (embeddings)**: ~$0.20
-- **Total**: **~$14 for complete enrichment** of 3,963 nodes
+**Actual Testing Costs:**
+- **Sentiment Analysis**: $0.0006 (17 items tested)
+- **Topic Extraction**: $0.25 (10 pages tested)
+- **Total Spent**: **~$0.26** for testing/validation
+
+**Projected Full-Scale Costs** (if scaling to all nodes):
+- **Sentiment Analysis**: ~$0.14 (3,743 content items)
+- **Topic Extraction**: ~$13.73 (3,963 nodes)
+- **Persona Classification**: ~$0.03 (10 pages)
+- **Similarity (embeddings)**: ~$0.20 (3,963 nodes)
+- **Projected Total**: **~$14 for complete enrichment** of 3,963 nodes
+
+**Note**: Current implementation tested on 10 pages with 100% success rate. Costs are projections for full-scale deployment.
 
 ### Status: Production Ready ✅
 

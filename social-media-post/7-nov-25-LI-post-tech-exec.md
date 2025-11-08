@@ -9,13 +9,13 @@
 
 💼 **How AI-Powered Content Intelligence Drives Revenue: A Real-World Case Study**
 
-Most organizations are sitting on content gold mines but struggle with a critical problem: **the right content isn't reaching the right people at the right time.**
+Most organisations are sitting on content gold mines but struggle with a critical problem: **the right content isn't reaching the right people at the right time.**
 
-I just completed a proof-of-concept that transforms how content finds its audience—and the results are remarkable.
+I just completed a proof-of-concept that transforms how content finds its audience.
 
 **🎯 Background and a hypothetical Business Challenge**
 
-Last Friday, Dinis Cruz and I met at London Business School. We had met to bounce off ideas to innovate using the Agentic AI realms we have been exploring. In particular, my interest was the Graph based knowledge architecture that Dinis has been championing. I proposed that why don't we try and apply that to London Business School. A globally top ranked institution, it  has exceptional content: world-class faculty research, program information, thought leadership, alumni stories. But like most complex organisations and as I can relay from my own experiences (of being an alumni) that:
+On the Friday last week, Dinis Cruz and I met at London Business School. We had met to bounce off ideas to innovate using the Agentic AI realms we have been exploring. In particular, my interest was the Graph based knowledge architecture that Dinis has been championing. I proposed that why don't we try and apply that to London Business School. A globally top ranked institution, it  has exceptional content: world-class faculty research, program information, thought leadership, alumni stories. But like most complex organisations and as I can relay from my own experiences (of being an alumni) that:
 
 • Prospective students likely waste time searching for relevant programs
 • Executives miss high-value executive education content

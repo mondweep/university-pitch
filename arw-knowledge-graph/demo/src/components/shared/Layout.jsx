@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, Calculator, Zap, Github } from 'lucide-react'
+import { Home, Calculator, Zap, Network, Github } from 'lucide-react'
 
 const Layout = ({ children }) => {
   const location = useLocation()
@@ -8,6 +8,7 @@ const Layout = ({ children }) => {
     { name: 'Home', path: '/', icon: Home },
     { name: 'Cost Calculator', path: '/cost-calculator', icon: Calculator },
     { name: 'Speed Demon', path: '/speed-demon', icon: Zap },
+    { name: 'Graph Navigator', path: '/graph-navigator', icon: Network },
   ]
 
   const isActive = (path) => location.pathname === path

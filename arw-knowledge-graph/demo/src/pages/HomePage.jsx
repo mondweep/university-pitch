@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Calculator, Zap, TrendingDown, TrendingUp, Gauge, Target, ArrowRight, CheckCircle } from 'lucide-react'
+import { Calculator, Zap, Network, TrendingDown, TrendingUp, Gauge, Target, ArrowRight, CheckCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const HomePage = () => {
@@ -35,6 +35,19 @@ const HomePage = () => {
         'Real-time metrics visualization',
         'Knowledge graph navigation',
         '97% accuracy vs 75% traditional'
+      ]
+    },
+    {
+      title: 'Graph Navigator',
+      description: 'Explore the LBS knowledge graph interactively - visualize 3,963 nodes, persona journeys, and semantic relationships',
+      icon: Network,
+      path: '/graph-navigator',
+      color: 'from-cyan-500 to-blue-600',
+      features: [
+        'Interactive graph visualization',
+        'Persona journey simulator',
+        'Topic filtering and search',
+        'Traditional vs Semantic comparison'
       ]
     }
   ]
@@ -140,7 +153,7 @@ const HomePage = () => {
       </motion.div>
 
       {/* Demo Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {demos.map((demo, index) => {
           const Icon = demo.icon
           return (
